@@ -1,9 +1,9 @@
-package keyhub.data.set;
+package keyhub.data.simpleimplement;
 
-import keyhub.data.DataSet;
-import keyhub.data.InnerJoinSet;
-import keyhub.data.JoinSet;
-import keyhub.data.LeftJoinSet;
+import keyhub.data.tbl.Tbl;
+import keyhub.data.join.InnerJoinSet;
+import keyhub.data.join.JoinSet;
+import keyhub.data.join.LeftJoinSet;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -15,7 +15,7 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class DataSetImplementTest {
+public class TblValueTest {
 
     @Nested
     class SelectTest{
@@ -25,12 +25,14 @@ public class DataSetImplementTest {
             List<Object> data1 = Arrays.asList(1, "aaa");
             List<Object> data2 = Arrays.asList(2, "bbb");
             List<Object> data3 = Arrays.asList(3, "ccc");
-            DataSet dataSet = new DataSetImplement(columns);
-            dataSet.addRow(data1);
-            dataSet.addRow(data2);
-            dataSet.addRow(data3);
+            Tbl tbl = Tbl.builder()
+                    .addColumns(columns)
+                    .addRow(data1)
+                    .addRow(data2)
+                    .addRow(data3)
+                    .build();
 
-            DataSet result = dataSet.selectAll();
+            Tbl result = tbl.selectAll();
             assertEquals(2, result.getColumns().size());
             assertEquals(3, result.getRows().size());
             assertEquals(2, result.getRows().getFirst().size());
@@ -42,12 +44,14 @@ public class DataSetImplementTest {
             List<Object> data1 = Arrays.asList(1, "aaa");
             List<Object> data2 = Arrays.asList(2, "bbb");
             List<Object> data3 = Arrays.asList(3, "ccc");
-            DataSet dataSet = new DataSetImplement(columns);
-            dataSet.addRow(data1);
-            dataSet.addRow(data2);
-            dataSet.addRow(data3);
+            Tbl tbl = Tbl.builder()
+                    .addColumns(columns)
+                    .addRow(data1)
+                    .addRow(data2)
+                    .addRow(data3)
+                    .build();
 
-            DataSet result = dataSet.select("id");
+            Tbl result = tbl.select("id");
             System.out.println(result.getColumns());
             System.out.println(result.getRows());
             assertEquals(1, result.getColumns().size());
@@ -66,16 +70,18 @@ public class DataSetImplementTest {
             List<Object> data1 = Arrays.asList(1, "aaa");
             List<Object> data2 = Arrays.asList(2, "bbb");
             List<Object> data3 = Arrays.asList(3, "ccc");
-            DataSet dataSet = new DataSetImplement(columns);
-            dataSet.addRow(data1);
-            dataSet.addRow(data2);
-            dataSet.addRow(data3);
+            Tbl tbl = Tbl.builder()
+                    .addColumns(columns)
+                    .addRow(data1)
+                    .addRow(data2)
+                    .addRow(data3)
+                    .build();
 
-            dataSet.where("id", "==", 2);
-            System.out.println(dataSet.getRows());
-            System.out.println(dataSet.getRow(0));
-            assertEquals(1, dataSet.getRows().size());
-            assertEquals(2, dataSet.getRow(0).getFirst());
+            tbl.where("id", "==", 2);
+            System.out.println(tbl.getRows());
+            System.out.println(tbl.getRow(0));
+            assertEquals(1, tbl.getRows().size());
+            assertEquals(2, tbl.getRow(0).getFirst());
         }
 
         @Test
@@ -84,16 +90,18 @@ public class DataSetImplementTest {
             List<Object> data1 = Arrays.asList(1, "aaa");
             List<Object> data2 = Arrays.asList(2, "bbb");
             List<Object> data3 = Arrays.asList(3, "ccc");
-            DataSet dataSet = new DataSetImplement(columns);
-            dataSet.addRow(data1);
-            dataSet.addRow(data2);
-            dataSet.addRow(data3);
+            Tbl tbl = Tbl.builder()
+                    .addColumns(columns)
+                    .addRow(data1)
+                    .addRow(data2)
+                    .addRow(data3)
+                    .build();
 
-            dataSet.where("name", "==", "bbb");
-            System.out.println(dataSet.getRows());
-            System.out.println(dataSet.getRow(0));
-            assertEquals(1, dataSet.getRows().size());
-            assertEquals(2, dataSet.getRow(0).getFirst());
+            tbl.where("name", "==", "bbb");
+            System.out.println(tbl.getRows());
+            System.out.println(tbl.getRow(0));
+            assertEquals(1, tbl.getRows().size());
+            assertEquals(2, tbl.getRow(0).getFirst());
         }
 
         @Test
@@ -102,14 +110,16 @@ public class DataSetImplementTest {
             List<Object> row1 = Arrays.asList(1, "aaa");
             List<Object> row2 = Arrays.asList(2, "bbb");
             List<Object> row3 = Arrays.asList(3, "ccc");
-            DataSet dataSet = new DataSetImplement(columns);
-            dataSet.addRow(row1);
-            dataSet.addRow(row2);
-            dataSet.addRow(row3);
+            Tbl tbl = Tbl.builder()
+                    .addColumns(columns)
+                    .addRow(row1)
+                    .addRow(row2)
+                    .addRow(row3)
+                    .build();
 
-            dataSet.where("name", "!=", "bbb");
-            assertEquals(2, dataSet.getRows().size());
-            assertTrue(dataSet.getRows().stream().noneMatch(row -> row.get(1).equals("bbb")));
+            tbl.where("name", "!=", "bbb");
+            assertEquals(2, tbl.getRows().size());
+            assertTrue(tbl.getRows().stream().noneMatch(row -> row.get(1).equals("bbb")));
         }
 
         @Test
@@ -118,14 +128,16 @@ public class DataSetImplementTest {
             List<Object> row1 = Arrays.asList(1, "aaa");
             List<Object> row2 = Arrays.asList(2, "bbb");
             List<Object> row3 = Arrays.asList(3, "ccc");
-            DataSet dataSet = new DataSetImplement(columns);
-            dataSet.addRow(row1);
-            dataSet.addRow(row2);
-            dataSet.addRow(row3);
+            Tbl tbl = Tbl.builder()
+                    .addColumns(columns)
+                    .addRow(row1)
+                    .addRow(row2)
+                    .addRow(row3)
+                    .build();
 
-            dataSet.where("id", ">", 1);
-            assertEquals(2, dataSet.getRows().size());
-            assertTrue(dataSet.getRows().stream().allMatch(row -> (int) row.getFirst() > 1));
+            tbl.where("id", ">", 1);
+            assertEquals(2, tbl.getRows().size());
+            assertTrue(tbl.getRows().stream().allMatch(row -> (int) row.getFirst() > 1));
         }
 
         @Test
@@ -134,15 +146,17 @@ public class DataSetImplementTest {
             List<Object> row1 = Arrays.asList(1, "aaa");
             List<Object> row2 = Arrays.asList(2, "bbb");
             List<Object> row3 = Arrays.asList(3, "ccc");
-            DataSet dataSet = new DataSetImplement(columns);
-            dataSet.addRow(row1);
-            dataSet.addRow(row2);
-            dataSet.addRow(row3);
+            Tbl tbl = Tbl.builder()
+                    .addColumns(columns)
+                    .addRow(row1)
+                    .addRow(row2)
+                    .addRow(row3)
+                    .build();
 
-            dataSet.where("id", "<", 3);
+            tbl.where("id", "<", 3);
 
-            assertEquals(2, dataSet.getRows().size());
-            assertTrue(dataSet.getRows().stream().allMatch(row -> (int) row.getFirst() < 3));
+            assertEquals(2, tbl.getRows().size());
+            assertTrue(tbl.getRows().stream().allMatch(row -> (int) row.getFirst() < 3));
 
         }
     }
@@ -152,21 +166,25 @@ public class DataSetImplementTest {
         @Test
         @DisplayName("Test Inner Join Success")
         public void testInnerJoin(){
-            DataSet left = DataSet.of(List.of("id", "name"))
+            Tbl left = Tbl.builder()
+                    .addColumns(List.of("id", "name"))
                     .addRow(List.of(1, "Alice"))
                     .addRow(List.of(2, "Bob"))
-                    .addRow(List.of(3, "Charlie"));
+                    .addRow(List.of(3, "Charlie"))
+                    .build();
 
-            DataSet right = DataSet.of(List.of("id", "age"))
+            Tbl right = Tbl.builder()
+                    .addColumns(List.of("id", "age"))
                     .addRow(List.of(1, 20))
                     .addRow(List.of(3, 30))
-                    .addRow(List.of(4, 40));
+                    .addRow(List.of(4, 40))
+                    .build();
 
             JoinSet joinSet = InnerJoinSet.of(left, right)
                     .on("id")
                     .selectAll();
 
-            DataSet result = joinSet.toDataSet();
+            Tbl result = joinSet.toDataSet();
 
             System.out.println(result.getColumns());
             System.out.println(result.getRows());
@@ -186,21 +204,25 @@ public class DataSetImplementTest {
         @Test
         @DisplayName("Test Left Join Success")
         public void testLeftJoin(){
-            DataSet left = DataSet.of(List.of("id", "name"))
+            Tbl left = Tbl.builder()
+                    .addColumns(List.of("id", "name"))
                     .addRow(List.of(1, "Alice"))
                     .addRow(List.of(2, "Bob"))
-                    .addRow(List.of(3, "Charlie"));
+                    .addRow(List.of(3, "Charlie"))
+                    .build();
 
-            DataSet right = DataSet.of(List.of("id", "age"))
+            Tbl right = Tbl.builder()
+                    .addColumns(List.of("id", "age"))
                     .addRow(List.of(1, 20))
                     .addRow(List.of(3, 30))
-                    .addRow(List.of(4, 40));
+                    .addRow(List.of(4, 40))
+                    .build();
 
             JoinSet joinSet = LeftJoinSet.of(left, right)
                     .on("id")
                     .selectAll();
 
-            DataSet result = joinSet.toDataSet();
+            Tbl result = joinSet.toDataSet();
 
             System.out.println(result.getColumns());
             System.out.println(result.getRows());
@@ -223,14 +245,16 @@ public class DataSetImplementTest {
             List<Object> data1 = Arrays.asList(1, "aaa");
             List<Object> data2 = Arrays.asList(2, "bbb");
             List<Object> data3 = Arrays.asList(3, "ccc");
-            DataSet dataSet = new DataSetImplement(columns);
-            dataSet.addRow(data1);
-            dataSet.addRow(data2);
-            dataSet.addRow(data3);
+            Tbl tbl = Tbl.builder()
+                    .addColumns(columns)
+                    .addRow(data1)
+                    .addRow(data2)
+                    .addRow(data3)
+                    .build();
 
-            List<Map<String, Object>> result = dataSet.toRowMapList();
-            System.out.println(dataSet.getColumns());
-            System.out.println(dataSet.getRows());
+            List<Map<String, Object>> result = tbl.toRowMapList();
+            System.out.println(tbl.getColumns());
+            System.out.println(tbl.getRows());
             System.out.println(result);
 
             assertEquals(3, result.size());
@@ -251,14 +275,16 @@ public class DataSetImplementTest {
             List<Object> data1 = Arrays.asList(1, "aaa");
             List<Object> data2 = Arrays.asList(2, "bbb");
             List<Object> data3 = Arrays.asList(3, "ccc");
-            DataSet dataSet = new DataSetImplement(columns);
-            dataSet.addRow(data1);
-            dataSet.addRow(data2);
-            dataSet.addRow(data3);
+            Tbl tbl = Tbl.builder()
+                    .addColumns(columns)
+                    .addRow(data1)
+                    .addRow(data2)
+                    .addRow(data3)
+                    .build();
 
-            Map<String, List<Object>> result = dataSet.toColumnMapList();
-            System.out.println(dataSet.getColumns());
-            System.out.println(dataSet.getRows());
+            Map<String, List<Object>> result = tbl.toColumnMapList();
+            System.out.println(tbl.getColumns());
+            System.out.println(tbl.getRows());
             System.out.println(result);
 
             assertEquals(2, result.size());

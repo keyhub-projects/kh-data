@@ -1,7 +1,6 @@
-package keyhub.data.set;
+package keyhub.data.join;
 
-import keyhub.data.LeftJoinSet;
-import keyhub.data.DataSet;
+import keyhub.data.tbl.Tbl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,16 +8,14 @@ import java.util.List;
 public class LeftJoinSetImplement extends JoinSetImplement implements LeftJoinSet {
 
 
-    public LeftJoinSetImplement(DataSet left, DataSet right) {
+    public LeftJoinSetImplement(Tbl left, Tbl right) {
         super(left, right);
     }
 
     @Override
-    public DataSet computeJoinRawResult(){
-        List<String> columns = new ArrayList<>();
-        columns.addAll(this.left.getColumns());
-        columns.addAll(this.right.getColumns());
-        DataSet rawResult = DataSet.of(columns);
+    public List<List<Object>> computeJoinRawResult(){
+
+        List<List<Object>> rawResult = new ArrayList<>();
         for(int i = 0; i < left.size(); i++){
             boolean anyMatched = false;
             for(int j = 0; j < right.size(); j++){
@@ -28,7 +25,7 @@ public class LeftJoinSetImplement extends JoinSetImplement implements LeftJoinSe
                     row.addAll(left.getRow(i));
                     row.addAll(right.getRow(j));
                     anyMatched = true;
-                    rawResult.addRow(row);
+                    rawResult.add(row);
                 }
             }
             if(!anyMatched){
@@ -37,7 +34,7 @@ public class LeftJoinSetImplement extends JoinSetImplement implements LeftJoinSe
                 for(int k = 0; k < right.getColumnSize(); k++){
                     emptyRow.add(null);
                 }
-                rawResult.addRow(emptyRow);
+                rawResult.add(emptyRow);
             }
         }
         return rawResult;

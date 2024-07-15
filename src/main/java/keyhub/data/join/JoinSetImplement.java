@@ -1,20 +1,19 @@
-package keyhub.data.set;
+package keyhub.data.join;
 
-import keyhub.data.JoinSet;
-import keyhub.data.DataSet;
+import keyhub.data.tbl.Tbl;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 public abstract class JoinSetImplement implements JoinSet {
-    protected final DataSet left;
-    protected final DataSet right;
+    protected final Tbl left;
+    protected final Tbl right;
     protected final List<List<Integer>> selectColumns;
     protected final List<List<Integer>> joinColumns = new ArrayList<>();
 
 
-    public JoinSetImplement(DataSet left, DataSet right) {
+    public JoinSetImplement(Tbl left, Tbl right) {
         this.left = left;
         this.right = right;
         this.selectColumns = new ArrayList<>();
@@ -43,16 +42,17 @@ public abstract class JoinSetImplement implements JoinSet {
     }
 
     @Override
-    public DataSet toDataSet() {
+    public Tbl toDataSet() {
         computePreProcess();
-        DataSet rawResult = computeJoinRawResult();
+        List<List<Object>> rawRows = computeJoinRawResult();
         List<String> columns = computeJoinColumn();
-        return computeJoinData(columns, rawResult);
+        List<List<Object>> rows = computeJoinData(columns, rawRows);
+        return Tbl.of(columns, rows);
     }
     protected void computePreProcess(){
         // Do nothing
     }
-    protected abstract DataSet computeJoinRawResult();
+    protected abstract List<List<Object>> computeJoinRawResult();
     protected boolean isJoinedRow(List<Object> leftRow, List<Object> rightRow){
         return this.joinColumns.stream().allMatch(pair -> {
             int leftIndex = pair.get(0);
@@ -67,18 +67,18 @@ public abstract class JoinSetImplement implements JoinSet {
         selectColumns.get(1).forEach(index -> columns.add(right.getColumn(index)));
         return columns;
     }
-    protected DataSet computeJoinData(List<String> columns, DataSet rawResult){
-        DataSet dataSet = DataSet.of(columns);
-        for(List<Object> row : rawResult.getRows()){
+    protected List<List<Object>> computeJoinData(List<String> columns, List<List<Object>> rawResult){
+        List<List<Object>> rows = new ArrayList<>();
+        for(List<Object> row : rawResult){
             List<Object> newRow = new ArrayList<>();
             for(int k = 0; k < this.selectColumns.get(0).size() + this.selectColumns.get(1).size(); k++){
                 newRow.add(null);
             }
             selectColumns.get(0).forEach(index -> newRow.set(index, row.get(index)));
             selectColumns.get(1).forEach(index -> newRow.set(index + this.selectColumns.get(0).size(), row.get(index + this.selectColumns.get(0).size())));
-            dataSet.addRow(newRow);
+            rows.add(newRow);
         }
-        return dataSet;
+        return rows;
     }
 
     @Override

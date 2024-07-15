@@ -1,13 +1,15 @@
-package keyhub.data;
+package keyhub.data.join;
+
+import keyhub.data.tbl.Tbl;
 
 import java.util.Optional;
 
-public interface JoinSet extends DataVariable {
+public interface JoinSet {
     default boolean checkType(Class<?> clazz){
         return clazz.equals(JoinSet.class);
     }
 
-    DataSet toDataSet();
+    Tbl toDataSet();
     JoinSet on(String sameKey);
     JoinSet on(String leftKey, String rightKey);
 

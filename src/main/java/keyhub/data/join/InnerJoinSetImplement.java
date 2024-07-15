@@ -1,26 +1,20 @@
-package keyhub.data.set;
+package keyhub.data.join;
 
 
-import keyhub.data.InnerJoinSet;
-import keyhub.data.DataSet;
+import keyhub.data.tbl.Tbl;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class InnerJoinSetImplement extends JoinSetImplement implements InnerJoinSet {
 
-    public InnerJoinSetImplement(DataSet left, DataSet right) {
+    public InnerJoinSetImplement(Tbl left, Tbl right) {
         super(left, right);
     }
 
     @Override
-    public DataSet computeJoinRawResult(){
-
-        List<String> columns = new ArrayList<>();
-        columns.addAll(this.left.getColumns());
-        columns.addAll(this.right.getColumns());
-
-        DataSet rawResult = DataSet.of(columns);
+    public List<List<Object>> computeJoinRawResult(){
+        List<List<Object>> rows = new ArrayList<>();
         for(int i = 0; i < left.size(); i++){
             for(int j = 0; j < right.size(); j++){
                 boolean isJoined = isJoinedRow(this.left.getRow(i), this.right.getRow(j));
@@ -28,10 +22,10 @@ public class InnerJoinSetImplement extends JoinSetImplement implements InnerJoin
                     List<Object> row = new ArrayList<>();
                     row.addAll(left.getRow(i));
                     row.addAll(right.getRow(j));
-                    rawResult.addRow(row);
+                    rows.add(row);
                 }
             }
         }
-        return rawResult;
+        return rows;
     }
 }

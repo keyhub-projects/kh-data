@@ -1,5 +1,5 @@
 package keyhub.data;
 
 public interface DataVariable {
-    boolean checkType(Class<?> clazz);
+    public <T extends DataValue> T toValue();
 }
