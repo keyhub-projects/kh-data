@@ -9,7 +9,7 @@ public interface JoinSet {
         return clazz.equals(JoinSet.class);
     }
 
-    Tbl toDataSet();
+    Tbl toTbl();
     JoinSet on(String sameKey);
     JoinSet on(String leftKey, String rightKey);
 

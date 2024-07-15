@@ -184,7 +184,7 @@ public class TblValueTest {
                     .on("id")
                     .selectAll();
 
-            Tbl result = joinSet.toDataSet();
+            Tbl result = joinSet.toTbl();
 
             System.out.println(result.getColumns());
             System.out.println(result.getRows());
@@ -222,7 +222,7 @@ public class TblValueTest {
                     .on("id")
                     .selectAll();
 
-            Tbl result = joinSet.toDataSet();
+            Tbl result = joinSet.toTbl();
 
             System.out.println(result.getColumns());
             System.out.println(result.getRows());

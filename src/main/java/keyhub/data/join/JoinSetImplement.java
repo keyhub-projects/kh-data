@@ -42,7 +42,7 @@ public abstract class JoinSetImplement implements JoinSet {
     }
 
     @Override
-    public Tbl toDataSet() {
+    public Tbl toTbl() {
         computePreProcess();
         List<List<Object>> rawRows = computeJoinRawResult();
         List<String> columns = computeJoinColumn();
