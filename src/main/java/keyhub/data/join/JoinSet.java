@@ -5,10 +5,6 @@ import keyhub.data.tbl.Tbl;
 import java.util.Optional;
 
 public interface JoinSet {
-    default boolean checkType(Class<?> clazz){
-        return clazz.equals(JoinSet.class);
-    }
-
     Tbl toTbl();
     JoinSet on(String sameKey);
     JoinSet on(String leftKey, String rightKey);

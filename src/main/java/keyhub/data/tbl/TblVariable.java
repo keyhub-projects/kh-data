@@ -1,16 +1,15 @@
 package keyhub.data.tbl;
 
-import keyhub.data.DataValue;
 import keyhub.data.DataVariable;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class TblVariable extends TblImplement implements DataVariable {
-    private List<String> columns;
-    private List<List<Object>> data;
-    private List<Integer> resultColumns;
-    private List<Integer> resultRows;
+    private final List<String> columns;
+    private final List<List<Object>> data;
+    private final List<Integer> resultColumns;
+    private final List<Integer> resultRows;
 
     @Override
     protected List<String> columns() {
@@ -27,6 +26,13 @@ public class TblVariable extends TblImplement implements DataVariable {
     @Override
     protected List<Integer> resultRows() {
         return this.resultRows;
+    }
+
+    public TblVariable() {
+        this.resultColumns = new ArrayList<>();
+        this.resultRows = new ArrayList<>();
+        this.columns = new ArrayList<>();
+        this.data = new ArrayList<>();
     }
 
     public TblVariable(List<String> columns, List<List<Object>> data) {
@@ -46,8 +52,19 @@ public class TblVariable extends TblImplement implements DataVariable {
         selectAll();
     }
 
+    public TblVariable clearSelect(){
+        this.resultColumns.clear();
+        return this;
+    }
+
+    public TblVariable resetSelect(){
+        clearSelect();
+        selectAll();
+        return this;
+    }
+
     @Override
-    public DataValue toValue() {
+    public TblValue toValue() {
         return new TblValue(this.columns, this.data);
     }
 
@@ -57,7 +74,7 @@ public class TblVariable extends TblImplement implements DataVariable {
         return this;
     }
 
-    public TblVariable addAllRows(List<List<Object>> rows){
+    public TblVariable addRows(List<List<Object>> rows){
         this.data.addAll(rows);
         clearWhere();
         return this;
@@ -65,11 +82,13 @@ public class TblVariable extends TblImplement implements DataVariable {
 
     public TblVariable addColumn(String column){
         this.columns.add(column);
+        resetSelect();
         return this;
     }
 
     public TblVariable addColumns(List<String> columns){
         this.columns.addAll(columns);
+        resetSelect();
         return this;
     }
 }

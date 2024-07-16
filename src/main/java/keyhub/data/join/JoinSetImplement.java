@@ -75,7 +75,9 @@ public abstract class JoinSetImplement implements JoinSet {
                 newRow.add(null);
             }
             selectColumns.get(0).forEach(index -> newRow.set(index, row.get(index)));
-            selectColumns.get(1).forEach(index -> newRow.set(index + this.selectColumns.get(0).size(), row.get(index + this.selectColumns.get(0).size())));
+            for(int j = 0; j < selectColumns.get(1).size(); j++){
+                newRow.set(selectColumns.get(0).size() + j, row.get(selectColumns.get(1).get(j) + selectColumns.get(0).size()));
+            }
             rows.add(newRow);
         }
         return rows;
