@@ -7,13 +7,13 @@
 <dependency>
     <groupId>io.github.keyhub-projects</groupId>
     <artifactId>kh-data</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
 </dependency>
 ```
 
 ## Gradle
 ```gradle
-implementation 'io.github.keyhub-projects:kh-data:1.0.0'
+implementation 'io.github.keyhub-projects:kh-data:1.0.1'
 ```
 
 # Structure
