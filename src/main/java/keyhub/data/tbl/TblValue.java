@@ -28,14 +28,9 @@ public class TblValue extends TblImplement implements DataValue {
         return this.resultRows;
     }
 
-
-    public TblValue(List<String> columns, List<List<Object>> data) {
-        this.resultColumns = new ArrayList<>();
-        this.resultRows = new ArrayList<>();
-        this.columns = columns;
-        this.data = data;
-        clearWhere();
-        selectAll();
+    @Override
+    public List<List<Object>> adjustRows(List<List<Object>> rows) {
+        return rows.stream().map(this::adjustRow).toList();
     }
 
     public TblValue(List<String> columns) {
@@ -46,11 +41,22 @@ public class TblValue extends TblImplement implements DataValue {
         selectAll();
     }
 
+    public TblValue(List<String> columns, List<List<Object>> data) {
+        this.resultColumns = new ArrayList<>();
+        this.resultRows = new ArrayList<>();
+        this.columns = columns;
+        validateRowsSize(data);
+        this.data = adjustRows(data);
+        clearWhere();
+        selectAll();
+    }
+
     private TblValue(TblValueBuilder builder) {
+        this.resultColumns = new ArrayList<>();
+        this.resultRows = new ArrayList<>();
         this.columns = builder.columns;
-        this.data = builder.data;
-        this.resultColumns = builder.resultColumns;
-        this.resultRows = builder.resultRows;
+        validateRowsSize(builder.data);
+        this.data = adjustRows(builder.data);
         clearWhere();
         selectAll();
     }
@@ -64,8 +70,6 @@ public class TblValue extends TblImplement implements DataValue {
     public static class TblValueBuilder {
         private final List<String> columns = new ArrayList<>();
         private final List<List<Object>> data = new ArrayList<>();
-        private final List<Integer> resultColumns = new ArrayList<>();
-        private final List<Integer> resultRows = new ArrayList<>();
 
         public TblValueBuilder addColumns(List<String> columns) {
             this.columns.addAll(columns.stream().toList());
@@ -84,26 +88,6 @@ public class TblValue extends TblImplement implements DataValue {
 
         public TblValueBuilder addRow(List<Object> row) {
             this.data.add(row.stream().toList());
-            return this;
-        }
-
-        public TblValueBuilder addResultColumns(List<Integer> resultColumns) {
-            this.resultColumns.addAll(resultColumns.stream().toList());
-            return this;
-        }
-
-        public TblValueBuilder addResultColumn(Integer resultColumn) {
-            this.resultColumns.add(resultColumn);
-            return this;
-        }
-
-        public TblValueBuilder resultRows(List<Integer> resultRows) {
-            this.resultRows.addAll(resultRows.stream().toList());
-            return this;
-        }
-
-        public TblValueBuilder addResultRow(Integer resultRow) {
-            this.resultRows.add(resultRow);
             return this;
         }
 

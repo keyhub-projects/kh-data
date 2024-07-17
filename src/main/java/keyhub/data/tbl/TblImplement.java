@@ -15,6 +15,24 @@ public abstract class TblImplement implements Tbl {
     protected abstract List<Integer> resultRows();
 
     @Override
+    public List<Object> adjustRow(List<Object> row){
+        List<Object> result = new ArrayList<>(row);
+        while(result.size() < columns().size()){
+            result.add(null);
+        }
+        return result;
+    }
+
+    @Override
+    public boolean validateRowsSize(List<List<Object>> row){
+        return row.stream().allMatch(this::validateRowSize);
+    }
+    @Override
+    public boolean validateRowSize(List<Object> row){
+        return row.size() <= columns().size();
+    }
+
+    @Override
     public int size(){
         return data().size();
     }
@@ -142,6 +160,16 @@ public abstract class TblImplement implements Tbl {
         }, HashMap::putAll);
     }
 
+
+    public boolean equalsSchema(Tbl tbl){
+        for(int i = 0; i < tbl.getColumns().size(); i++){
+            if(tbl.getColumns().stream().anyMatch(column -> !this.getColumns().contains(column))){
+                return false;
+            }
+        }
+        return true;
+    }
+
     @Override
     public boolean equals(Object obj){
         if(obj == this){
@@ -159,20 +187,15 @@ public abstract class TblImplement implements Tbl {
             return false;
         }
 
-        for(int i = 0; i < tbl.getColumns().size(); i++){
-            if(!tbl.getColumns().get(i).equals(this.getColumns().get(i))){
-                return false;
-            }
+        if(!this.equalsSchema(tbl)){
+            return false;
         }
+
         for(int i = 0; i < tbl.getRows().size(); i++){
-            var row1 = tbl.getRows().get(i);
-            var row2 = this.getRows().get(i);
-            for(int j = 0; j < this.getColumns().size(); j++){
-                var columnStr = this.getColumns().get(j);
-                if(
-                    !row2.get(tbl.findColumnIndex(columnStr).orElseThrow())
-                        .equals(row1.get(j))
-                ){
+            for(int j = 0; j < tbl.getColumns().size(); j++){
+                var thisColumn = this.getColumns().get(j);
+                var thatColumnIndex = tbl.findColumnIndex(thisColumn).orElseThrow();
+                if(!this.getRows().get(i).get(j).equals(tbl.getRows().get(i).get(thatColumnIndex))){
                     return false;
                 }
             }

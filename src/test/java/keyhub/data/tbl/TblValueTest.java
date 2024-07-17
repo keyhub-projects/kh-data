@@ -1,10 +1,8 @@
-package keyhub.data.simpleimplement;
+package keyhub.data.tbl;
 
 import keyhub.data.join.InnerJoinSet;
 import keyhub.data.join.JoinSet;
 import keyhub.data.join.LeftJoinSet;
-import keyhub.data.tbl.Tbl;
-import keyhub.data.tbl.TblVariable;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -16,7 +14,7 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class TblVariableTest {
+public class TblValueTest {
 
     @Nested
     class SelectTest{
@@ -26,7 +24,12 @@ public class TblVariableTest {
             List<Object> data1 = Arrays.asList(1, "aaa");
             List<Object> data2 = Arrays.asList(2, "bbb");
             List<Object> data3 = Arrays.asList(3, "ccc");
-            Tbl tbl = new TblVariable(columns, List.of(data1, data2, data3));
+            Tbl tbl = Tbl.builder()
+                    .addColumns(columns)
+                    .addRow(data1)
+                    .addRow(data2)
+                    .addRow(data3)
+                    .build();
 
             Tbl result = tbl.selectAll();
             assertEquals(2, result.getColumns().size());
@@ -37,10 +40,15 @@ public class TblVariableTest {
         @Test
         public void testSelect(){
             List<String> columns = List.of("id", "name");
-            TblVariable tbl = new TblVariable(columns);
-            tbl.addRow(Arrays.asList(1, "aaa"));
-            tbl.addRow(Arrays.asList(2, "bbb"));
-            tbl.addRow(Arrays.asList(3, "ccc"));
+            List<Object> data1 = Arrays.asList(1, "aaa");
+            List<Object> data2 = Arrays.asList(2, "bbb");
+            List<Object> data3 = Arrays.asList(3, "ccc");
+            Tbl tbl = Tbl.builder()
+                    .addColumns(columns)
+                    .addRow(data1)
+                    .addRow(data2)
+                    .addRow(data3)
+                    .build();
 
             Tbl result = tbl.select("id");
             System.out.println(result.getColumns());
@@ -61,8 +69,12 @@ public class TblVariableTest {
             List<Object> data1 = Arrays.asList(1, "aaa");
             List<Object> data2 = Arrays.asList(2, "bbb");
             List<Object> data3 = Arrays.asList(3, "ccc");
-            TblVariable tbl = new TblVariable(columns);
-            tbl.addRows(List.of(data1, data2, data3));
+            Tbl tbl = Tbl.builder()
+                    .addColumns(columns)
+                    .addRow(data1)
+                    .addRow(data2)
+                    .addRow(data3)
+                    .build();
 
             tbl.where("id", "==", 2);
             System.out.println(tbl.getRows());
@@ -73,12 +85,16 @@ public class TblVariableTest {
 
         @Test
         public void testWhereEquals2() {
-            TblVariable tbl = new TblVariable();
-            tbl.addColumns(List.of("id", "name"));
+            List<String> columns = List.of("id", "name");
             List<Object> data1 = Arrays.asList(1, "aaa");
             List<Object> data2 = Arrays.asList(2, "bbb");
             List<Object> data3 = Arrays.asList(3, "ccc");
-            tbl.addRows(List.of(data1, data2, data3));
+            Tbl tbl = Tbl.builder()
+                    .addColumns(columns)
+                    .addRow(data1)
+                    .addRow(data2)
+                    .addRow(data3)
+                    .build();
 
             tbl.where("name", "==", "bbb");
             System.out.println(tbl.getRows());
@@ -89,12 +105,16 @@ public class TblVariableTest {
 
         @Test
         public void testWhereNotEquals() {
-            TblVariable tbl = new TblVariable()
-                    .addColumn("id")
-                    .addColumn("name")
-                    .addRow(Arrays.asList(1, "aaa"))
-                    .addRow(Arrays.asList(2, "bbb"))
-                    .addRow(Arrays.asList(3, "ccc"));
+            List<String> columns = List.of("id", "name");
+            List<Object> row1 = Arrays.asList(1, "aaa");
+            List<Object> row2 = Arrays.asList(2, "bbb");
+            List<Object> row3 = Arrays.asList(3, "ccc");
+            Tbl tbl = Tbl.builder()
+                    .addColumns(columns)
+                    .addRow(row1)
+                    .addRow(row2)
+                    .addRow(row3)
+                    .build();
 
             tbl.where("name", "!=", "bbb");
             assertEquals(2, tbl.getRows().size());
@@ -107,7 +127,12 @@ public class TblVariableTest {
             List<Object> row1 = Arrays.asList(1, "aaa");
             List<Object> row2 = Arrays.asList(2, "bbb");
             List<Object> row3 = Arrays.asList(3, "ccc");
-            Tbl tbl = new TblVariable(columns, List.of(row1, row2, row3));
+            Tbl tbl = Tbl.builder()
+                    .addColumns(columns)
+                    .addRow(row1)
+                    .addRow(row2)
+                    .addRow(row3)
+                    .build();
 
             tbl.where("id", ">", 1);
             assertEquals(2, tbl.getRows().size());
@@ -120,7 +145,12 @@ public class TblVariableTest {
             List<Object> row1 = Arrays.asList(1, "aaa");
             List<Object> row2 = Arrays.asList(2, "bbb");
             List<Object> row3 = Arrays.asList(3, "ccc");
-            Tbl tbl = new TblVariable(columns, List.of(row1, row2, row3));
+            Tbl tbl = Tbl.builder()
+                    .addColumns(columns)
+                    .addRow(row1)
+                    .addRow(row2)
+                    .addRow(row3)
+                    .build();
 
             tbl.where("id", "<", 3);
 
@@ -135,17 +165,19 @@ public class TblVariableTest {
         @Test
         @DisplayName("Test Inner Join Success")
         public void testInnerJoin(){
-            Tbl left = new TblVariable(List.of("id", "name"), List.of(
-                    List.of(1, "Alice"),
-                    List.of(2, "Bob"),
-                    List.of(3, "Charlie")
-            ));
+            Tbl left = Tbl.builder()
+                    .addColumns(List.of("id", "name"))
+                    .addRow(List.of(1, "Alice"))
+                    .addRow(List.of(2, "Bob"))
+                    .addRow(List.of(3, "Charlie"))
+                    .build();
 
-            Tbl right = new TblVariable(List.of("id", "age"), List.of(
-                    List.of(1, 20),
-                    List.of(3, 30),
-                    List.of(4, 40)
-            ));
+            Tbl right = Tbl.builder()
+                    .addColumns(List.of("id", "age"))
+                    .addRow(List.of(1, 20))
+                    .addRow(List.of(3, 30))
+                    .addRow(List.of(4, 40))
+                    .build();
 
             JoinSet joinSet = InnerJoinSet.of(left, right)
                     .on("id")
@@ -164,6 +196,7 @@ public class TblVariableTest {
             // 4
             assertEquals(4, result.getRow(0).size());
         }
+
     }
 
     @Nested
@@ -171,17 +204,19 @@ public class TblVariableTest {
         @Test
         @DisplayName("Test Left Join Success")
         public void testLeftJoin(){
-            Tbl left = new TblVariable(List.of("id", "name"), List.of(
-                    List.of(1, "Alice"),
-                    List.of(2, "Bob"),
-                    List.of(3, "Charlie")
-            ));
+            Tbl left = Tbl.builder()
+                    .addColumns(List.of("id", "name"))
+                    .addRow(List.of(1, "Alice"))
+                    .addRow(List.of(2, "Bob"))
+                    .addRow(List.of(3, "Charlie"))
+                    .build();
 
-            Tbl right = new TblVariable(List.of("id", "age"), List.of(
-                    List.of(1, 20),
-                    List.of(3, 30),
-                    List.of(4, 40)
-            ));
+            Tbl right = Tbl.builder()
+                    .addColumns(List.of("id", "age"))
+                    .addRow(List.of(1, 20))
+                    .addRow(List.of(3, 30))
+                    .addRow(List.of(4, 40))
+                    .build();
 
             JoinSet joinSet = LeftJoinSet.of(left, right)
                     .on("id")
@@ -200,6 +235,7 @@ public class TblVariableTest {
             // 4
             assertEquals(4, result.getRow(0).size());
         }
+
     }
 
     @Nested
@@ -210,7 +246,12 @@ public class TblVariableTest {
             List<Object> data1 = Arrays.asList(1, "aaa");
             List<Object> data2 = Arrays.asList(2, "bbb");
             List<Object> data3 = Arrays.asList(3, "ccc");
-            Tbl tbl = new TblVariable(columns, List.of(data1, data2, data3));
+            Tbl tbl = Tbl.builder()
+                    .addColumns(columns)
+                    .addRow(data1)
+                    .addRow(data2)
+                    .addRow(data3)
+                    .build();
 
             List<Map<String, Object>> result = tbl.toRowMapList();
             System.out.println(tbl.getColumns());
@@ -235,7 +276,12 @@ public class TblVariableTest {
             List<Object> data1 = Arrays.asList(1, "aaa");
             List<Object> data2 = Arrays.asList(2, "bbb");
             List<Object> data3 = Arrays.asList(3, "ccc");
-            Tbl tbl = new TblVariable(columns, List.of(data1, data2, data3));
+            Tbl tbl = Tbl.builder()
+                    .addColumns(columns)
+                    .addRow(data1)
+                    .addRow(data2)
+                    .addRow(data3)
+                    .build();
 
             Map<String, List<Object>> result = tbl.toColumnListMap();
             System.out.println(tbl.getColumns());

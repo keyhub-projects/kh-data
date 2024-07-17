@@ -52,15 +52,26 @@ public class TblVariable extends TblImplement implements DataVariable {
         selectAll();
     }
 
-    public TblVariable clearSelect(){
+    public void clearSelect(){
         this.resultColumns.clear();
-        return this;
     }
 
-    public TblVariable resetSelect(){
+    public void resetSelect(){
         clearSelect();
         selectAll();
-        return this;
+    }
+
+    public void adjustAllRows(){
+        this.data().forEach(row -> {
+            while(row.size() < columns().size()){
+                row.add(null);
+            }
+        });
+    }
+
+    @Override
+    public List<List<Object>> adjustRows(List<List<Object>> rows) {
+        return rows.stream().map(this::adjustRow).toList();
     }
 
     @Override
@@ -69,12 +80,20 @@ public class TblVariable extends TblImplement implements DataVariable {
     }
 
     public TblVariable addRow(List<Object> row){
+        if(!validateRowSize(row)){
+            throw new IllegalArgumentException("row size is bigger than columns size");
+        }
+        row = adjustRow(row);
         this.data.add(row);
         clearWhere();
         return this;
     }
 
     public TblVariable addRows(List<List<Object>> rows){
+        if(!validateRowsSize(rows)){
+            throw new IllegalArgumentException("row size is bigger than columns size");
+        }
+        rows = rows.stream().map(this::adjustRow).toList();
         this.data.addAll(rows);
         clearWhere();
         return this;
@@ -82,12 +101,14 @@ public class TblVariable extends TblImplement implements DataVariable {
 
     public TblVariable addColumn(String column){
         this.columns.add(column);
+        adjustAllRows();
         resetSelect();
         return this;
     }
 
     public TblVariable addColumns(List<String> columns){
         this.columns.addAll(columns);
+        adjustAllRows();
         resetSelect();
         return this;
     }

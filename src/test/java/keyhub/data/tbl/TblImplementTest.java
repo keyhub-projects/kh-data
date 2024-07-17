@@ -1,18 +1,16 @@
-package keyhub.data.simpleimplement;
+package keyhub.data.tbl;
 
 import keyhub.data.join.InnerJoinSet;
 import keyhub.data.join.JoinSet;
 import keyhub.data.join.LeftJoinSet;
-import keyhub.data.tbl.Tbl;
-import keyhub.data.tbl.TblValue;
-import keyhub.data.tbl.TblVariable;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TblImplementTest {
 
@@ -56,7 +54,6 @@ public class TblImplementTest {
             assertEquals(tbl.getColumns(), tblVariable.getColumns());
         }
     }
-
 
     @Nested
     class InnerJoinTest {
@@ -273,6 +270,137 @@ public class TblImplementTest {
             assertEquals(left.size(), result.getRows().size());
             // 4
             assertEquals(4, result.getRow(0).size());
+        }
+    }
+
+    @Nested
+    public class ValidateRowsSizeTest{
+        @Test
+        public void testValidateRowsSize_True(){
+            TblVariable tbl = new TblVariable(List.of("id", "name"))
+                    .addRow(List.of(1, "aaa"))
+                    .addRow(List.of(2, "bbb"))
+                    .addRow(List.of(3, "ccc"));
+
+            boolean result = tbl.validateRowsSize(tbl.getRows());
+            assertTrue(result);
+        }
+
+        @Test
+        public void testValidateRowsSize_False(){
+            assertThrows(IllegalArgumentException.class, () -> {
+                new TblVariable(List.of("id", "name"))
+                    .addRow(List.of(1, "aaa"))
+                    .addRow(List.of(3, "ccc", "extra data"));
+            });
+        }
+    }
+
+    @Nested
+    class AdjustRowTest {
+        @Test
+        @DisplayName("Test adjustRow when row size is less than columns size")
+        public void testAdjustRow_SizeLessThanColumns() {
+            TblVariable tbl = new TblVariable(List.of("id", "name", "age"));
+            List<Object> adjustedRow = tbl.adjustRow(List.of(1, "aaa"));
+
+            assertEquals(Arrays.asList(1, "aaa", null), adjustedRow);
+        }
+
+        @Test
+        @DisplayName("Test adjustRow when row size equals to columns size")
+        public void testAdjustRow_SizeEqualsToColumns() {
+            TblVariable tbl = new TblVariable(List.of("id", "name"));
+            List<Object> adjustedRow = tbl.adjustRow(List.of(1, "aaa"));
+
+            assertEquals(Arrays.asList(1, "aaa"), adjustedRow);
+        }
+    }
+    @Nested
+    public class EqualsTest {
+
+        @Test
+        public void testEquals_SameObject(){
+            Tbl tbl = new TblVariable(List.of("id", "name"))
+                    .addRow(List.of(1, "aaa"))
+                    .addRow(List.of(2, "bbb"))
+                    .addRow(List.of(3, "ccc"));
+
+            assertTrue(tbl.equals(tbl));
+        }
+
+        @Test
+        public void testEquals_DifferentObjectSameData(){
+            Tbl tbl1 = new TblVariable(List.of("id", "name"))
+                    .addRow(List.of(1, "aaa"))
+                    .addRow(List.of(2, "bbb"))
+                    .addRow(List.of(3, "ccc"));
+
+            Tbl tbl2 = Tbl.builder()
+                    .addColumns(List.of("id", "name"))
+                    .addRows(List.of(
+                            List.of(1, "aaa"),
+                            List.of(2, "bbb"),
+                            List.of(3, "ccc")
+                    ))
+                    .build();
+
+            assertEquals(tbl1, tbl2);
+        }
+
+        @Test
+        public void testEquals_SameData(){
+            Tbl tbl1 = new TblVariable(List.of("id", "name"))
+                    .addRow(List.of(1, "aaa"))
+                    .addRow(List.of(2, "bbb"))
+                    .addRow(List.of(3, "ccc"));
+
+            Tbl tbl2 = new TblVariable(List.of("name", "id"))
+                    .addRow(List.of("aaa", 1))
+                    .addRow(List.of("bbb", 2))
+                    .addRow(List.of("ccc", 3));
+
+            assertEquals(tbl1, tbl2);
+        }
+
+        @Test
+        public void testEquals_NotSameData(){
+            Tbl tbl1 = new TblVariable(List.of("id", "name"))
+                    .addRow(List.of(1, "aaa"))
+                    .addRow(List.of(2, "bbb"))
+                    .addRow(List.of(3, "ccc"));
+
+            Tbl tbl2 = new TblVariable(List.of("id", "name"))
+                    .addRow(List.of(1, "aaa"))
+                    .addRow(List.of(2, "cbb"))
+                    .addRow(List.of(3, "ccc"));
+
+            assertNotEquals(tbl1, tbl2);
+        }
+
+        @Test
+        public void testEquals_NotSameData2(){
+            Tbl tbl1 = new TblVariable(List.of("id", "name"))
+                    .addRow(List.of(1, "aaa"))
+                    .addRow(List.of(2, "bbb"))
+                    .addRow(List.of(3, "ccc"));
+
+            Tbl tbl2 = new TblVariable(List.of("id", "alphabet"))
+                    .addRow(List.of(1, "aaa"))
+                    .addRow(List.of(2, "bbb"))
+                    .addRow(List.of(3, "ccc"));
+
+            assertNotEquals(tbl1, tbl2);
+        }
+
+        @Test
+        public void testEquals_NotTblType(){
+            Tbl tbl = new TblVariable(List.of("id", "name"))
+                    .addRow(List.of(1, "aaa"))
+                    .addRow(List.of(2, "bbb"))
+                    .addRow(List.of(3, "ccc"));
+
+            assertNotEquals(tbl, new Object());
         }
     }
 }

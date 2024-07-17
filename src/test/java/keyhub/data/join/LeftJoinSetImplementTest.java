@@ -1,6 +1,5 @@
-package keyhub.data.simpleimplement;
+package keyhub.data.join;
 
-import keyhub.data.join.LeftJoinSetImplement;
 import keyhub.data.tbl.Tbl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,7 +25,7 @@ public class LeftJoinSetImplementTest {
                 .addRow(Arrays.asList(3, "mary.jane@email.com"))
                 .build();
 
-        LeftJoinSetImplement leftJoinSet = new LeftJoinSetImplement(tbl1, tbl2);
+        LeftJoinSetImplement leftJoinSet = (LeftJoinSetImplement) tbl1.leftJoin(tbl2);
         leftJoinSet.on("id").selectAll();
 
         // Execute the method under test

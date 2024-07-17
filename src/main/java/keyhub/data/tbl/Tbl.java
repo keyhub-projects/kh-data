@@ -58,6 +58,13 @@ public interface Tbl {
         return new TblValue.TblValueBuilder();
     }
 
+    List<List<Object>> adjustRows(List<List<Object>> rows);
+    List<Object> adjustRow(List<Object> row);
+
+    boolean validateRowsSize(List<List<Object>> row);
+
+    boolean validateRowSize(List<Object> row);
+
     int size();
     List<Object> getRow(int index);
     List<List<Object>> getRows();

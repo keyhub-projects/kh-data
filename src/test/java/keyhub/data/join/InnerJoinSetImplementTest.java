@@ -1,6 +1,5 @@
-package keyhub.data.simpleimplement;
+package keyhub.data.join;
 
-import keyhub.data.join.InnerJoinSetImplement;
 import keyhub.data.tbl.Tbl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,7 +14,8 @@ public class InnerJoinSetImplementTest {
     public void testComputeJoinRawResult() {
         // Prepare data sets for test
         Tbl tbl1 = Tbl.builder()
-                .addColumns(Arrays.asList("id", "name"))
+                .addColumn("id")
+                .addColumn("name")
                 .addRow(Arrays.asList(1, "John Doe"))
                 .addRow(Arrays.asList(2, "Jane Doe"))
                 .build();
@@ -26,7 +26,7 @@ public class InnerJoinSetImplementTest {
                 .addRow(Arrays.asList(3, "mary.jane@email.com"))
                 .build();
 
-        InnerJoinSetImplement innerJoinSet = new InnerJoinSetImplement(tbl1, tbl2);
+        InnerJoinSetImplement innerJoinSet = (InnerJoinSetImplement) tbl1.innerJoin(tbl2);
         innerJoinSet.on("id").selectAll();
 
         // Execute the method under test
