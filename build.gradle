@@ -8,7 +8,7 @@ plugins {
 }
 
 group = 'keyhub'
-version = '1.0.1'
+version = '1.0.2'
 
 repositories {
     mavenCentral()
@@ -28,7 +28,7 @@ mavenPublishing {
     publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
     signAllPublications()
 
-    coordinates("io.github.keyhub-projects", "kh-data", "1.0.1")
+    coordinates("io.github.keyhub-projects", "kh-data", "1.0.2")
 
     pom {
         name = "kh-data"
