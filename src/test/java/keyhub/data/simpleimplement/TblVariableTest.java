@@ -237,7 +237,7 @@ public class TblVariableTest {
             List<Object> data3 = Arrays.asList(3, "ccc");
             Tbl tbl = new TblVariable(columns, List.of(data1, data2, data3));
 
-            Map<String, List<Object>> result = tbl.toColumnMapList();
+            Map<String, List<Object>> result = tbl.toColumnListMap();
             System.out.println(tbl.getColumns());
             System.out.println(tbl.getRows());
             System.out.println(result);

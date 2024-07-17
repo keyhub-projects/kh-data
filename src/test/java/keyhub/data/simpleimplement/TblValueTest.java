@@ -284,7 +284,7 @@ public class TblValueTest {
                     .addRow(data3)
                     .build();
 
-            Map<String, List<Object>> result = tbl.toColumnMapList();
+            Map<String, List<Object>> result = tbl.toColumnListMap();
             System.out.println(tbl.getColumns());
             System.out.println(tbl.getRows());
             System.out.println(result);

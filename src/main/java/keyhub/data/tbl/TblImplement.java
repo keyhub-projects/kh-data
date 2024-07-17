@@ -134,11 +134,59 @@ public abstract class TblImplement implements Tbl {
         }).toList();
     }
     @Override
-    public Map<String, List<Object>> toColumnMapList() {
+    public Map<String, List<Object>> toColumnListMap() {
         Tbl computed = getComputed();
         return computed.getColumns().stream().collect(HashMap::new, (map, column) -> {
             int index = computed.findColumnIndex(column).orElseThrow();
             map.put(column, computed.getRows().stream().map(row -> row.get(index)).toList());
         }, HashMap::putAll);
+    }
+
+    @Override
+    public boolean equals(Object obj){
+        if(obj == this){
+            return true;
+        }
+
+        if(!(obj instanceof Tbl tbl)){
+            return false;
+        }
+
+        if(
+            tbl.getColumns().size() != this.getColumns().size()
+            || tbl.getRows().size() != this.getRows().size()
+        ){
+            return false;
+        }
+
+        for(int i = 0; i < tbl.getColumns().size(); i++){
+            if(!tbl.getColumns().get(i).equals(this.getColumns().get(i))){
+                return false;
+            }
+        }
+        for(int i = 0; i < tbl.getRows().size(); i++){
+            var row1 = tbl.getRows().get(i);
+            var row2 = this.getRows().get(i);
+            for(int j = 0; j < this.getColumns().size(); j++){
+                var columnStr = this.getColumns().get(j);
+                if(
+                    !row2.get(tbl.findColumnIndex(columnStr).orElseThrow())
+                        .equals(row1.get(j))
+                ){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public String toString(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("[")
+            .append(getColumns())
+            .append(getRows())
+            .append("]");
+        return sb.toString();
     }
 }
