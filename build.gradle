@@ -2,23 +2,60 @@ import com.vanniktech.maven.publish.SonatypeHost
 
 plugins {
     id 'java'
-    id "com.vanniktech.maven.publish" version "0.29.0"
+    id 'maven-publish'
     id 'signing'
+    id "com.vanniktech.maven.publish" version "0.29.0"
 }
 
 group = 'keyhub'
-version = '1.0-SNAPSHOT'
+version = '1.0.0'
 
 repositories {
     mavenCentral()
 }
 
-mavenPublishing {
-    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
-
-    signAllPublications()
+java {
+//    withJavadocJar()
+    withSourcesJar()
 }
 
+signing {
+    useGpgCmd()
+    sign publishing.publications
+}
+
+mavenPublishing {
+    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
+    signAllPublications()
+
+    coordinates("io.github.keyhub-projects", "kh-data", "1.0.0")
+
+    pom {
+        name = "kh-data"
+        description = "A library for data manipulation"
+        inceptionYear = "2024"
+        url = "https://github.com/keyhub-projects/kh-data"
+        licenses {
+            license {
+                name = "MIT"
+                url = "https://opensource.org/licenses/MIT"
+                distribution = "repo"
+            }
+        }
+        developers {
+            developer {
+                id = "Iol-lshh"
+                name = "Luke SH Hong"
+                url = "https://github.com/Iol-lshh"
+            }
+        }
+        scm {
+            url = "https://github.com/username/mylibrary/"
+            connection = "scm:git:git://github.com/keyhub-projects/kh-data.git"
+            developerConnection = "scm:git:ssh://git@github.com/Iol-lshh/Iol-lshh.git"
+        }
+    }
+}
 
 dependencies {
     testImplementation platform('org.junit:junit-bom:5.10.0')
@@ -28,3 +65,4 @@ dependencies {
 test {
     useJUnitPlatform()
 }
+

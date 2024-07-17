@@ -1,14 +1,33 @@
 # KeyHub-Data
 - This repository contains some classes about DataSet used in the KeyHub project.
 
+# How to start
+## Maven
+```xml
+<dependency>
+    <groupId>io.github.keyhub-projects</groupId>
+    <artifactId>kh-data</artifactId>
+    <version>1.0.0</version>
+</dependency>
+```
+
+## Gradle
+```gradle
+implementation 'io.github.keyhub-projects:kh-data:1.0.0'
+```
+
 # Structure
 ## Class Diagram
-- DataVariable
-  - DataConstant
-  - DataSet
-  - JoinSet
-    - InnerJoinSet
-    - LeftJoinSet
+- DataObject
+  - DataValue
+  - DataVariable
+- Tbl
+  - TblValue
+    - TblValueBuilder
+  - TblVariable
+- JoinSet
+  - InnerJoinSet
+  - LeftJoinSet
 
 ![class_diagram](./docs/class_diagram.png)
 
