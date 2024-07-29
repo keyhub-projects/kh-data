@@ -1,14 +1,14 @@
-package keyhub.data.join;
+package keyhub.data.tbl.join;
 
 import keyhub.data.tbl.Tbl;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class LeftJoinSetImplement extends JoinSetImplement implements LeftJoinSet {
+public class LeftTblJoinImplement extends TblJoinImplement implements LeftTblJoin {
 
 
-    public LeftJoinSetImplement(Tbl left, Tbl right) {
+    public LeftTblJoinImplement(Tbl left, Tbl right) {
         super(left, right);
     }
 

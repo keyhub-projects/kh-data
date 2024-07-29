@@ -1,6 +1,7 @@
 package keyhub.data.join;
 
 import keyhub.data.tbl.Tbl;
+import keyhub.data.tbl.join.InnerTblJoinImplement;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import java.util.Arrays;
@@ -8,7 +9,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class InnerJoinSetImplementTest {
+public class InnerTblJoinImplementTest {
 
     @Test
     public void testComputeJoinRawResult() {
@@ -26,7 +27,7 @@ public class InnerJoinSetImplementTest {
                 .addRow(Arrays.asList(3, "mary.jane@email.com"))
                 .build();
 
-        InnerJoinSetImplement innerJoinSet = (InnerJoinSetImplement) tbl1.innerJoin(tbl2);
+        InnerTblJoinImplement innerJoinSet = (InnerTblJoinImplement) tbl1.innerJoin(tbl2);
         innerJoinSet.on("id").selectAll();
 
         // Execute the method under test
@@ -52,7 +53,7 @@ public class InnerJoinSetImplementTest {
                 .addRow(Arrays.asList(3, "mary.jane@email.com"))
                 .build();
 
-        InnerJoinSetImplement innerJoinSet = new InnerJoinSetImplement(tbl1, tbl2);
+        InnerTblJoinImplement innerJoinSet = new InnerTblJoinImplement(tbl1, tbl2);
         innerJoinSet.on("id").selectAll();
         // Execute the method under test
         List<List<Object>> rawResult = innerJoinSet.computeJoinRawResult();
@@ -77,7 +78,7 @@ public class InnerJoinSetImplementTest {
                 .addRow(Arrays.asList(2, 10))
                 .build();
 
-        InnerJoinSetImplement joinSet = new InnerJoinSetImplement(tbl1, tbl2);
+        InnerTblJoinImplement joinSet = new InnerTblJoinImplement(tbl1, tbl2);
         joinSet.on("id").selectAll();
         // Execute the method under test
         List<List<Object>> rawResult = joinSet.computeJoinRawResult();

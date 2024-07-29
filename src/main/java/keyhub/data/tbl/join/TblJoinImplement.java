@@ -1,4 +1,4 @@
-package keyhub.data.join;
+package keyhub.data.tbl.join;
 
 import keyhub.data.tbl.Tbl;
 
@@ -6,14 +6,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public abstract class JoinSetImplement implements JoinSet {
+public abstract class TblJoinImplement implements TblJoin {
     protected final Tbl left;
     protected final Tbl right;
     protected final List<List<Integer>> selectColumns;
     protected final List<List<Integer>> joinColumns = new ArrayList<>();
 
 
-    public JoinSetImplement(Tbl left, Tbl right) {
+    public TblJoinImplement(Tbl left, Tbl right) {
         this.left = left;
         this.right = right;
         this.selectColumns = new ArrayList<>();
@@ -24,12 +24,12 @@ public abstract class JoinSetImplement implements JoinSet {
     }
 
     @Override
-    public JoinSet on(String key){
+    public TblJoin on(String key){
         return on(key, key);
     }
 
     @Override
-    public JoinSet on(String leftKey, String rightKey){
+    public TblJoin on(String leftKey, String rightKey){
         Integer leftIndex = findColumnIndexFromLeft(leftKey)
                 .orElseThrow(() -> new IllegalArgumentException("Key not found"));
         Integer rightIndex = findColumnIndexFromRight(rightKey)
@@ -84,27 +84,27 @@ public abstract class JoinSetImplement implements JoinSet {
     }
 
     @Override
-    public JoinSet selectAll(){
+    public TblJoin selectAll(){
         selectAllFromLeft();
         selectAllFromRight();
         return this;
     }
     @Override
-    public JoinSet selectFromLeft(String column){
+    public TblJoin selectFromLeft(String column){
         int index = findColumnIndexFromLeft(column)
                 .orElseThrow(() -> new IllegalArgumentException("Left Key not found"));
         this.selectColumns.get(0).add(index);
         return this;
     }
     @Override
-    public JoinSet selectFromLeft(String... columns){
+    public TblJoin selectFromLeft(String... columns){
         for(String column : columns){
             selectFromLeft(column);
         }
         return this;
     }
     @Override
-    public JoinSet selectAllFromLeft(){
+    public TblJoin selectAllFromLeft(){
         this.selectColumns.get(0).clear();
         for(int i = 0; i < left.getColumns().size(); i++){
             this.selectColumns.get(0).add(i);
@@ -112,21 +112,21 @@ public abstract class JoinSetImplement implements JoinSet {
         return this;
     }
     @Override
-    public JoinSet selectFromRight(String column){
+    public TblJoin selectFromRight(String column){
         int index = findColumnIndexFromRight(column)
                 .orElseThrow(() -> new IllegalArgumentException("Right Key not found"));
         this.selectColumns.get(1).add(index);
         return this;
     }
     @Override
-    public JoinSet selectFromRight(String... columns){
+    public TblJoin selectFromRight(String... columns){
         for(String column : columns){
             selectFromRight(column);
         }
         return this;
     }
     @Override
-    public JoinSet selectAllFromRight(){
+    public TblJoin selectAllFromRight(){
         this.selectColumns.get(1).clear();
         for(int i = 0; i < right.getColumns().size(); i++){
             this.selectColumns.get(1).add(i);

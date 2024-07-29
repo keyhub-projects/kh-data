@@ -1,61 +1,29 @@
 package keyhub.data.tbl;
 
-import keyhub.data.join.JoinSet;
+import keyhub.data.tbl.join.TblJoin;
 
-import java.lang.reflect.Field;
 import java.util.*;
 
 public interface Tbl {
+
     static Tbl of(List<String> columns, List<List<Object>> data) {
-        return new TblValue(columns, data);
+        return TblImplement.of(columns, data);
     }
 
     static Tbl of(List<Map<String, Object>> rowMapList) {
-        if(rowMapList.isEmpty()) {
-            return new TblValue(List.of());
-        }
-        var columns = List.copyOf(rowMapList.getFirst().keySet());
-        var rows = rowMapList.stream()
-                .map(row -> columns.stream().map(row::get).toList())
-                .toList();
-        return new TblValue(columns, rows);
+        return TblImplement.of(rowMapList);
     }
 
     static Tbl of(Map<String, List<Object>> columnMapList) {
-        var columns = List.copyOf(columnMapList.keySet());
-        List<List<Object>> rows = new ArrayList<>();
-        for(int i = 0; i < columnMapList.get(columns.getFirst()).size(); i++) {
-            List<Object> row = new ArrayList<>();
-            for(String column : columns) {
-                row.add(columnMapList.get(column).get(i));
-            }
-            rows.add(row);
-        }
-
-        return new TblValue(columns, rows);
+        return TblImplement.of(columnMapList);
     }
 
     static <T> Tbl of(List<T> dtoList, Class<T> dtoClass) {
-        var columns = Arrays.stream(dtoClass.getDeclaredFields()).map(Field::getName).toList();
-        List<List<Object>> rows = dtoList.stream()
-                .map(dto -> Arrays.stream(dtoClass.getDeclaredFields())
-                        .map(field -> {
-                            try {
-                                field.setAccessible(true);
-                                return field.get(dto);
-                            } catch (IllegalAccessException e) {
-                                throw new RuntimeException(e);
-                            }finally {
-                                field.setAccessible(false);
-                            }
-                        })
-                        .toList())
-                .toList();
-        return new TblValue(columns, rows);
+        return TblImplement.of(dtoList, dtoClass);
     }
 
     static TblValue.TblValueBuilder builder() {
-        return new TblValue.TblValueBuilder();
+        return TblImplement.builder();
     }
 
     List<List<Object>> adjustRows(List<List<Object>> rows);
@@ -73,8 +41,8 @@ public interface Tbl {
     List<String> getColumns();
     Optional<Integer> findColumnIndex(String column);
 
-    JoinSet leftJoin(Tbl right);
-    JoinSet innerJoin(Tbl right);
+    TblJoin leftJoin(Tbl right);
+    TblJoin innerJoin(Tbl right);
 
     Tbl select(String... columns);
     Tbl selectAll();

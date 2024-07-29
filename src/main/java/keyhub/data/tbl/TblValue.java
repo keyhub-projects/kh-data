@@ -61,11 +61,6 @@ public class TblValue extends TblImplement implements DataValue {
         selectAll();
     }
 
-    @Override
-    public TblVariable toVariable() {
-        return new TblVariable(columns, data);
-    }
-
     // builder
     public static class TblValueBuilder {
         private final List<String> columns = new ArrayList<>();
@@ -87,6 +82,9 @@ public class TblValue extends TblImplement implements DataValue {
         }
 
         public TblValueBuilder addRow(List<Object> row) {
+            if(row.size() != this.columns.size()) {
+                throw new IllegalArgumentException("row size is not equal to columns size");
+            }
             this.data.add(row.stream().toList());
             return this;
         }

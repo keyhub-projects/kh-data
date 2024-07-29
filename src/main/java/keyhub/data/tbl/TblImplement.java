@@ -1,9 +1,10 @@
 package keyhub.data.tbl;
 
-import keyhub.data.join.InnerJoinSet;
-import keyhub.data.join.JoinSet;
-import keyhub.data.join.LeftJoinSet;
+import keyhub.data.tbl.join.InnerTblJoin;
+import keyhub.data.tbl.join.TblJoin;
+import keyhub.data.tbl.join.LeftTblJoin;
 
+import java.lang.reflect.Field;
 import java.util.*;
 
 // TableByList
@@ -13,6 +14,58 @@ public abstract class TblImplement implements Tbl {
     protected abstract List<List<Object>> data();
     protected abstract List<Integer> resultColumns();
     protected abstract List<Integer> resultRows();
+
+    static Tbl of(List<String> columns, List<List<Object>> data) {
+        return new TblValue(columns, data);
+    }
+
+    static Tbl of(List<Map<String, Object>> rowMapList) {
+        if(rowMapList.isEmpty()) {
+            return new TblValue(List.of());
+        }
+        var columns = List.copyOf(rowMapList.getFirst().keySet());
+        var rows = rowMapList.stream()
+                .map(row -> columns.stream().map(row::get).toList())
+                .toList();
+        return new TblValue(columns, rows);
+    }
+
+    static Tbl of(Map<String, List<Object>> columnMapList) {
+        var columns = List.copyOf(columnMapList.keySet());
+        List<List<Object>> rows = new ArrayList<>();
+        for(int i = 0; i < columnMapList.get(columns.getFirst()).size(); i++) {
+            List<Object> row = new ArrayList<>();
+            for(String column : columns) {
+                row.add(columnMapList.get(column).get(i));
+            }
+            rows.add(row);
+        }
+
+        return new TblValue(columns, rows);
+    }
+
+    static <T> Tbl of(List<T> dtoList, Class<T> dtoClass) {
+        var columns = Arrays.stream(dtoClass.getDeclaredFields()).map(Field::getName).toList();
+        List<List<Object>> rows = dtoList.stream()
+                .map(dto -> Arrays.stream(dtoClass.getDeclaredFields())
+                        .map(field -> {
+                            try {
+                                field.setAccessible(true);
+                                return field.get(dto);
+                            } catch (IllegalAccessException e) {
+                                throw new RuntimeException(e);
+                            }finally {
+                                field.setAccessible(false);
+                            }
+                        })
+                        .toList())
+                .toList();
+        return new TblValue(columns, rows);
+    }
+
+    static TblValue.TblValueBuilder builder() {
+        return new TblValue.TblValueBuilder();
+    }
 
     @Override
     public List<Object> adjustRow(List<Object> row){
@@ -73,12 +126,12 @@ public abstract class TblImplement implements Tbl {
     }
 
     @Override
-    public JoinSet leftJoin(Tbl right){
-        return LeftJoinSet.of(this.getComputed(), right.getComputed());
+    public TblJoin leftJoin(Tbl right){
+        return LeftTblJoin.of(this.getComputed(), right.getComputed());
     }
     @Override
-    public JoinSet innerJoin(Tbl right){
-        return InnerJoinSet.of(this.getComputed(), right.getComputed());
+    public TblJoin innerJoin(Tbl right){
+        return InnerTblJoin.of(this.getComputed(), right.getComputed());
     }
 
     @Override

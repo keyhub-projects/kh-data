@@ -1,6 +1,7 @@
 package keyhub.data.join;
 
 import keyhub.data.tbl.Tbl;
+import keyhub.data.tbl.join.LeftTblJoinImplement;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -8,7 +9,7 @@ import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class LeftJoinSetImplementTest {
+public class LeftTblJoinImplementTest {
 
     @Test
     public void testComputeJoinRawResult() {
@@ -25,7 +26,7 @@ public class LeftJoinSetImplementTest {
                 .addRow(Arrays.asList(3, "mary.jane@email.com"))
                 .build();
 
-        LeftJoinSetImplement leftJoinSet = (LeftJoinSetImplement) tbl1.leftJoin(tbl2);
+        LeftTblJoinImplement leftJoinSet = (LeftTblJoinImplement) tbl1.leftJoin(tbl2);
         leftJoinSet.on("id").selectAll();
 
         // Execute the method under test
@@ -50,7 +51,7 @@ public class LeftJoinSetImplementTest {
                 .addColumns(Arrays.asList("id", "email"))
                 .addRow(Arrays.asList(3, "mary.jane@email.com"))
                 .build();
-        LeftJoinSetImplement leftJoinSet = new LeftJoinSetImplement(tbl1, tbl2);
+        LeftTblJoinImplement leftJoinSet = new LeftTblJoinImplement(tbl1, tbl2);
         leftJoinSet.on("id").selectAll();
         // Execute the method under test
         var rawResult = leftJoinSet.computeJoinRawResult();
@@ -77,7 +78,7 @@ public class LeftJoinSetImplementTest {
                 .addRow(Arrays.asList(2, 10))
                 .build();
 
-        LeftJoinSetImplement leftJoinSet = new LeftJoinSetImplement(tbl1, tbl2);
+        LeftTblJoinImplement leftJoinSet = new LeftTblJoinImplement(tbl1, tbl2);
         leftJoinSet.on("id").selectAll();
         // Execute the method under test
         var rawResult = leftJoinSet.computeJoinRawResult();

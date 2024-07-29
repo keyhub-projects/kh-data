@@ -1,4 +1,4 @@
-package keyhub.data.join;
+package keyhub.data.tbl.join;
 
 
 import keyhub.data.tbl.Tbl;
@@ -6,9 +6,9 @@ import keyhub.data.tbl.Tbl;
 import java.util.ArrayList;
 import java.util.List;
 
-public class InnerJoinSetImplement extends JoinSetImplement implements InnerJoinSet {
+public class InnerTblJoinImplement extends TblJoinImplement implements InnerTblJoin {
 
-    public InnerJoinSetImplement(Tbl left, Tbl right) {
+    public InnerTblJoinImplement(Tbl left, Tbl right) {
         super(left, right);
     }
 

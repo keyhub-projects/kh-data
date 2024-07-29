@@ -1,8 +1,8 @@
 package keyhub.data.tbl;
 
-import keyhub.data.join.InnerJoinSet;
-import keyhub.data.join.JoinSet;
-import keyhub.data.join.LeftJoinSet;
+import keyhub.data.tbl.join.InnerTblJoin;
+import keyhub.data.tbl.join.TblJoin;
+import keyhub.data.tbl.join.LeftTblJoin;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -179,11 +179,11 @@ public class TblValueTest {
                     .addRow(List.of(4, 40))
                     .build();
 
-            JoinSet joinSet = InnerJoinSet.of(left, right)
+            TblJoin tblJoin = InnerTblJoin.of(left, right)
                     .on("id")
                     .selectAll();
 
-            Tbl result = joinSet.toTbl();
+            Tbl result = tblJoin.toTbl();
 
             System.out.println(result.getColumns());
             System.out.println(result.getRows());
@@ -218,11 +218,11 @@ public class TblValueTest {
                     .addRow(List.of(4, 40))
                     .build();
 
-            JoinSet joinSet = LeftJoinSet.of(left, right)
+            TblJoin tblJoin = LeftTblJoin.of(left, right)
                     .on("id")
                     .selectAll();
 
-            Tbl result = joinSet.toTbl();
+            Tbl result = tblJoin.toTbl();
 
             System.out.println(result.getColumns());
             System.out.println(result.getRows());
