@@ -41,8 +41,6 @@ public class TblRowTest {
             TblRow tblRow = TblRow.of(schema, values);
 
             Assertions.assertEquals(schema, tblRow.getSchema());
-            System.out.println(tblRow.toList());
-            System.out.println(values);
             values.forEach(value -> Assertions.assertTrue(tblRow.toList().contains(value)));
         }
 

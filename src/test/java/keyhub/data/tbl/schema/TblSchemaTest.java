@@ -38,32 +38,37 @@ public class TblSchemaTest {
 
             TblSchema tblSchema = TblSchema.of(schemas);
 
-            Optional<TblColumnSchema<?>> result = tblSchema.findColumnSchema("testFindColumnSchema");
+            Optional<TblColumnSchema> result = tblSchema.findColumnSchema("testFindColumnSchema");
             assertNotNull(result.orElse(null));}
     }
 
 
-    @Test
-    void testEquals() {
-        TblColumnSchema<?> firstColumn = TblColumnSchema.of("testEquals1", String.class);
-        TblColumnSchema<?> secondColumn = TblColumnSchema.of("testEquals2", String.class);
-        List<TblColumnSchema> schemas = List.of(firstColumn, secondColumn);
-        TblSchema tblSchema1 = TblSchema.of(schemas);
-        TblSchema tblSchema2 = TblSchema.of(schemas);
+    @Nested
+    class EqualsTest{
+        @Test
+        @DisplayName("같은 스키마인지 확인")
+        void testEquals() {
+            TblColumnSchema<?> firstColumn = TblColumnSchema.of("testEquals1", String.class);
+            TblColumnSchema<?> secondColumn = TblColumnSchema.of("testEquals2", String.class);
+            List<TblColumnSchema> schemas = List.of(firstColumn, secondColumn);
+            TblSchema tblSchema1 = TblSchema.of(schemas);
+            TblSchema tblSchema2 = TblSchema.of(schemas);
 
-        assertEquals(tblSchema1, tblSchema2);
-    }
+            assertEquals(tblSchema1, tblSchema2);
+        }
 
-    @Test
-    void testNotEquals() {
-        TblColumnSchema<?> firstColumn = TblColumnSchema.of("testEquals1", String.class);
-        TblColumnSchema<?> secondColumn = TblColumnSchema.of("testEquals2", String.class);
-        List<TblColumnSchema> schemas1 = List.of(firstColumn, secondColumn);
-        TblSchema tblSchema1 = TblSchema.of(schemas1);
+        @Test
+        @DisplayName("다른 스키마인지 확인")
+        void testNotEquals() {
+            TblColumnSchema<?> firstColumn = TblColumnSchema.of("testEquals1", String.class);
+            TblColumnSchema<?> secondColumn = TblColumnSchema.of("testEquals2", String.class);
+            List<TblColumnSchema> schemas1 = List.of(firstColumn, secondColumn);
+            TblSchema tblSchema1 = TblSchema.of(schemas1);
 
-        List<TblColumnSchema> schemas2 = List.of(firstColumn);
-        TblSchema tblSchema2 = TblSchema.of(schemas2);
+            List<TblColumnSchema> schemas2 = List.of(firstColumn);
+            TblSchema tblSchema2 = TblSchema.of(schemas2);
 
-        assertNotEquals(tblSchema1, tblSchema2);
+            assertNotEquals(tblSchema1, tblSchema2);
+        }
     }
 }

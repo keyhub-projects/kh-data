@@ -6,9 +6,9 @@ import keyhub.data.tbl.Tbl;
 import java.util.ArrayList;
 import java.util.List;
 
-public class InnerTblJoinImplement extends TblJoinImplement implements InnerTblJoin {
+public class TblInnerJoinImplement extends TblJoinImplement implements TblInnerJoin {
 
-    public InnerTblJoinImplement(Tbl left, Tbl right) {
+    public TblInnerJoinImplement(Tbl left, Tbl right) {
         super(left, right);
     }
 

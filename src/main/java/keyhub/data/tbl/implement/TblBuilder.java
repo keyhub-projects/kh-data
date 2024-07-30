@@ -9,9 +9,6 @@ public interface TblBuilder {
     static TblBuilder forRowSet(TblSchema schema) {
         return new RowSetTblBuilder(schema);
     }
-    static TblBuilder forColumnSet(TblSchema schema) {
-        return new ColumnSetTblBuilder(schema);
-    }
     TblBuilder addRow(List<Object> row);
     TblBuilder addRows(List<List<Object>> data);
     Tbl build();

@@ -15,16 +15,17 @@ public abstract class TblImplement implements Tbl {
     }
 
     public static Tbl of(List<Map<String, Object>> rowMapList) {
-        List<TblColumnSchema> keyMap = rowMapList.getFirst().entrySet().stream()
+        Map<String, Object> firstRowMap = rowMapList.getFirst();
+        List<TblColumnSchema> keyMap = firstRowMap.entrySet().stream()
                 .map(entry -> (TblColumnSchema)(TblColumnSchema.of(entry.getKey(), entry.getValue().getClass())))
                 .toList();
         TblSchema schema = TblSchema.of(keyMap);
         TblBuilder builder = TblBuilder.forRowSet(schema);
-        for(Map<String, ?> rowMap : rowMapList) {
-            List<?> row = keyMap.stream()
+        for(Map<String, Object> rowMap : rowMapList) {
+            List<Object> row = keyMap.stream()
                     .map(columnSchema -> rowMap.getOrDefault(columnSchema.getColumnName(), null))
                     .toList();
-            //builder.addRow(row);
+            builder.addRow(row);
         }
         return builder.build();
     }
@@ -34,13 +35,13 @@ public abstract class TblImplement implements Tbl {
                 .map(entry -> (TblColumnSchema)(TblColumnSchema.of(entry.getKey(), entry.getValue().getFirst().getClass())))
                 .toList();
         TblSchema schema = TblSchema.of(keyMap);
-        TblBuilder builder = TblBuilder.forColumnSet(schema);
+        TblBuilder builder = TblBuilder.forRowSet(schema);
         for(int i = 0; i < columnListMap.get(keyMap.getFirst().getColumnName()).size(); i++) {
             int finalI = i;
-            List<?> row = keyMap.stream()
+            List<Object> row = keyMap.stream()
                     .map(columnSchema -> columnListMap.get(columnSchema.getColumnName()).get(finalI))
                     .toList();
-            //builder.addRow(row);
+            builder.addRow(row);
         }
         return builder.build();
     }

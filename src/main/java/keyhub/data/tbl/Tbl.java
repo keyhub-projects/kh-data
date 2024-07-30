@@ -5,6 +5,7 @@ import keyhub.data.tbl.implement.RowSetTblImplement;
 import keyhub.data.tbl.implement.TblBuilder;
 import keyhub.data.tbl.implement.TblImplement;
 import keyhub.data.tbl.join.TblJoin;
+import keyhub.data.tbl.operator.TblOperatorType;
 import keyhub.data.tbl.row.TblRow;
 import keyhub.data.tbl.schema.TblColumnSchema;
 import keyhub.data.tbl.schema.TblSchema;
@@ -44,8 +45,7 @@ public interface Tbl extends DataObject {
     TblJoin innerJoin(Tbl right);
 
     Tbl select(String... columns);
-    Tbl selectAll();
-    Tbl where(String column, String operator, Object value);
+    Tbl where(String column, TblOperatorType operator, Object value);
 
     List<Map<String, Object>> toRowMapList();
     Map<String, List<Object>> toColumnListMap();

@@ -2,12 +2,14 @@ package keyhub.data.tbl.implement;
 
 import keyhub.data.DataValue;
 import keyhub.data.tbl.Tbl;
+import keyhub.data.tbl.operator.TblOperator;
+import keyhub.data.tbl.operator.TblOperatorType;
 import keyhub.data.tbl.join.TblJoin;
 import keyhub.data.tbl.row.TblRow;
+import keyhub.data.tbl.schema.TblColumnSchema;
 import keyhub.data.tbl.schema.TblSchema;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class RowSetTblImplement extends TblImplement implements DataValue {
     private final List<List<Object>> data;
@@ -24,12 +26,14 @@ public class RowSetTblImplement extends TblImplement implements DataValue {
 
     @Override
     public TblRow getRow(int index) {
-        return null;
+        return TblRow.of(super.schema, data.get(index));
     }
 
     @Override
     public List<TblRow> getRows() {
-        return List.of();
+        return data.stream()
+                .map(row -> TblRow.of(super.schema, row))
+                .toList();
     }
 
     @Override
@@ -44,17 +48,30 @@ public class RowSetTblImplement extends TblImplement implements DataValue {
 
     @Override
     public Tbl select(String... columns) {
-        return null;
+        List<TblColumnSchema> columnSchemas = new ArrayList<>();
+        for (String column : columns){
+            Optional<TblColumnSchema> schema = this.schema.findColumnSchema(column);
+            if(schema.isEmpty()){
+                throw new IllegalArgumentException("Column not found in schema");
+            }
+            columnSchemas.add(schema.get());
+        }
+        List<List<Object>> newData = new ArrayList<>();
+        for(List<Object> row : this.data){
+            List<Object> newRow = new ArrayList<>();
+            for(TblColumnSchema<?> columnSchema : columnSchemas){
+                int index = this.schema.getColumnIndex(columnSchema.getColumnName());
+                newRow.add(row.get(index));
+            }
+            newData.add(newRow);
+        }
+        return new RowSetTblImplement(TblSchema.of(columnSchemas), newData);
     }
 
     @Override
-    public Tbl selectAll() {
-        return null;
-    }
-
-    @Override
-    public Tbl where(String column, String operator, Object value) {
-        return null;
+    public Tbl where(String column, TblOperatorType operator, Object value) {
+        TblOperator tblOperator = TblOperator.of(this);
+        return tblOperator.by(column, operator, value);
     }
 
     @Override

@@ -33,7 +33,7 @@ public abstract class TblRowImplement implements TblRow {
     }
     @Override
     public <T> Optional<T> findValue(String columnName) {
-        Optional<TblColumnSchema<?>> schema = schema().findColumnSchema(columnName);
+        Optional<TblColumnSchema> schema = schema().findColumnSchema(columnName);
         if (schema.isEmpty()) {
             return Optional.empty();
         }

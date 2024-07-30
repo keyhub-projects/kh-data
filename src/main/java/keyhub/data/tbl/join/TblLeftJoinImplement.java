@@ -5,10 +5,10 @@ import keyhub.data.tbl.Tbl;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LeftTblJoinImplement extends TblJoinImplement implements LeftTblJoin {
+public class TblLeftJoinImplement extends TblJoinImplement implements TblLeftJoin {
 
 
-    public LeftTblJoinImplement(Tbl left, Tbl right) {
+    public TblLeftJoinImplement(Tbl left, Tbl right) {
         super(left, right);
     }
 

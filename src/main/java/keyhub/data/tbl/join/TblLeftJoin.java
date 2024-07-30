@@ -2,8 +2,8 @@ package keyhub.data.tbl.join;
 
 import keyhub.data.tbl.Tbl;
 
-public interface InnerTblJoin extends TblJoin {
+public interface TblLeftJoin extends TblJoin {
     static TblJoin of(Tbl left, Tbl right) {
-        return new InnerTblJoinImplement(left, right);
+        return new TblLeftJoinImplement(left, right);
     }
 }

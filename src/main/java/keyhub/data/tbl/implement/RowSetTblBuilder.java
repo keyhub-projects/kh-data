@@ -6,7 +6,7 @@ import keyhub.data.tbl.schema.TblSchema;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RowSetTblBuilder extends TblBuilderImplement implements TblBuilder{
+public class RowSetTblBuilder extends TblBuilderImplement{
     private final List<List<Object>> rows = new ArrayList<>();
 
     public RowSetTblBuilder(TblSchema schema) {
@@ -15,13 +15,14 @@ public class RowSetTblBuilder extends TblBuilderImplement implements TblBuilder{
 
     @Override
     public Tbl build() {
-        return null;
+        return new RowSetTblImplement(this.schema, this.rows);
     }
 
     @Override
     public TblBuilder addRow(List<Object> row) {
         for(int i = 0; i < row.size(); i++) {
-            if(!this.schema.getColumnTypes().get(i).isInstance(row.get(i))) {
+            String columnName = this.schema.getColumnNames().get(i);
+            if(!this.schema.getColumnTypes().get(columnName).isInstance(row.get(i))) {
                 throw new IllegalArgumentException("Row value type does not match schema");
             }
         }
