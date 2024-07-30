@@ -47,7 +47,7 @@ public abstract class TblJoinImplement implements TblJoin {
         List<List<Object>> rawRows = computeJoinRawResult();
         List<String> columns = computeJoinColumn();
         List<List<Object>> rows = computeJoinData(columns, rawRows);
-        return Tbl.of(columns, rows);
+        return null;//Tbl.of(columns, rows);
     }
     protected void computePreProcess(){
         // Do nothing
@@ -136,11 +136,14 @@ public abstract class TblJoinImplement implements TblJoin {
 
     @Override
     public Optional<Integer> findColumnIndexFromLeft(String column){
-        return this.left.findColumnIndex(column);
+//        return this.left.findColumnIndex(column);
+        return Optional.empty();
     }
     @Override
     public Optional<Integer> findColumnIndexFromRight(String column){
-        return this.right.findColumnIndex(column);
+//        return this.right.findColumnIndex(column);
+        return Optional.empty();
     }
+
 
 }

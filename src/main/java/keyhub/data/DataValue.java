@@ -1,4 +1,4 @@
 package keyhub.data;
 
-public interface DataValue {
+public interface DataValue extends DataObject{
 }
