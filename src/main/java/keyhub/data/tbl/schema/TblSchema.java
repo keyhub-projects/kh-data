@@ -20,4 +20,7 @@ public interface TblSchema extends DataObject {
     Optional<TblColumnSchema<?>> findColumnSchema(String columnName);
 
     TblColumnSchema<?> getColumnSchema(int index);
+
+    @Override
+    boolean equals(Object o);
 }

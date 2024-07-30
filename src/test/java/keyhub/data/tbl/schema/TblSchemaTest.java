@@ -4,11 +4,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TblSchemaTest {
 
@@ -42,5 +40,30 @@ public class TblSchemaTest {
 
             Optional<TblColumnSchema<?>> result = tblSchema.findColumnSchema("testFindColumnSchema");
             assertNotNull(result.orElse(null));}
+    }
+
+
+    @Test
+    void testEquals() {
+        TblColumnSchema<?> firstColumn = TblColumnSchema.of("testEquals1", String.class);
+        TblColumnSchema<?> secondColumn = TblColumnSchema.of("testEquals2", String.class);
+        List<TblColumnSchema> schemas = List.of(firstColumn, secondColumn);
+        TblSchema tblSchema1 = TblSchema.of(schemas);
+        TblSchema tblSchema2 = TblSchema.of(schemas);
+
+        assertEquals(tblSchema1, tblSchema2);
+    }
+
+    @Test
+    void testNotEquals() {
+        TblColumnSchema<?> firstColumn = TblColumnSchema.of("testEquals1", String.class);
+        TblColumnSchema<?> secondColumn = TblColumnSchema.of("testEquals2", String.class);
+        List<TblColumnSchema> schemas1 = List.of(firstColumn, secondColumn);
+        TblSchema tblSchema1 = TblSchema.of(schemas1);
+
+        List<TblColumnSchema> schemas2 = List.of(firstColumn);
+        TblSchema tblSchema2 = TblSchema.of(schemas2);
+
+        assertNotEquals(tblSchema1, tblSchema2);
     }
 }

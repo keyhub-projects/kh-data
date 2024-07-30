@@ -41,4 +41,16 @@ public abstract class TblSchemaImplement implements TblSchema{
         return TblColumnSchema.of(columnName, columnType);
     }
 
+    @Override
+    public boolean equals(Object o){
+        if(this == o){
+            return true;
+        }
+        if(o == null || getClass() != o.getClass()){
+            return false;
+        }
+        TblSchemaImplement that = (TblSchemaImplement) o;
+        return columnNames().equals(that.columnNames()) && columnTypes().equals(that.columnTypes());
+    }
+
 }
