@@ -1,6 +1,6 @@
-package keyhub.data.tbl;
+package keyhub.data.tbl.operator;
 
-public enum TblOperator {
+public enum TblOperatorType {
     GREATER_THAN,
     LESS_THAN,
     GREATER_THAN_OR_EQUAL,
@@ -8,11 +8,8 @@ public enum TblOperator {
     EQUAL,
     NOT_EQUAL,
     LIKE,
-    NOT_LIKE,
     IN,
     NOT_IN,
     IS_NULL,
-    IS_NOT_NULL,
-    EXISTS,
-    NOT_EXISTS,
+    IS_NOT_NULL
 }

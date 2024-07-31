@@ -1,9 +1,8 @@
 package keyhub.data.tbl;
 
 import keyhub.data.DataObject;
-import keyhub.data.tbl.implement.RowSetTblImplement;
-import keyhub.data.tbl.implement.TblBuilder;
 import keyhub.data.tbl.implement.TblImplement;
+import keyhub.data.tbl.implement.rowset.RowSetTblImplement;
 import keyhub.data.tbl.join.TblJoin;
 import keyhub.data.tbl.operator.TblOperatorType;
 import keyhub.data.tbl.row.TblRow;
@@ -41,12 +40,16 @@ public interface Tbl extends DataObject {
     Class<?> getColumnType(int index);
     Map<String, Class<?>> getColumnTypes();
 
-    TblJoin leftJoin(Tbl right);
-    TblJoin innerJoin(Tbl right);
-
     Tbl select(String... columns);
     Tbl where(String column, TblOperatorType operator, Object value);
 
+    TblJoin leftJoin(Tbl right);
+    TblJoin innerJoin(Tbl right);
+
     List<Map<String, Object>> toRowMapList();
     Map<String, List<Object>> toColumnListMap();
+
+    Object getValue(String columnName, int rowIndex);
+
+    Object getValue(int columnIndex, int rowIndex);
 }

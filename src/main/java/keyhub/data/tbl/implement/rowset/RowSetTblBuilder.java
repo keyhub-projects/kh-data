@@ -1,12 +1,14 @@
-package keyhub.data.tbl.implement;
+package keyhub.data.tbl.implement.rowset;
 
 import keyhub.data.tbl.Tbl;
+import keyhub.data.tbl.TblBuilder;
+import keyhub.data.tbl.implement.TblBuilderImplement;
 import keyhub.data.tbl.schema.TblSchema;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class RowSetTblBuilder extends TblBuilderImplement{
+public class RowSetTblBuilder extends TblBuilderImplement {
     private final List<List<Object>> rows = new ArrayList<>();
 
     public RowSetTblBuilder(TblSchema schema) {

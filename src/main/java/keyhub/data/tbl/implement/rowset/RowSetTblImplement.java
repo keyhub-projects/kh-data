@@ -1,7 +1,8 @@
-package keyhub.data.tbl.implement;
+package keyhub.data.tbl.implement.rowset;
 
 import keyhub.data.DataValue;
 import keyhub.data.tbl.Tbl;
+import keyhub.data.tbl.implement.TblImplement;
 import keyhub.data.tbl.operator.TblOperator;
 import keyhub.data.tbl.operator.TblOperatorType;
 import keyhub.data.tbl.join.TblJoin;
@@ -26,24 +27,38 @@ public class RowSetTblImplement extends TblImplement implements DataValue {
 
     @Override
     public TblRow getRow(int index) {
+        if(index < 0 || index >= this.data.size()){
+            throw new IllegalArgumentException("Row index out of bounds");
+        }
         return TblRow.of(super.schema, data.get(index));
     }
+
+    @Override
+    public Object getValue(String columnName, int rowIndex){
+        int columnIndex = this.schema.getColumnIndex(columnName);
+        if(columnIndex == -1){
+            throw new IllegalArgumentException("Column not found in schema");
+        }
+        return getValue(columnIndex, rowIndex);
+    }
+
+    @Override
+    public Object getValue(int columnIndex, int rowIndex){
+        if(columnIndex < 0 || columnIndex >= this.schema.getColumnSize()){
+            throw new IllegalArgumentException("Column index out of bounds");
+        }
+        if(rowIndex < 0 || rowIndex >= this.data.size()){
+            throw new IllegalArgumentException("Row index out of bounds");
+        }
+        return data.get(rowIndex).get(columnIndex);
+    }
+
 
     @Override
     public List<TblRow> getRows() {
         return data.stream()
                 .map(row -> TblRow.of(super.schema, row))
                 .toList();
-    }
-
-    @Override
-    public TblJoin leftJoin(Tbl right) {
-        return null;
-    }
-
-    @Override
-    public TblJoin innerJoin(Tbl right) {
-        return null;
     }
 
     @Override
@@ -70,8 +85,22 @@ public class RowSetTblImplement extends TblImplement implements DataValue {
 
     @Override
     public Tbl where(String column, TblOperatorType operator, Object value) {
-        TblOperator tblOperator = TblOperator.of(this);
-        return tblOperator.by(column, operator, value);
+        return TblOperator.builder()
+                .operator(operator)
+                .tbl(this)
+                .column(column)
+                .value(value)
+                .build();
+    }
+
+    @Override
+    public TblJoin leftJoin(Tbl right) {
+        return null;
+    }
+
+    @Override
+    public TblJoin innerJoin(Tbl right) {
+        return null;
     }
 
     @Override

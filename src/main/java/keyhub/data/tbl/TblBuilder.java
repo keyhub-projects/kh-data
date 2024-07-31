@@ -1,6 +1,6 @@
-package keyhub.data.tbl.implement;
+package keyhub.data.tbl;
 
-import keyhub.data.tbl.Tbl;
+import keyhub.data.tbl.implement.rowset.RowSetTblBuilder;
 import keyhub.data.tbl.schema.TblSchema;
 
 import java.util.List;

@@ -1,7 +1,8 @@
-package keyhub.data.tbl.join;
+package keyhub.data.tbl.join.inner;
 
 
 import keyhub.data.tbl.Tbl;
+import keyhub.data.tbl.join.TblJoinImplement;
 
 import java.util.ArrayList;
 import java.util.List;

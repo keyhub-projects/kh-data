@@ -1,6 +1,7 @@
 package keyhub.data.tbl.implement;
 
 import keyhub.data.tbl.Tbl;
+import keyhub.data.tbl.TblBuilder;
 import keyhub.data.tbl.schema.TblColumnSchema;
 import keyhub.data.tbl.schema.TblSchema;
 

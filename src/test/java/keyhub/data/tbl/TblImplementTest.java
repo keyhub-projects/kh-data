@@ -1,8 +1,6 @@
-package keyhub.data.tbl.implement;
+package keyhub.data.tbl;
 
-import keyhub.data.tbl.Tbl;
-import keyhub.data.tbl.schema.TblColumnSchema;
-import keyhub.data.tbl.schema.TblSchema;
+import keyhub.data.tbl.implement.TblImplement;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

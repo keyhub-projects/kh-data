@@ -1,5 +1,6 @@
 package keyhub.data.tbl.implement;
 
+import keyhub.data.tbl.TblBuilder;
 import keyhub.data.tbl.schema.TblSchema;
 
 import java.util.List;
