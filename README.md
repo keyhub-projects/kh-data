@@ -27,6 +27,6 @@ implementation 'io.github.keyhub-projects:kh-data:1.0.2'
 - Almost setter made by fluent interface.
   - It returns the instance itself.
     - It means that you can chain methods.
-    - For example, `tbl.where("b", , 10).selectAll()`.
+    - For example, `tbl.where("b", EQUAL, 10).selectAll()`.
 
 
