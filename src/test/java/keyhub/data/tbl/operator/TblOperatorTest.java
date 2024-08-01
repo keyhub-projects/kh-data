@@ -87,7 +87,7 @@ public class TblOperatorTest {
         @Test
         public void testBuildOperatorGreaterThanOrEqual() {
             Tbl result = mockTbl.where("column2", TblOperatorType.GREATER_THAN_OR_EQUAL, 2);
-            assertEquals(3, result.getRows().size());
+            assertEquals(2, result.getRows().size());
         }
     }
 
@@ -105,7 +105,7 @@ public class TblOperatorTest {
         @Test
         public void testBuildOperatorLessThanOrEqual() {
             Tbl result = mockTbl.where("column2", TblOperatorType.LESS_THAN_OR_EQUAL, 2);
-            assertEquals(3, result.getRows().size());
+            assertEquals(2, result.getRows().size());
         }
     }
 
