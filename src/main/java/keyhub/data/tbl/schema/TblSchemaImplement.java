@@ -35,14 +35,21 @@ public abstract class TblSchemaImplement implements TblSchema{
         return Optional.ofNullable(getColumnSchema(index));
     }
 
+    @Override
     public TblColumnSchema<?> getColumnSchema(int index){
         String columnName = columnNames().get(index);
         Class<?> columnType = columnTypes().get(columnName);
         return TblColumnSchema.of(columnName, columnType);
     }
 
+    @Override
     public int getColumnIndex(String columnName){
         return columnNames().indexOf(columnName);
+    }
+
+    @Override
+    public boolean contains(String column){
+        return columnNames().contains(column);
     }
 
     @Override

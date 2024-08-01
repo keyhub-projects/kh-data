@@ -3,6 +3,7 @@ package keyhub.data.tbl.implement.rowset;
 import keyhub.data.tbl.Tbl;
 import keyhub.data.tbl.TblBuilder;
 import keyhub.data.tbl.implement.TblBuilderImplement;
+import keyhub.data.tbl.row.TblRow;
 import keyhub.data.tbl.schema.TblSchema;
 
 import java.util.ArrayList;
@@ -24,10 +25,18 @@ public class RowSetTblBuilder extends TblBuilderImplement {
     public TblBuilder addRow(List<Object> row) {
         for(int i = 0; i < row.size(); i++) {
             String columnName = this.schema.getColumnNames().get(i);
-            if(!this.schema.getColumnTypes().get(columnName).isInstance(row.get(i))) {
+            if(row.get(i) != null && !this.schema.getColumnTypes().get(columnName).isInstance(row.get(i))) {
                 throw new IllegalArgumentException("Row value type does not match schema");
             }
         }
+        rows.add(row);
+        return this;
+    }
+
+    @Override
+    public TblBuilder addRow(TblRow row) {
+        List<Object> rawRow = row.toList();
+        this.rows.add(rawRow);
         return this;
     }
 

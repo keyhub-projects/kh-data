@@ -32,6 +32,8 @@ public interface Tbl extends DataObject {
     int count();
     TblRow getRow(int index);
     List<TblRow> getRows();
+    List<Object> getRawRow(int index);
+    List<List<Object>> getRawRows();
     TblColumnSchema<?> getColumnSchema(int index);
     TblSchema getSchema();
     int getColumnSize();

@@ -44,10 +44,10 @@ public class RowSetTblImplementTest {
             assertEquals(expectedColumns, resultTbl.getColumns());
 
             String expectedFirstRowFirstColumn = "A";
-            assertEquals(expectedFirstRowFirstColumn, resultTbl.getRow(0).findValue("column1").orElseThrow());
+            assertEquals(expectedFirstRowFirstColumn, resultTbl.getRow(0).findCell("column1").orElseThrow());
 
             String expectedFirstRowSecondColumn = "B";
-            assertEquals(expectedFirstRowSecondColumn, resultTbl.getRow(0).findValue("column2").orElseThrow());
+            assertEquals(expectedFirstRowSecondColumn, resultTbl.getRow(0).findCell("column2").orElseThrow());
         }
     }
 }

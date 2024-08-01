@@ -1,6 +1,7 @@
 package keyhub.data.tbl.implement;
 
 import keyhub.data.tbl.TblBuilder;
+import keyhub.data.tbl.row.TblRow;
 import keyhub.data.tbl.schema.TblSchema;
 
 import java.util.List;
@@ -13,8 +14,8 @@ public abstract class TblBuilderImplement implements TblBuilder {
     }
 
     @Override
-    public TblBuilder addRows(List<List<Object>> data) {
-        for(List<Object> row : data) {
+    public TblBuilder addRows(List<TblRow> rows) {
+        for(TblRow row : rows) {
             addRow(row);
         }
         return this;

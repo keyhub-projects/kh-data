@@ -1,6 +1,7 @@
 package keyhub.data.tbl;
 
 import keyhub.data.tbl.implement.rowset.RowSetTblBuilder;
+import keyhub.data.tbl.row.TblRow;
 import keyhub.data.tbl.schema.TblSchema;
 
 import java.util.List;
@@ -10,6 +11,7 @@ public interface TblBuilder {
         return new RowSetTblBuilder(schema);
     }
     TblBuilder addRow(List<Object> row);
-    TblBuilder addRows(List<List<Object>> data);
+    TblBuilder addRow(TblRow row);
+    TblBuilder addRows(List<TblRow> rows);
     Tbl build();
 }

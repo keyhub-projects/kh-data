@@ -5,7 +5,7 @@ import keyhub.data.tbl.Tbl;
 public interface TblOperatorBuilder {
 
     static TblOperatorBuilder of() {
-        return TblOperatorBuilderImplement.of();
+        return SimpleTblOperatorBuilder.of();
     }
 
     TblOperatorBuilder tbl(Tbl tbl);

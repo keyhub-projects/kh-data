@@ -25,4 +25,6 @@ public interface TblSchema extends DataObject {
     boolean equals(Object o);
 
     int getColumnIndex(String columnName);
+
+    boolean contains(String column);
 }

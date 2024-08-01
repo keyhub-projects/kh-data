@@ -13,7 +13,7 @@ public abstract class TblRowImplement implements TblRow {
         }
         for(int i = 0; i < values.size(); i++) {
             String columnName = schema.getColumnNames().get(i);
-            if(!schema.getColumnTypes().get(columnName).isInstance(values.get(i))) {
+            if(values.get(i) != null && !schema.getColumnTypes().get(columnName).isInstance(values.get(i))) {
                 throw new IllegalArgumentException("Row value type does not match schema");
             }
         }
@@ -32,14 +32,14 @@ public abstract class TblRowImplement implements TblRow {
         return values();
     }
     @Override
-    public <T> Optional<T> findValue(String columnName) {
+    public <T> Optional<T> findCell(String columnName) {
         Optional<TblColumnSchema> schema = schema().findColumnSchema(columnName);
         if (schema.isEmpty()) {
             return Optional.empty();
         }
         int index = schema().getColumnNames().indexOf(columnName);
         Class<T> columnType = (Class<T>) schema.get().getColumnType();
-        return Optional.of(columnType.cast(values().get(index)));
+        return Optional.ofNullable(columnType.cast(values().get(index)));
     }
 
 }

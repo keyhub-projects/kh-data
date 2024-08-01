@@ -62,6 +62,19 @@ public class RowSetTblImplement extends TblImplement implements DataValue {
     }
 
     @Override
+    public List<Object> getRawRow(int index) {
+        if(index < 0 || index >= this.data.size()){
+            throw new IllegalArgumentException("Row index out of bounds");
+        }
+        return this.data.get(index);
+    }
+
+    @Override
+    public List<List<Object>> getRawRows() {
+        return this.data;
+    }
+
+    @Override
     public Tbl select(String... columns) {
         List<TblColumnSchema> columnSchemas = new ArrayList<>();
         for (String column : columns){
