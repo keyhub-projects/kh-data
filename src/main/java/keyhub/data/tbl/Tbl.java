@@ -45,6 +45,7 @@ public interface Tbl extends DataObject {
 
     Tbl select(String... columns);
     Tbl where(String column, TblOperatorType operator, Object value);
+    Tbl where(String column, TblOperatorType operator);
 
     TblJoin leftJoin(Tbl right);
     TblJoin innerJoin(Tbl right);

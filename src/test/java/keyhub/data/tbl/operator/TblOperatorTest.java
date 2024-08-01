@@ -34,11 +34,7 @@ public class TblOperatorTest {
     class IsNullTest{
         @Test
         public void testBuildOperatorIsNull() {
-            SimpleTblOperatorBuilder builder = new SimpleTblOperatorBuilder();
-            Tbl result = builder.operator(TblOperatorType.IS_NULL)
-                    .tbl(mockTbl)
-                    .column("column1")
-                    .build();
+            Tbl result = mockTbl.where("column1", TblOperatorType.IS_NULL);
             assertEquals(1, result.getRows().size());
         }
     }
@@ -47,11 +43,7 @@ public class TblOperatorTest {
     class IsNotNullTest{
         @Test
         public void testBuildOperatorIsNotNull() {
-            SimpleTblOperatorBuilder builder = new SimpleTblOperatorBuilder();
-            Tbl result = builder.operator(TblOperatorType.IS_NOT_NULL)
-                    .tbl(mockTbl)
-                    .column("column1")
-                    .build();
+            Tbl result = mockTbl.where("column1", TblOperatorType.IS_NOT_NULL);
             assertEquals(2, result.getRows().size());
         }
     }
@@ -60,12 +52,7 @@ public class TblOperatorTest {
     class EqualTest{
         @Test
         public void testBuildOperatorEqual() {
-            SimpleTblOperatorBuilder builder = new SimpleTblOperatorBuilder();
-            Tbl result = builder.operator(TblOperatorType.EQUAL)
-                    .tbl(mockTbl)
-                    .column("column1")
-                    .value("value1")
-                    .build();
+            Tbl result = mockTbl.where("column1", TblOperatorType.EQUAL, "value1");
             assertEquals(1, result.getRows().size());
         }
     }
@@ -74,12 +61,7 @@ public class TblOperatorTest {
     class NotEqualTest{
         @Test
         public void testBuildOperatorNotEqual() {
-            SimpleTblOperatorBuilder builder = new SimpleTblOperatorBuilder();
-            Tbl result = builder.operator(TblOperatorType.NOT_EQUAL)
-                    .tbl(mockTbl)
-                    .column("column1")
-                    .value("value1")
-                    .build();
+            Tbl result = mockTbl.where("column1", TblOperatorType.NOT_EQUAL, "value1");
             // null 포함
             assertEquals(2, result.getRows().size());
         }
@@ -89,23 +71,13 @@ public class TblOperatorTest {
     class GreaterThanTest{
         @Test
         public void testBuildOperatorGreaterThan() {
-            SimpleTblOperatorBuilder builder = new SimpleTblOperatorBuilder();
-            Tbl result = builder.operator(TblOperatorType.GREATER_THAN)
-                    .tbl(mockTbl)
-                    .column("column2")
-                    .value(1)
-                    .build();
+            Tbl result = mockTbl.where("column2", TblOperatorType.GREATER_THAN, 1);
             assertEquals(2, result.getRows().size());
         }
 
         @Test
         public void testBuildOperatorGreaterThanWithDateTime() {
-            SimpleTblOperatorBuilder builder = new SimpleTblOperatorBuilder();
-            Tbl result = builder.operator(TblOperatorType.GREATER_THAN)
-                    .tbl(mockTbl)
-                    .column("column3")
-                    .value(LocalDateTime.of(2021, 1, 2, 0, 0))
-                    .build();
+            Tbl result = mockTbl.where("column3", TblOperatorType.GREATER_THAN, LocalDateTime.of(2021, 1, 2, 0, 0));
             assertEquals(1, result.getRows().size());
         }
     }
@@ -114,12 +86,7 @@ public class TblOperatorTest {
     class GreaterThanOrEqualTest{
         @Test
         public void testBuildOperatorGreaterThanOrEqual() {
-            SimpleTblOperatorBuilder builder = new SimpleTblOperatorBuilder();
-            Tbl result = builder.operator(TblOperatorType.GREATER_THAN_OR_EQUAL)
-                    .tbl(mockTbl)
-                    .column("column2")
-                    .value(1)
-                    .build();
+            Tbl result = mockTbl.where("column2", TblOperatorType.GREATER_THAN_OR_EQUAL, 2);
             assertEquals(3, result.getRows().size());
         }
     }
@@ -128,12 +95,7 @@ public class TblOperatorTest {
     class LessThanTest{
         @Test
         public void testBuildOperatorLessThan() {
-            SimpleTblOperatorBuilder builder = new SimpleTblOperatorBuilder();
-            Tbl result = builder.operator(TblOperatorType.LESS_THAN)
-                    .tbl(mockTbl)
-                    .column("column2")
-                    .value(3)
-                    .build();
+            Tbl result = mockTbl.where("column2", TblOperatorType.LESS_THAN, 3);
             assertEquals(2, result.getRows().size());
         }
     }
@@ -142,12 +104,7 @@ public class TblOperatorTest {
     class LessThanOrEqualTest{
         @Test
         public void testBuildOperatorLessThanOrEqual() {
-            SimpleTblOperatorBuilder builder = new SimpleTblOperatorBuilder();
-            Tbl result = builder.operator(TblOperatorType.LESS_THAN_OR_EQUAL)
-                    .tbl(mockTbl)
-                    .column("column2")
-                    .value(3)
-                    .build();
+            Tbl result = mockTbl.where("column2", TblOperatorType.LESS_THAN_OR_EQUAL, 2);
             assertEquals(3, result.getRows().size());
         }
     }
@@ -156,12 +113,7 @@ public class TblOperatorTest {
     class LikeTest{
         @Test
         public void testBuildOperatorLike() {
-            SimpleTblOperatorBuilder builder = new SimpleTblOperatorBuilder();
-            Tbl result = builder.operator(TblOperatorType.LIKE)
-                    .tbl(mockTbl)
-                    .column("column1")
-                    .value("value")
-                    .build();
+            Tbl result = mockTbl.where("column1", TblOperatorType.LIKE, "value");
             assertEquals(2, result.getRows().size());
         }
     }
@@ -171,11 +123,7 @@ public class TblOperatorTest {
         @Test
         public void testBuildOperatorIn() {
             SimpleTblOperatorBuilder builder = new SimpleTblOperatorBuilder();
-            Tbl result = builder.operator(TblOperatorType.IN)
-                    .tbl(mockTbl)
-                    .column("column1")
-                    .value(List.of("value1", "value2"))
-                    .build();
+            Tbl result = mockTbl.where("column1", TblOperatorType.IN, List.of("value1", "value2"));
             assertEquals(2, result.getRows().size());
         }
     }
@@ -184,12 +132,7 @@ public class TblOperatorTest {
     class NotInTest{
         @Test
         public void testBuildOperatorNotIn() {
-            SimpleTblOperatorBuilder builder = new SimpleTblOperatorBuilder();
-            Tbl result = builder.operator(TblOperatorType.NOT_IN)
-                    .tbl(mockTbl)
-                    .column("column1")
-                    .value(List.of("value1"))
-                    .build();
+            Tbl result = mockTbl.where("column1", TblOperatorType.NOT_IN, List.of("value1"));
             assertEquals(2, result.getRows().size());
         }
     }
