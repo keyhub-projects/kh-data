@@ -2,8 +2,6 @@ package keyhub.data.tbl.join;
 
 import keyhub.data.tbl.Tbl;
 
-import java.util.Optional;
-
 public interface TblJoin {
     Tbl toTbl();
     TblJoin on(String sameKey);

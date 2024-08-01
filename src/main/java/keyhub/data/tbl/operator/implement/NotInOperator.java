@@ -3,7 +3,6 @@ package keyhub.data.tbl.operator.implement;
 import keyhub.data.tbl.Tbl;
 import keyhub.data.tbl.operator.TblOperator;
 import keyhub.data.tbl.operator.TblOperatorImplement;
-import keyhub.data.tbl.row.TblRow;
 import keyhub.data.tbl.schema.TblSchema;
 
 import java.util.Arrays;
