@@ -10,7 +10,8 @@ public interface TblBuilder {
     static TblBuilder forRowSet(TblSchema schema) {
         return new RowSetTblBuilder(schema);
     }
-    TblBuilder addRow(List<Object> row);
+    TblBuilder addRawRow(List<Object> row);
+    TblBuilder addRawRows(List<List<Object>> rows);
     TblBuilder addRow(TblRow row);
     TblBuilder addRows(List<TblRow> rows);
     Tbl build();

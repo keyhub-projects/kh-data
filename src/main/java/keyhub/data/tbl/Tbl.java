@@ -41,6 +41,7 @@ public interface Tbl extends DataObject {
     List<String> getColumns();
     Class<?> getColumnType(int index);
     Map<String, Class<?>> getColumnTypes();
+    int getColumnIndex(String column);
 
     Tbl select(String... columns);
     Tbl where(String column, TblOperatorType operator, Object value);
@@ -51,7 +52,8 @@ public interface Tbl extends DataObject {
     List<Map<String, Object>> toRowMapList();
     Map<String, List<Object>> toColumnListMap();
 
-    Object getValue(String columnName, int rowIndex);
+    Object findCell(String columnName, int rowIndex);
 
-    Object getValue(int columnIndex, int rowIndex);
+    Object getCell(int columnIndex, int rowIndex);
+
 }

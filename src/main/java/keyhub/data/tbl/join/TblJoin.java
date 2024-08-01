@@ -17,6 +17,7 @@ public interface TblJoin {
     TblJoin selectFromRight(String... columns);
     TblJoin selectAllFromRight();
 
-    Optional<Integer> findColumnIndexFromLeft(String column);
-    Optional<Integer> findColumnIndexFromRight(String column);
+    int getColumnIndexFromLeft(String column);
+    int getColumnIndexFromRight(String column);
+
 }

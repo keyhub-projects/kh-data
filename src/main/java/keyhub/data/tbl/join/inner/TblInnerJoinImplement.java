@@ -16,17 +16,17 @@ public class TblInnerJoinImplement extends TblJoinImplement implements TblInnerJ
     @Override
     public List<List<Object>> computeJoinRawResult(){
         List<List<Object>> rows = new ArrayList<>();
-//        for(int i = 0; i < left.size(); i++){
-//            for(int j = 0; j < right.size(); j++){
-//                boolean isJoined = isJoinedRow(this.left.getRow(i), this.right.getRow(j));
-//                if(isJoined){
-//                    List<Object> row = new ArrayList<>();
-//                    row.addAll(left.getRow(i));
-//                    row.addAll(right.getRow(j));
-//                    rows.add(row);
-//                }
-//            }
-//        }
+        for(int i = 0; i < this.left.count(); i++){
+            for(int j = 0; j < right.count(); j++){
+                boolean isJoined = isJoinedRow(this.left.getRow(i), this.right.getRow(j));
+                if(isJoined){
+                    List<Object> row = new ArrayList<>();
+                    row.addAll(this.left.getRawRow(i));
+                    row.addAll(this.right.getRawRow(j));
+                    rows.add(row);
+                }
+            }
+        }
         return rows;
     }
 }

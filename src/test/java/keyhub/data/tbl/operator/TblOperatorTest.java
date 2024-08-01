@@ -24,9 +24,9 @@ public class TblOperatorTest {
                 .addColumn("column3", LocalDateTime.class)
                 .build();
         mockTbl = Tbl.builder(mockSchema)
-                .addRow(List.of("value1", 1, LocalDateTime.of(2021, 1, 1, 0, 0)))
-                .addRow(List.of("value2", 2, LocalDateTime.of(2021, 1, 2, 0, 0)))
-                .addRow(Arrays.asList(null, 3, LocalDateTime.of(2021, 1, 3, 0, 0)))
+                .addRawRow(List.of("value1", 1, LocalDateTime.of(2021, 1, 1, 0, 0)))
+                .addRawRow(List.of("value2", 2, LocalDateTime.of(2021, 1, 2, 0, 0)))
+                .addRawRow(Arrays.asList(null, 3, LocalDateTime.of(2021, 1, 3, 0, 0)))
                 .build();
     }
 

@@ -41,5 +41,12 @@ public abstract class TblRowImplement implements TblRow {
         Class<T> columnType = (Class<T>) schema.get().getColumnType();
         return Optional.ofNullable(columnType.cast(values().get(index)));
     }
+    @Override
+    public <T> T getCell(int columnIndex) {
+        if(columnIndex < 0 || columnIndex >= schema().getColumnSize()){
+            throw new IllegalArgumentException("Column index out of bounds");
+        }
+        return (T) values().get(columnIndex);
+    }
 
 }

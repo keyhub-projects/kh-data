@@ -3,19 +3,17 @@ package keyhub.data.tbl.operator.implement;
 import keyhub.data.tbl.Tbl;
 import keyhub.data.tbl.operator.TblOperator;
 import keyhub.data.tbl.operator.TblOperatorImplement;
-import keyhub.data.tbl.row.TblRow;
 import keyhub.data.tbl.schema.TblSchema;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 public class InOperator extends TblOperatorImplement {
     private final TblSchema schema;
-    private final List<TblRow> rows;
+    private final List<List<Object>> rows;
 
-    public InOperator(TblSchema schema, List<TblRow> rows) {
+    public InOperator(TblSchema schema, List<List<Object>> rows) {
         this.schema = schema;
         this.rows = rows;
     }
@@ -25,9 +23,10 @@ public class InOperator extends TblOperatorImplement {
         if(!originSchema.contains(column)){
             throw new IllegalArgumentException("Column not found");
         }
-        List<TblRow> originData = tbl.getRows();
-        List<TblRow> filtered = originData.stream().filter(row -> {
-            Optional<Object> cell = row.findCell(column);
+        List<List<Object>> originData = tbl.getRawRows();
+        List<List<Object>> filtered = originData.stream().filter(row -> {
+            int index = originSchema.getColumnIndex(column);
+            Optional<Object> cell = Optional.ofNullable(row.get(index));
             if(cell.isEmpty()){
                 return false;
             }
@@ -42,7 +41,7 @@ public class InOperator extends TblOperatorImplement {
     }
     
     @Override
-    public List<TblRow> rows() {
+    public List<List<Object>> rows() {
         return this.rows;
     }
 

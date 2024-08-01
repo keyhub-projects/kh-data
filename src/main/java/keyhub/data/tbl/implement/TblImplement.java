@@ -26,7 +26,7 @@ public abstract class TblImplement implements Tbl {
             List<Object> row = keyMap.stream()
                     .map(columnSchema -> rowMap.getOrDefault(columnSchema.getColumnName(), null))
                     .toList();
-            builder.addRow(row);
+            builder.addRawRow(row);
         }
         return builder.build();
     }
@@ -42,7 +42,7 @@ public abstract class TblImplement implements Tbl {
             List<Object> row = keyMap.stream()
                     .map(columnSchema -> columnListMap.get(columnSchema.getColumnName()).get(finalI))
                     .toList();
-            builder.addRow(row);
+            builder.addRawRow(row);
         }
         return builder.build();
     }
@@ -80,6 +80,11 @@ public abstract class TblImplement implements Tbl {
     @Override
     public Map<String, Class<?>> getColumnTypes() {
         return schema.getColumnTypes();
+    }
+
+    @Override
+    public int getColumnIndex(String column) {
+        return schema.getColumnIndex(column);
     }
 
 }

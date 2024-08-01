@@ -3,7 +3,6 @@ package keyhub.data.tbl.operator.implement;
 import keyhub.data.tbl.Tbl;
 import keyhub.data.tbl.operator.TblOperator;
 import keyhub.data.tbl.operator.TblOperatorImplement;
-import keyhub.data.tbl.row.TblRow;
 import keyhub.data.tbl.schema.TblSchema;
 
 import java.util.List;
@@ -11,11 +10,11 @@ import java.util.Optional;
 
 public class EqualOperator extends TblOperatorImplement {
     private final TblSchema schema;
-    private final List<TblRow> rows;
+    private final List<List<Object>> data;
 
-    public EqualOperator(TblSchema schema, List<TblRow> rows) {
+    public EqualOperator(TblSchema schema, List<List<Object>> data) {
         this.schema = schema;
-        this.rows = rows;
+        this.data = data;
     }
 
     public static TblOperator of(Tbl tbl, String column, Object value) {
@@ -23,9 +22,10 @@ public class EqualOperator extends TblOperatorImplement {
         if(!originSchema.contains(column)){
             throw new IllegalArgumentException("Column not found");
         }
-        List<TblRow> originData = tbl.getRows();
-        List<TblRow> filtered = originData.stream().filter(row -> {
-            Optional<Object> cell = row.findCell(column);
+        List<List<Object>> originData = tbl.getRawRows();
+        List<List<Object>> filtered = originData.stream().filter(row -> {
+            int index = originSchema.getColumnIndex(column);
+            Optional<Object> cell = Optional.ofNullable(row.get(index));
             return cell.isPresent() && cell.get().equals(value);
         }).toList();
 
@@ -33,8 +33,8 @@ public class EqualOperator extends TblOperatorImplement {
     }
 
     @Override
-    public List<TblRow> rows() {
-        return this.rows;
+    public List<List<Object>> rows() {
+        return this.data;
     }
 
     @Override

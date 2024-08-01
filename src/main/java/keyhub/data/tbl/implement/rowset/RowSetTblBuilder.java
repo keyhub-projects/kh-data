@@ -22,7 +22,7 @@ public class RowSetTblBuilder extends TblBuilderImplement {
     }
 
     @Override
-    public TblBuilder addRow(List<Object> row) {
+    public TblBuilder addRawRow(List<Object> row) {
         for(int i = 0; i < row.size(); i++) {
             String columnName = this.schema.getColumnNames().get(i);
             if(row.get(i) != null && !this.schema.getColumnTypes().get(columnName).isInstance(row.get(i))) {

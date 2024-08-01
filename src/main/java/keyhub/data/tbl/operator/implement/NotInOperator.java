@@ -12,9 +12,9 @@ import java.util.Optional;
 
 public class NotInOperator extends TblOperatorImplement {
     private final TblSchema schema;
-    private final List<TblRow> rows;
+    private final List<List<Object>> rows;
 
-    public NotInOperator(TblSchema schema, List<TblRow> rows) {
+    public NotInOperator(TblSchema schema, List<List<Object>> rows) {
         this.schema = schema;
         this.rows = rows;
     }
@@ -24,9 +24,10 @@ public class NotInOperator extends TblOperatorImplement {
         if(!originSchema.contains(column)){
             throw new IllegalArgumentException("Column not found");
         }
-        List<TblRow> originData = tbl.getRows();
-        List<TblRow> filtered = originData.stream().filter(row -> {
-            Optional<Object> cell = row.findCell(column);
+        List<List<Object>> originData = tbl.getRawRows();
+        List<List<Object>> filtered = originData.stream().filter(row -> {
+            int index = originSchema.getColumnIndex(column);
+            Optional<Object> cell = Optional.ofNullable(row.get(index));
             if(cell.isEmpty()){
                 return true;
             }
@@ -41,7 +42,7 @@ public class NotInOperator extends TblOperatorImplement {
     }
     
     @Override
-    public List<TblRow> rows() {
+    public List<List<Object>> rows() {
         return this.rows;
     }
 

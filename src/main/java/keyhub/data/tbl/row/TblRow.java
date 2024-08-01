@@ -18,5 +18,5 @@ public interface TblRow {
     TblSchema getSchema();
     List<Object> toList();
     <T> Optional<T> findCell(String columnName);
-
+    <T> T getCell(int columnIndex);
 }

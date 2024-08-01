@@ -1,16 +1,19 @@
 package keyhub.data.tbl.join;
 
 import keyhub.data.tbl.Tbl;
+import keyhub.data.tbl.row.TblRow;
+import keyhub.data.tbl.schema.TblColumnSchema;
+import keyhub.data.tbl.schema.TblSchema;
+import keyhub.data.tbl.schema.TblSchemaValue;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public abstract class TblJoinImplement implements TblJoin {
     protected final Tbl left;
     protected final Tbl right;
     protected final List<List<Integer>> selectColumns;
-    protected final List<List<Integer>> joinColumns = new ArrayList<>();
+    protected final List<List<Integer>> joinColumns;
 
 
     public TblJoinImplement(Tbl left, Tbl right) {
@@ -21,6 +24,7 @@ public abstract class TblJoinImplement implements TblJoin {
         this.selectColumns.add(leftSelectColumns);
         List<Integer> rightSelectColumns = new ArrayList<>();
         this.selectColumns.add(rightSelectColumns);
+        this.joinColumns = new ArrayList<>();
     }
 
     @Override
@@ -30,13 +34,15 @@ public abstract class TblJoinImplement implements TblJoin {
 
     @Override
     public TblJoin on(String leftKey, String rightKey){
-        Integer leftIndex = findColumnIndexFromLeft(leftKey)
-                .orElseThrow(() -> new IllegalArgumentException("Key not found"));
-        Integer rightIndex = findColumnIndexFromRight(rightKey)
-                .orElseThrow(() -> new IllegalArgumentException("Key not found"));
-        List<Integer> joinColumn = new ArrayList<>();
-        joinColumn.add(leftIndex);
-        joinColumn.add(rightIndex);
+        int leftIndex = getColumnIndexFromLeft(leftKey);
+        if(leftIndex == -1){
+            throw new IllegalArgumentException("Key not found");
+        }
+        int rightIndex = getColumnIndexFromRight(rightKey);
+        if(rightIndex == -1){
+            throw new IllegalArgumentException("Key not found");
+        }
+        List<Integer> joinColumn = List.of(leftIndex, rightIndex);
         this.joinColumns.add(joinColumn);
         return this;
     }
@@ -45,29 +51,35 @@ public abstract class TblJoinImplement implements TblJoin {
     public Tbl toTbl() {
         computePreProcess();
         List<List<Object>> rawRows = computeJoinRawResult();
-        List<String> columns = computeJoinColumn();
-        List<List<Object>> rows = computeJoinData(columns, rawRows);
-        return null;//Tbl.of(columns, rows);
+        TblSchema schema = computeJoinSchema();
+        List<List<Object>> rows = computeJoinData(rawRows);
+        return Tbl.of(schema, rows);
     }
     protected void computePreProcess(){
         // Do nothing
     }
     protected abstract List<List<Object>> computeJoinRawResult();
-    protected boolean isJoinedRow(List<Object> leftRow, List<Object> rightRow){
+    protected boolean isJoinedRow(TblRow leftRow, TblRow rightRow){
         return this.joinColumns.stream().allMatch(pair -> {
             int leftIndex = pair.get(0);
             int rightIndex = pair.get(1);
-            return leftRow.get(leftIndex)
-                    .equals(rightRow.get(rightIndex));
+            return leftRow.getCell(leftIndex)
+                    .equals(rightRow.getCell(rightIndex));
         });
     }
-    protected List<String> computeJoinColumn(){
-        List<String> columns = new ArrayList<>();
-        selectColumns.get(0).forEach(index -> columns.add(left.getColumn(index)));
-        selectColumns.get(1).forEach(index -> columns.add(right.getColumn(index)));
-        return columns;
+    protected TblSchema computeJoinSchema(){
+        TblSchemaValue.TblSchemaValueBuilder builder = TblSchemaValue.builder();
+        selectColumns.get(0).forEach(index -> {
+            TblColumnSchema<?> columnSchema = left.getColumnSchema(index);
+            builder.addColumn(columnSchema);
+        });
+        selectColumns.get(1).forEach(index -> {
+            TblColumnSchema<?> columnSchema = right.getColumnSchema(index);
+            builder.addColumn(columnSchema);
+        });
+        return builder.build();
     }
-    protected List<List<Object>> computeJoinData(List<String> columns, List<List<Object>> rawResult){
+    protected List<List<Object>> computeJoinData(List<List<Object>> rawResult){
         List<List<Object>> rows = new ArrayList<>();
         for(List<Object> row : rawResult){
             List<Object> newRow = new ArrayList<>();
@@ -91,9 +103,11 @@ public abstract class TblJoinImplement implements TblJoin {
     }
     @Override
     public TblJoin selectFromLeft(String column){
-        int index = findColumnIndexFromLeft(column)
-                .orElseThrow(() -> new IllegalArgumentException("Left Key not found"));
-        this.selectColumns.get(0).add(index);
+        int index = getColumnIndexFromLeft(column);
+        if(index == -1){
+            throw new IllegalArgumentException("Left Key not found");
+        }
+        this.selectColumns.getFirst().add(index);
         return this;
     }
     @Override
@@ -105,16 +119,18 @@ public abstract class TblJoinImplement implements TblJoin {
     }
     @Override
     public TblJoin selectAllFromLeft(){
-        this.selectColumns.get(0).clear();
+        this.selectColumns.getFirst().clear();
         for(int i = 0; i < left.getColumns().size(); i++){
-            this.selectColumns.get(0).add(i);
+            this.selectColumns.getFirst().add(i);
         }
         return this;
     }
     @Override
     public TblJoin selectFromRight(String column){
-        int index = findColumnIndexFromRight(column)
-                .orElseThrow(() -> new IllegalArgumentException("Right Key not found"));
+        int index = getColumnIndexFromRight(column);
+        if(index == -1){
+            throw new IllegalArgumentException("Right Key not found");
+        }
         this.selectColumns.get(1).add(index);
         return this;
     }
@@ -135,15 +151,11 @@ public abstract class TblJoinImplement implements TblJoin {
     }
 
     @Override
-    public Optional<Integer> findColumnIndexFromLeft(String column){
-//        return this.left.findColumnIndex(column);
-        return Optional.empty();
+    public int getColumnIndexFromLeft(String column){
+        return this.left.getColumnIndex(column);
     }
     @Override
-    public Optional<Integer> findColumnIndexFromRight(String column){
-//        return this.right.findColumnIndex(column);
-        return Optional.empty();
+    public int getColumnIndexFromRight(String column){
+        return this.right.getColumnIndex(column);
     }
-
-
 }

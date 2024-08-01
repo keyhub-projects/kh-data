@@ -14,6 +14,14 @@ public abstract class TblBuilderImplement implements TblBuilder {
     }
 
     @Override
+    public TblBuilder addRawRows(List<List<Object>> rows) {
+        for(List<Object> row : rows) {
+            addRawRow(row);
+        }
+        return this;
+    }
+
+    @Override
     public TblBuilder addRows(List<TblRow> rows) {
         for(TblRow row : rows) {
             addRow(row);
