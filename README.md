@@ -17,24 +17,16 @@ implementation 'io.github.keyhub-projects:kh-data:1.0.2'
 ```
 
 # Structure
-## Class Diagram
-- DataObject
-  - DataValue
-  - DataVariable
-- Tbl
-  - TblValue
-    - TblValueBuilder
-  - TblVariable
-- JoinSet
-  - InnerJoinSet
-  - LeftJoinSet
+
+## Tbl
+### Class Diagram
 
 ![class_diagram](./docs/class_diagram.png)
 
-# How to Use
+## How to Use
 - Almost setter made by fluent interface.
   - It returns the instance itself.
     - It means that you can chain methods.
-    - For example, `tbl.select("a").where("b", ">", 10).selectAll()`.
+    - For example, `tbl.where("b", , 10).selectAll()`.
 
 

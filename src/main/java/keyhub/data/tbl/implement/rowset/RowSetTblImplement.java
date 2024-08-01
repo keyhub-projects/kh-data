@@ -39,7 +39,7 @@ public class RowSetTblImplement extends TblImplement implements DataValue {
     public Optional<Object> findCell(String columnName, int rowIndex){
         int columnIndex = this.schema.getColumnIndex(columnName);
         if(columnIndex == -1){
-            Optional.empty();
+            return Optional.empty();
         }
         return Optional.ofNullable(getCell(columnIndex, rowIndex));
     }
@@ -105,6 +105,14 @@ public class RowSetTblImplement extends TblImplement implements DataValue {
                 .tbl(this)
                 .column(column)
                 .value(value)
+                .build();
+    }
+    @Override
+    public Tbl where(String column, TblOperatorType operator) {
+        return TblOperator.builder()
+                .operator(operator)
+                .tbl(this)
+                .column(column)
                 .build();
     }
 
