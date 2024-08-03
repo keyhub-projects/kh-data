@@ -29,4 +29,5 @@ implementation 'io.github.keyhub-projects:kh-data:1.1.0'
     - It means that you can chain methods.
     - For example, `tbl.where("b", EQUAL, 10).selectAll()`.
 
+- [KeyHub-Data-Tbl(한글 설명)](./docs/KeyHub-Data-Tbl(한글설명).pdf)
 
