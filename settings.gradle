@@ -1,2 +1,4 @@
 rootProject.name = 'kh-data'
+include 'kh-data-tbl'
+include 'kh-data-tbl-example'
 

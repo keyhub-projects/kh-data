@@ -9,6 +9,8 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/kh-data-tbl" />
+            <option value="$PROJECT_DIR$/kh-data-tbl-example" />
           </set>
         </option>
       </GradleProjectSettings>
