@@ -28,7 +28,7 @@ class TblColumnSchemaTest {
     class EqualsTest {
         @Test
         void testEquals_sameObject() {
-            TblColumnSchema<?> schema1 = TblColumnSchemaImplement.of("id", Integer.class);
+            TblColumnSchema<?> schema1 = TblColumnSchema.of("id", Integer.class);
             TblColumnSchema<?> schema2 = schema1;
 
             assertEquals(schema1, schema2);
@@ -37,8 +37,8 @@ class TblColumnSchemaTest {
         @Test
         @DisplayName("같은 값을 가진 객체")
         void testEquals_equalObjects() {
-            TblColumnSchema<?> schema1 = TblColumnSchemaImplement.of("id", Integer.class);
-            TblColumnSchema<?> schema2 = TblColumnSchemaImplement.of("id", Integer.class);
+            TblColumnSchema<?> schema1 = TblColumnSchema.of("id", Integer.class);
+            TblColumnSchema<?> schema2 = TblColumnSchema.of("id", Integer.class);
 
             assertEquals(schema1, schema2);
         }
@@ -46,8 +46,8 @@ class TblColumnSchemaTest {
         @Test
         @DisplayName("다른 값을 가진 객체")
         void testEquals_diffColumnName() {
-            TblColumnSchema<?> schema1 = TblColumnSchemaImplement.of("id", Integer.class);
-            TblColumnSchema<?> schema2 = TblColumnSchemaImplement.of("name", Integer.class);
+            TblColumnSchema<?> schema1 = TblColumnSchema.of("id", Integer.class);
+            TblColumnSchema<?> schema2 = TblColumnSchema.of("name", Integer.class);
 
             Assertions.assertNotEquals(schema1, schema2);
         }
@@ -55,8 +55,8 @@ class TblColumnSchemaTest {
         @Test
         @DisplayName("다른 타입을 가진 객체")
         void testEquals_diffColumnType() {
-            TblColumnSchema<?> schema1 = TblColumnSchemaImplement.of("id", Integer.class);
-            TblColumnSchema<?> schema2 = TblColumnSchemaImplement.of("id", String.class);
+            TblColumnSchema<?> schema1 = TblColumnSchema.of("id", Integer.class);
+            TblColumnSchema<?> schema2 = TblColumnSchema.of("id", String.class);
 
             Assertions.assertNotEquals(schema1, schema2);
         }
@@ -64,7 +64,7 @@ class TblColumnSchemaTest {
         @Test
         @DisplayName("null과 비교")
         void testEquals_compareToNull() {
-            TblColumnSchema<?> schema1 = TblColumnSchemaImplement.of("id", Integer.class);
+            TblColumnSchema<?> schema1 = TblColumnSchema.of("id", Integer.class);
 
             Assertions.assertNotEquals(schema1, null);
         }

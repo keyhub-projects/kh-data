@@ -1,6 +1,5 @@
 package keyhub.data.tbl;
 
-import keyhub.data.tbl.implement.TblImplement;
 import keyhub.data.tbl.operator.TblOperatorType;
 import keyhub.data.tbl.row.TblRow;
 import keyhub.data.tbl.schema.TblColumnSchema;
@@ -26,7 +25,7 @@ public class TbTest {
             rowMap.put("key2", 2);
             rowMapList.add(rowMap);
 
-            Tbl result = TblImplement.of(rowMapList);
+            Tbl result = Tbl.of(rowMapList);
 
             System.out.println(result);
             assertNotNull(result);
@@ -51,7 +50,7 @@ public class TbTest {
             columnList2.add(3);
             columnListMap.put("key2", columnList2);
 
-            Tbl result = TblImplement.of(columnListMap);
+            Tbl result = Tbl.of(columnListMap);
 
             assertNotNull(result);
             assertEquals(2, result.getColumnSize());
@@ -78,7 +77,7 @@ public class TbTest {
             columnSchemas.add(TblColumnSchema.of("key2", Integer.class));
             TblSchema schema = TblSchema.of(columnSchemas);
 
-            Tbl result = TblImplement.of(schema, data);
+            Tbl result = Tbl.of(schema, data);
 
             assertNotNull(result);
             assertEquals(2, result.getColumnSize());

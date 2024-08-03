@@ -1,6 +1,7 @@
 package keyhub.data.tbl.implement;
 
 import keyhub.data.tbl.TblBuilder;
+import keyhub.data.tbl.implement.rowset.RowSetTblBuilder;
 import keyhub.data.tbl.row.TblRow;
 import keyhub.data.tbl.schema.TblSchema;
 
@@ -11,6 +12,10 @@ public abstract class TblBuilderImplement implements TblBuilder {
 
     protected TblBuilderImplement(TblSchema schema) {
         this.schema = schema;
+    }
+
+    public static TblBuilder forRowSet(TblSchema schema){
+        return new RowSetTblBuilder(schema);
     }
 
     @Override

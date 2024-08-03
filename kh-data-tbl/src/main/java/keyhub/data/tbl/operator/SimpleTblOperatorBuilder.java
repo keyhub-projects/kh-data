@@ -4,11 +4,6 @@ import keyhub.data.tbl.Tbl;
 import keyhub.data.tbl.operator.implement.*;
 
 public class SimpleTblOperatorBuilder extends TblOperatorBuilderImplement{
-
-    public static TblOperatorBuilder of(){
-        return new SimpleTblOperatorBuilder();
-    }
-
     @Override
     public Tbl build(){
         if(this.operator == null){

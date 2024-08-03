@@ -8,6 +8,10 @@ public abstract class TblOperatorBuilderImplement implements TblOperatorBuilder{
     protected String column;
     protected Object value;
 
+    static TblOperatorBuilder of() {
+        return new SimpleTblOperatorBuilder();
+    }
+
     @Override
     public TblOperatorBuilder tbl(Tbl tbl){
         this.tbl = tbl;
