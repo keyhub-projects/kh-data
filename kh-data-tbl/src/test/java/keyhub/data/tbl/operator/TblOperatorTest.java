@@ -146,7 +146,6 @@ public class TblOperatorTest {
     class InTest{
         @Test
         public void testBuildOperatorIn() {
-            SimpleTblOperatorBuilder builder = new SimpleTblOperatorBuilder();
             Tbl result = mockTbl.where("column1", TblOperatorType.IN, List.of("value1", "value2"));
             assertEquals(2, result.getRows().size());
         }
