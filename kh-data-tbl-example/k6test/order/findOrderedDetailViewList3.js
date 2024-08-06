@@ -2,8 +2,9 @@ import http from 'k6/http';
 import { check, sleep } from 'k6';
 
 export const options = {
-    vus: 10,
-    duration: '1m30s',
+    stages: [
+        { duration: '5m30s', target: 1000 },
+    ],
     thresholds: {
         http_req_duration: ['p(95)<200'],
     },
@@ -16,3 +17,4 @@ export default function () {
     check(response, { 'status was 200': (r) => r.status === 200});
     sleep(1);
 }
+
