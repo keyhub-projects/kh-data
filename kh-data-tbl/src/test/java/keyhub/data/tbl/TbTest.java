@@ -1,6 +1,29 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2024 KH
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 package keyhub.data.tbl;
 
-import keyhub.data.tbl.implement.TblImplement;
 import keyhub.data.tbl.operator.TblOperatorType;
 import keyhub.data.tbl.row.TblRow;
 import keyhub.data.tbl.schema.TblColumnSchema;
@@ -26,7 +49,7 @@ public class TbTest {
             rowMap.put("key2", 2);
             rowMapList.add(rowMap);
 
-            Tbl result = TblImplement.of(rowMapList);
+            Tbl result = Tbl.of(rowMapList);
 
             System.out.println(result);
             assertNotNull(result);
@@ -51,7 +74,7 @@ public class TbTest {
             columnList2.add(3);
             columnListMap.put("key2", columnList2);
 
-            Tbl result = TblImplement.of(columnListMap);
+            Tbl result = Tbl.of(columnListMap);
 
             assertNotNull(result);
             assertEquals(2, result.getColumnSize());
@@ -78,7 +101,7 @@ public class TbTest {
             columnSchemas.add(TblColumnSchema.of("key2", Integer.class));
             TblSchema schema = TblSchema.of(columnSchemas);
 
-            Tbl result = TblImplement.of(schema, data);
+            Tbl result = Tbl.of(schema, data);
 
             assertNotNull(result);
             assertEquals(2, result.getColumnSize());
