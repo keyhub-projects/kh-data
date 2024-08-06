@@ -50,7 +50,6 @@ public class NotEqualOperator extends TblOperatorImplement {
         List<List<Object>> filtered = originData.stream().filter(row -> {
             int index = originSchema.getColumnIndex(column);
             Optional<Object> cell = Optional.ofNullable(row.get(index));
-            // null 미포함? 고민.. 일단 포함
             return cell.isEmpty() || !cell.get().equals(value);
         }).toList();
 

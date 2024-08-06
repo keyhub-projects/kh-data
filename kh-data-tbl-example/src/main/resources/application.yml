@@ -1,0 +1,27 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: demo
+  datasource:
+    #    # MSSQL
+    #    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    #    url: jdbc:sqlserver://localhost:1433;databaseName=mytest
+    #    # MY-SQL
+    #    driver-class-name: com.mysql.cj.jdbc.Driver
+    #    url: jdbc:mysql://localhost:3306/mytest?serverTimezone=UTC&characterEncoding=UTF-8
+    #    # 계정
+    #    username: root
+    #    password: 1234!
+    # H2
+    url: jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+  jpa:
+    #    # MSSQL
+    #    database-platform: org.hibernate.dialect.SQLServer2012Dialect
+    #    # MY-SQL
+    #    database-platform: org.hibernate.dialect.MySQL8Dialect
+    # DDL 자동 생성
+    generate-ddl: true
+    # DDL 자동 생성 하이버네이트 옵션 (create, create-drop, update, validate, none)
+    hibernate:
+      ddl-auto: update

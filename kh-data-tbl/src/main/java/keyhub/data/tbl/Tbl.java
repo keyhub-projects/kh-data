@@ -36,6 +36,10 @@ import java.util.*;
 
 public interface Tbl extends DataObject {
 
+    static Tbl asObjects(List<?> objectList) {
+        return TblImplement.asObjects(objectList);
+    }
+
     static Tbl of(TblSchema schema, List<List<Object>> data) {
         return TblImplement.of(schema, data);
     }

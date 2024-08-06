@@ -53,7 +53,6 @@ public class LessThanOrEqualOperator extends TblOperatorImplement {
         List<List<Object>> filtered = originData.stream().filter(row -> {
             int index = originSchema.getColumnIndex(column);
             Optional<Object> cell = Optional.ofNullable(row.get(index));
-            // null 미포함? 고민.. 일단 미포함
             if(cell.isEmpty()){
                 return false;
             }

@@ -24,6 +24,7 @@
 
 package keyhub.data.tbl.implement;
 
+import keyhub.data.converter.ObjectConverter;
 import keyhub.data.tbl.Tbl;
 import keyhub.data.tbl.TblBuilder;
 import keyhub.data.tbl.schema.TblColumnSchema;
@@ -37,6 +38,11 @@ public abstract class TblImplement implements Tbl {
 
     protected TblImplement(TblSchema schema) {
         this.schema = schema;
+    }
+
+    public static Tbl asObjects(List<?> objectList) {
+        List<Map<String, Object>> mapList = ObjectConverter.convertToMapList(objectList);
+        return of(mapList);
     }
 
     public static Tbl of(List<Map<String, Object>> rowMapList) {
