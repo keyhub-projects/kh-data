@@ -5,5 +5,5 @@ import keyhub.order.domain.dto.OrderDetailView;
 import java.util.List;
 
 public interface OrderReader {
-    List<OrderDetailView> findOrderedDetailViewList(String userId);
+    List<OrderDetailView> findOrderedDetailViewList(String userId) throws IllegalAccessException;
 }

@@ -36,7 +36,7 @@ import java.util.*;
 
 public interface Tbl extends DataObject {
 
-    static Tbl asObjects(List<?> objectList) {
+    static Tbl asObjects(List<?> objectList) throws IllegalAccessException {
         return TblImplement.asObjects(objectList);
     }
 

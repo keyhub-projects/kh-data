@@ -40,7 +40,7 @@ public abstract class TblImplement implements Tbl {
         this.schema = schema;
     }
 
-    public static Tbl asObjects(List<?> objectList) {
+    public static Tbl asObjects(List<?> objectList) throws IllegalAccessException {
         List<Map<String, Object>> mapList = ObjectConverter.convertToMapList(objectList);
         return of(mapList);
     }

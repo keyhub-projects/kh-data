@@ -25,27 +25,20 @@
 package keyhub.data.converter;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ObjectConverter {
-    public static Map<String, Object> convertToMap(Object object){
-        Map<String, Object> map = new HashMap<>();
+    public static Map<String, Object> convertToMap(Object object) throws IllegalAccessException {
+        Map<String, Object> map = new WeakHashMap<>();
         Field[] fields = object.getClass().getDeclaredFields();
         for(Field field : fields){
             field.setAccessible(true);
-            try {
-                map.put(field.getName(), field.get(object));
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
+            map.put(field.getName(), field.get(object));
         }
         return map;
     }
 
-    public static List<Map<String, Object>> convertToMapList(List<?> objectList){
+    public static List<Map<String, Object>> convertToMapList(List<?> objectList) throws IllegalAccessException {
         List<Map<String, Object>> mapList = new ArrayList<>();
         for(Object object : objectList){
             mapList.add(convertToMap(object));
