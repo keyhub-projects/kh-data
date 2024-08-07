@@ -17,7 +17,7 @@ public class OrderController {
     private final OrderService orderService;
 
     @GetMapping("/{userId}")
-    public List<OrderDetailView> findOrderedDetailViewList(@PathVariable String userId) {
+    public List<OrderDetailView> findOrderedDetailViewList(@PathVariable String userId) throws IllegalAccessException {
         return orderService.findOrderedDetailViewList(userId);
     }
 

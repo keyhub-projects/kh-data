@@ -26,6 +26,7 @@ package keyhub.data.tbl.row;
 
 import keyhub.data.tbl.schema.TblSchema;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TblRowValue extends TblRowImplement {
@@ -34,7 +35,7 @@ public class TblRowValue extends TblRowImplement {
 
     public TblRowValue(TblSchema schema, List<Object> values) {
         this.schema = schema;
-        this.values = values;
+        this.values = new ArrayList<>(values);
     }
     @Override
     protected TblSchema schema() {

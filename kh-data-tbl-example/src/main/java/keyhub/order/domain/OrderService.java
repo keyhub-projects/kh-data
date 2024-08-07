@@ -13,7 +13,7 @@ public class OrderService {
     private final OrderReader orderReader;
 
     @Transactional(readOnly = true)
-    public List<OrderDetailView> findOrderedDetailViewList(String userId) {
+    public List<OrderDetailView> findOrderedDetailViewList(String userId) throws IllegalAccessException {
         return orderReader.findOrderedDetailViewList(userId);
     }
 }

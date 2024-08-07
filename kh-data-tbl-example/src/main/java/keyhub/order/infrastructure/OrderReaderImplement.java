@@ -22,7 +22,7 @@ public class OrderReaderImplement implements OrderReader {
     private final WmsClient wmsClient;
 
     @Override
-    public List<OrderDetailView> findOrderedDetailViewList(String userId) {
+    public List<OrderDetailView> findOrderedDetailViewList(String userId) throws IllegalAccessException {
         List<Order> orderList = orderJpaRepository.findByUserId(userId);
         List<PgView> pgViewList = pgClient.findPgViewListByUserId(userId);
         List<WmsView> wmsViewList = wmsClient.findWmsViewListByUserId(userId);
