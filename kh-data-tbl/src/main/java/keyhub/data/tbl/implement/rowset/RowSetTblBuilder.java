@@ -30,13 +30,11 @@ import keyhub.data.tbl.implement.TblBuilderImplement;
 import keyhub.data.tbl.row.TblRow;
 import keyhub.data.tbl.schema.TblSchema;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class RowSetTblBuilder extends TblBuilderImplement {
-    private final WeakReference<List<List<Object>>> rows = new WeakReference<>(new ArrayList<>());
+    private final List<List<Object>> rows = new ArrayList<>();
 
     public RowSetTblBuilder(TblSchema schema) {
         super(schema);
@@ -44,7 +42,7 @@ public class RowSetTblBuilder extends TblBuilderImplement {
 
     @Override
     public Tbl build() {
-        return new RowSetTblImplement(this.schema, this.rows.get());
+        return new RowSetTblImplement(this.schema, this.rows);
     }
 
     @Override
@@ -55,14 +53,14 @@ public class RowSetTblBuilder extends TblBuilderImplement {
                 throw new IllegalArgumentException("Row value type does not match schema");
             }
         }
-        Objects.requireNonNull(rows.get()).add(row);
+        this.rows.add(row);
         return this;
     }
 
     @Override
     public TblBuilder addRow(TblRow row) {
         List<Object> rawRow = row.toList();
-        Objects.requireNonNull(this.rows.get()).add(rawRow);
+        this.rows.add(rawRow);
         return this;
     }
 
