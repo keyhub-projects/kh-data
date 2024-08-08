@@ -118,7 +118,7 @@ public class RowSetTblImplement extends TblImplement {
             }
             newData.add(newRow);
         }
-        return new RowSetTblImplement(TblSchema.of(columnSchemas), newData);
+        return new RowSetTblImplement(TblSchema.from(columnSchemas), newData);
     }
 
     @Override

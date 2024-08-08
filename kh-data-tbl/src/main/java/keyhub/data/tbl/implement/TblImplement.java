@@ -49,7 +49,7 @@ public abstract class TblImplement implements Tbl {
         return TblBuilder.forRowSet(schema).build();
     }
 
-    public static Tbl from(List<?> objectList) throws IllegalAccessException {
+    public static Tbl from(List<?> objectList) {
         if(objectList.isEmpty()) {
             return empty();
         }
@@ -59,17 +59,16 @@ public abstract class TblImplement implements Tbl {
         return fromObjects(objectList);
     }
 
-    public static Tbl fromObjects(List<?> objectList) throws IllegalAccessException {
+    public static Tbl fromObjects(List<?> objectList) {
         List<Map<String, Object>> mapList = ObjectConverter.convertToMapList(objectList);
         return fromRowMapList(mapList);
     }
 
     public static Tbl fromRowMapList(List<Map<String, Object>> rowMapList) {
-        Map<String, Object> firstRowMap = rowMapList.getFirst();
-        List<TblColumnSchema> keyMap = firstRowMap.entrySet().stream()
+        List<TblColumnSchema> keyMap = rowMapList.getFirst().entrySet().stream()
                 .map(entry -> (TblColumnSchema)(TblColumnSchema.of(entry.getKey(), entry.getValue().getClass())))
                 .toList();
-        TblSchema schema = TblSchema.of(keyMap);
+        TblSchema schema = TblSchema.from(keyMap);
         TblBuilder builder = TblBuilder.forRowSet(schema);
         for(Map<String, Object> rowMap : rowMapList) {
             List<Object> row = keyMap.stream()
@@ -84,7 +83,7 @@ public abstract class TblImplement implements Tbl {
         List<TblColumnSchema> keyMap = columnListMap.entrySet().stream()
                 .map(entry -> (TblColumnSchema)(TblColumnSchema.of(entry.getKey(), entry.getValue().getFirst().getClass())))
                 .toList();
-        TblSchema schema = TblSchema.of(keyMap);
+        TblSchema schema = TblSchema.from(keyMap);
         TblBuilder builder = TblBuilder.forRowSet(schema);
         for(int i = 0; i < columnListMap.get(keyMap.getFirst().getColumnName()).size(); i++) {
             int finalI = i;

@@ -31,8 +31,8 @@ import java.util.Map;
 import java.util.Optional;
 
 public interface TblSchema extends DataObject {
-    static TblSchema of(List<TblColumnSchema> tblColumnSchemas) {
-        return TblSchemaImplement.of(tblColumnSchemas);
+    static TblSchema from(List<TblColumnSchema> tblColumnSchemas) {
+        return TblSchemaImplement.from(tblColumnSchemas);
     }
     static TblSchemaValue.TblSchemaValueBuilder builder() {
         return TblSchemaImplement.builder();

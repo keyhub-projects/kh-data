@@ -44,11 +44,11 @@ public interface Tbl extends DataObject {
         return TblImplement.empty(schema);
     }
 
-    static Tbl from(List<?> objectList) throws IllegalAccessException {
+    static Tbl from(List<?> objectList) {
         return TblImplement.from(objectList);
     }
 
-    static Tbl fromObjects(List<?> objectList) throws IllegalAccessException {
+    static Tbl fromObjects(List<?> objectList) {
         return TblImplement.fromObjects(objectList);
     }
 
