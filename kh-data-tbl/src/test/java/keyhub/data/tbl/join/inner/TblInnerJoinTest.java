@@ -80,6 +80,7 @@ class TblInnerJoinTest {
                 LocalDateTime.of(2021, 1, 2, 0, 0)
         ));
         expected.put("column3", Arrays.asList(1, 2));
+        expected.put("column4", Arrays.asList("A", "B"));
         Assertions.assertEquals(expected, result.toColumnListMap());
     }
 

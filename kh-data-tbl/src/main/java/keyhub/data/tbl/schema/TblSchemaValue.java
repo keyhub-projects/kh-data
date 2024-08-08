@@ -33,6 +33,11 @@ public class TblSchemaValue extends TblSchemaImplement {
     private final List<String> columnNames;
     private final Map<String, Class<?>> columnTypes;
 
+    public TblSchemaValue(){
+        this.columnNames = new ArrayList<>();
+        this.columnTypes = new HashMap<>();
+    }
+
     public TblSchemaValue(List<TblColumnSchema> schemas){
         this.columnNames = schemas.stream().map(TblColumnSchema::getColumnName).toList();
         this.columnTypes = new HashMap<>();

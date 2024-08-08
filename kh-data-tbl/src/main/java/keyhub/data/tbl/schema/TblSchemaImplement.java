@@ -35,12 +35,15 @@ public abstract class TblSchemaImplement implements TblSchema{
     public static TblSchemaValue.TblSchemaValueBuilder builder(){
         return new TblSchemaValue.TblSchemaValueBuilder();
     }
+    public static TblSchema empty(){
+        return new TblSchemaValue();
+    }
 
     protected abstract List<String> columnNames();
     protected abstract Map<String, Class<?>> columnTypes();
     @Override
     public int getColumnSize(){
-        return columnTypes().size();
+        return columnNames().size();
     }
     @Override
     public List<String> getColumnNames(){

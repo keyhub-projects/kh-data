@@ -35,7 +35,6 @@ class TblColumnSchemaTest {
     @Nested
     class CreateColumnSchemaTest {
         @Test
-        @DisplayName("컬럼 스키마 제대로 만들어지나")
         void testConstructor() {
             String expectedColumnName = "testGetColumnName";
             Class<String> expectedColumnType = String.class;
@@ -48,7 +47,6 @@ class TblColumnSchemaTest {
     }
 
     @Nested
-    @DisplayName("같은 객체")
     class EqualsTest {
         @Test
         void testEquals_sameObject() {
@@ -59,7 +57,6 @@ class TblColumnSchemaTest {
         }
 
         @Test
-        @DisplayName("같은 값을 가진 객체")
         void testEquals_equalObjects() {
             TblColumnSchema<?> schema1 = TblColumnSchema.of("id", Integer.class);
             TblColumnSchema<?> schema2 = TblColumnSchema.of("id", Integer.class);
@@ -68,7 +65,6 @@ class TblColumnSchemaTest {
         }
 
         @Test
-        @DisplayName("다른 값을 가진 객체")
         void testEquals_diffColumnName() {
             TblColumnSchema<?> schema1 = TblColumnSchema.of("id", Integer.class);
             TblColumnSchema<?> schema2 = TblColumnSchema.of("name", Integer.class);
@@ -77,7 +73,6 @@ class TblColumnSchemaTest {
         }
 
         @Test
-        @DisplayName("다른 타입을 가진 객체")
         void testEquals_diffColumnType() {
             TblColumnSchema<?> schema1 = TblColumnSchema.of("id", Integer.class);
             TblColumnSchema<?> schema2 = TblColumnSchema.of("id", String.class);
@@ -86,7 +81,6 @@ class TblColumnSchemaTest {
         }
 
         @Test
-        @DisplayName("null과 비교")
         void testEquals_compareToNull() {
             TblColumnSchema<?> schema1 = TblColumnSchema.of("id", Integer.class);
 

@@ -81,6 +81,7 @@ class TblLeftJoinTest {
                 LocalDateTime.of(2021, 1, 3, 0, 0))
         );
         expected.put("column3", Arrays.asList(1, 2, null));
+        expected.put("column4", Arrays.asList("A", "B", null));
         Assertions.assertEquals(expected, result.toColumnListMap());
     }
 

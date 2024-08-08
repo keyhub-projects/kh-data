@@ -36,20 +36,32 @@ import java.util.*;
 
 public interface Tbl extends DataObject {
 
-    static Tbl asObjects(List<?> objectList) throws IllegalAccessException {
-        return TblImplement.asObjects(objectList);
+    static Tbl empty() {
+        return TblImplement.empty();
+    }
+
+    static Tbl empty(TblSchema schema) {
+        return TblImplement.empty(schema);
+    }
+
+    static Tbl from(List<?> objectList) throws IllegalAccessException {
+        return TblImplement.from(objectList);
+    }
+
+    static Tbl fromObjects(List<?> objectList) throws IllegalAccessException {
+        return TblImplement.fromObjects(objectList);
     }
 
     static Tbl of(TblSchema schema, List<List<Object>> data) {
         return TblImplement.of(schema, data);
     }
 
-    static Tbl of(List<Map<String, Object>> rowMapList) {
-        return TblImplement.of(rowMapList);
+    static Tbl fromRowMapList(List<Map<String, Object>> rowMapList) {
+        return TblImplement.fromRowMapList(rowMapList);
     }
 
-    static Tbl of(Map<String, List<Object>> columnListMap) {
-        return TblImplement.of(columnListMap);
+    static Tbl fromColumnListMap(Map<String, List<Object>> columnListMap) {
+        return TblImplement.fromColumnListMap(columnListMap);
     }
 
     static TblBuilder builder(TblSchema schema){

@@ -86,7 +86,6 @@ public class TblOperatorTest {
         @Test
         public void testBuildOperatorNotEqual() {
             Tbl result = mockTbl.where("column1", TblOperatorType.NOT_EQUAL, "value1");
-            // null 포함
             assertEquals(2, result.getRows().size());
         }
     }

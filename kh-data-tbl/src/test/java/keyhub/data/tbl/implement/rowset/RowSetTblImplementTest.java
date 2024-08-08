@@ -41,7 +41,6 @@ public class RowSetTblImplementTest {
     @Nested
     class SelectTest {
         @Test
-        @DisplayName("컬럼을 Select시, 해당 컬럼들로 이루어진 Tbl 객체를 반환한다.")
         void testSelectMethod() {
             List<TblColumnSchema> schemas = List.of(
                     TblColumnSchema.of("column1", String.class),
