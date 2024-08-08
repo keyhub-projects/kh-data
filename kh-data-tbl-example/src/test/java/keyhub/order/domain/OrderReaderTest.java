@@ -1,22 +1,11 @@
 package keyhub.order.domain;
 
-import keyhub.order.infrastructure.OrderJpaRepository;
-import keyhub.order.infrastructure.OrderReaderImplement;
 import org.junit.jupiter.api.Test;
 import keyhub.order.domain.dto.OrderDetailView;
-import keyhub.common.lib.pg.PgClient;
-import keyhub.common.lib.pg.PgView;
-import keyhub.common.lib.wms.WmsClient;
-import keyhub.common.lib.wms.WmsView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
