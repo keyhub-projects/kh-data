@@ -22,9 +22,9 @@ public class LocalClientConfig {
             @Override
             public List<PgView> findPgViewListByUserId(String userId) {
                 return List.of(
-                    new PgView(2L, "state1", 1L),
-                    new PgView(4L, "state2", 2L),
-                    new PgView(6L, "state3", 3L)
+                    new PgView(2L, "pgState1", 1L),
+                    new PgView(4L, "pgState2", 2L),
+                    new PgView(6L, "pgState3", 3L)
                 );
             }
         };
@@ -36,9 +36,9 @@ public class LocalClientConfig {
             @Override
             public List<WmsView> findWmsViewListByUserId(String userId) {
                 return List.of(
-                    new WmsView(3L, "state1", 1L),
-                    new WmsView(6L, "state2", 2L),
-                    new WmsView(9L, "state3", 3L)
+                    new WmsView(3L, "wmsState1", 1L),
+                    new WmsView(6L, "wmsState2", 2L),
+                    new WmsView(9L, "wmsState3", 3L)
                 );
             }
         };

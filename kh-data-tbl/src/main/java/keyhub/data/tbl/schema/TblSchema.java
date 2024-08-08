@@ -37,6 +37,11 @@ public interface TblSchema extends DataObject {
     static TblSchemaValue.TblSchemaValueBuilder builder() {
         return TblSchemaImplement.builder();
     }
+
+    static TblSchema empty() {
+        return TblSchemaImplement.empty();
+    }
+
     int getColumnSize();
     List<String> getColumnNames();
     Map<String, Class<?>> getColumnTypes();

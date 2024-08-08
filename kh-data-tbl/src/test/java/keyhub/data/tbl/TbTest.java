@@ -41,15 +41,14 @@ public class TbTest {
     @Nested
     class ConstructorTest{
         @Test
-        @DisplayName("rowMapList 를 이용한 Tbl 객체 생성")
-        public void testOfMethodWithRowMapList() {
+        public void testOfMethodWithRowMapList() throws IllegalAccessException {
             List<Map<String, Object>> rowMapList = new ArrayList<>();
             Map<String, Object> rowMap = new HashMap<>();
             rowMap.put("key1", "value1");
             rowMap.put("key2", 2);
             rowMapList.add(rowMap);
 
-            Tbl result = Tbl.of(rowMapList);
+            Tbl result = Tbl.from(rowMapList);
 
             System.out.println(result);
             assertNotNull(result);
@@ -59,7 +58,6 @@ public class TbTest {
         }
 
         @Test
-        @DisplayName("columnListMap 을 이용한 Tbl 객체 생성")
         public void testOfMethodWithColumnListMap() {
             Map<String, List<Object>> columnListMap = new HashMap<>();
             List<Object> columnList1 = new ArrayList<>();
@@ -74,7 +72,7 @@ public class TbTest {
             columnList2.add(3);
             columnListMap.put("key2", columnList2);
 
-            Tbl result = Tbl.of(columnListMap);
+            Tbl result = Tbl.fromColumnListMap(columnListMap);
 
             assertNotNull(result);
             assertEquals(2, result.getColumnSize());
@@ -83,7 +81,6 @@ public class TbTest {
         }
 
         @Test
-        @DisplayName("schema 와 data 를 이용한 Tbl 객체 생성")
         public void testOfMethodWithSchemaAndData() {
             List<List<Object>> data = new ArrayList<>();
             List<Object> row1 = new ArrayList<>();
@@ -110,7 +107,6 @@ public class TbTest {
         }
 
         @Test
-        @DisplayName("TblBuilder 를 이용한 Tbl 객체 생성")
         public void testBuilderMethod() {
             List<TblColumnSchema> columnSchemas = new ArrayList<>();
             columnSchemas.add(TblColumnSchema.of("key1", String.class));
@@ -132,7 +128,6 @@ public class TbTest {
     @Nested
     class ToColumnListMapTest{
         @Test
-        @DisplayName("컬럼 이름을 키로, 컬럼 값들을 리스트로 가지는 맵 반환")
         void testToColumnListMapMethod() {
             List<TblColumnSchema> schemas = List.of(
                     TblColumnSchema.of("column1", String.class),
@@ -160,7 +155,6 @@ public class TbTest {
     @Nested
     class ToRowMapListTest{
         @Test
-        @DisplayName("행을 Map 으로 변환한 리스트 반환")
         void testToRowMapListMethod() {
             List<TblColumnSchema> schemas = List.of(
                     TblColumnSchema.of("column1", String.class),
@@ -188,7 +182,6 @@ public class TbTest {
     @Nested
     class SelectTest {
         @Test
-        @DisplayName("컬럼을 Select시, 해당 컬럼들로 이루어진 Tbl 객체를 반환한다.")
         void testSelectMethod() {
             List<TblColumnSchema> schemas = List.of(
                     TblColumnSchema.of("column1", String.class),
@@ -224,7 +217,6 @@ public class TbTest {
     @Nested
     class WhereTest{
         @Test
-        @DisplayName("컬럼 이름과 값으로 필터링")
         void testWhereMethod() {
             List<TblColumnSchema> schemas = List.of(
                     TblColumnSchema.of("column1", String.class),

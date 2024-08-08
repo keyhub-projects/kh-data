@@ -39,7 +39,6 @@ public class TblRowTest {
     class ConstructorTest{
 
         @Test
-        @DisplayName("스키마와 값이 주어지면 TblRow 객체 생성")
         public void testOfWithSchemaAndVarargsValues() {
             TblSchema schema = TblSchema.builder()
                     .addColumn("col1", Integer.class)
@@ -53,7 +52,6 @@ public class TblRowTest {
         }
 
         @Test
-        @DisplayName("스키마와 값이 주어지면 TblRow 객체 생성")
         public void testOfWithSchemaAndListValues() {
             TblSchema schema = TblSchema.builder()
                     .addColumn("col1", Integer.class)
@@ -69,7 +67,6 @@ public class TblRowTest {
         }
 
         @Test
-        @DisplayName("스키마에 맞지 않은 값이 들어오면 예외 발생")
         void testOfWithSchemaAndListValues_invalidValues() {
             TblSchema schema = TblSchema.builder()
                     .addColumn("col1", Integer.class)

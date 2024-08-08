@@ -27,9 +27,9 @@ public class OrderReaderImplement implements OrderReader {
         List<PgView> pgViewList = pgClient.findPgViewListByUserId(userId);
         List<WmsView> wmsViewList = wmsClient.findWmsViewListByUserId(userId);
 
-        Tbl orderTbl = Tbl.asObjects(orderList);
-        Tbl pgTbl = Tbl.asObjects(pgViewList);
-        Tbl wmsTbl = Tbl.asObjects(wmsViewList);
+        Tbl orderTbl = Tbl.from(orderList);
+        Tbl pgTbl = Tbl.from(pgViewList);
+        Tbl wmsTbl = Tbl.from(wmsViewList);
         Tbl result = orderTbl.innerJoin(pgTbl)
                 .on("id", "orderId")
                 .selectAll()
