@@ -17,30 +17,20 @@ public class LocalClientConfig {
 
     @Bean
     public PgClient fakePgClient() {
-        return new PgClient() {
-            @Override
-            public List<PgView> findPgViewListByUserId(String userId) {
-                return List.of(
-                    new PgView(2L, "pgState1", 1L),
-                    new PgView(4L, "pgState2", 2L),
-                    new PgView(6L, "pgState3", 3L)
-                );
-            }
-        };
+        return userId -> List.of(
+            new PgView(2L, "pgState1", 1L),
+            new PgView(4L, "pgState2", 2L),
+            new PgView(6L, "pgState3", 3L)
+        );
     }
 
     @Bean
     public WmsClient fakeWmsClient() {
-        return new WmsClient() {
-            @Override
-            public List<WmsView> findWmsViewListByUserId(String userId) {
-                return List.of(
-                    new WmsView(3L, "wmsState1", 1L),
-                    new WmsView(6L, "wmsState2", 2L),
-                    new WmsView(9L, "wmsState3", 3L)
-                );
-            }
-        };
+        return userId -> List.of(
+            new WmsView(3L, "wmsState1", 1L),
+            new WmsView(6L, "wmsState2", 2L),
+            new WmsView(9L, "wmsState3", 3L)
+        );
     }
 
     @Autowired OrderJpaRepository orderJpaRepository;

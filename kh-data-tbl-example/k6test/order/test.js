@@ -11,7 +11,6 @@ export const options = {
 };
 
 export default function () {
-    let id = "userId1";
     let url = `http://localhost:8080/order/test`;
     let response = http.get(url);
     check(response, { 'status was 200': (r) => r.status === 200});
