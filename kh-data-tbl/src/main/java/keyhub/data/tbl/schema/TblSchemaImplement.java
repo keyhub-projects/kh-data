@@ -29,7 +29,7 @@ import java.util.Map;
 import java.util.Optional;
 
 public abstract class TblSchemaImplement implements TblSchema{
-    public static TblSchema of(List<TblColumnSchema> tblColumnSchemas){
+    public static TblSchema from(List<TblColumnSchema> tblColumnSchemas){
         return new TblSchemaValue(tblColumnSchemas);
     }
     public static TblSchemaValue.TblSchemaValueBuilder builder(){

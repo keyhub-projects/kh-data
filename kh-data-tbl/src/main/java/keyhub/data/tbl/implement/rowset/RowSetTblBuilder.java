@@ -53,7 +53,7 @@ public class RowSetTblBuilder extends TblBuilderImplement {
                 throw new IllegalArgumentException("Row value type does not match schema");
             }
         }
-        rows.add(row);
+        this.rows.add(row);
         return this;
     }
 

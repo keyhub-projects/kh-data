@@ -28,17 +28,21 @@ import java.lang.reflect.Field;
 import java.util.*;
 
 public class ObjectConverter {
-    public static Map<String, Object> convertToMap(Object object) throws IllegalAccessException {
+    public static Map<String, Object> convertToMap(Object object){
         Map<String, Object> map = new WeakHashMap<>();
         Field[] fields = object.getClass().getDeclaredFields();
         for(Field field : fields){
             field.setAccessible(true);
-            map.put(field.getName(), field.get(object));
+            try {
+                map.put(field.getName(), field.get(object));
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException("Failed to convert object to map", e);
+            }
         }
         return map;
     }
 
-    public static List<Map<String, Object>> convertToMapList(List<?> objectList) throws IllegalAccessException {
+    public static List<Map<String, Object>> convertToMapList(List<?> objectList) {
         List<Map<String, Object>> mapList = new ArrayList<>();
         for(Object object : objectList){
             mapList.add(convertToMap(object));
