@@ -56,5 +56,5 @@ public List<OrderDetailView> findOrderedDetailViewList(String userId) throws Ill
     }
 ```
 
-- [KeyHub-Data-Tbl(한글 설명)](./docs/KeyHub-Data-Tbl(한글설명).pdf)
+- [KeyHub-Data-Tbl(한글 설명)_1.2.0](./docs/KeyHub-Data-Tbl(한글설명)_1.2.0.pdf)
 
