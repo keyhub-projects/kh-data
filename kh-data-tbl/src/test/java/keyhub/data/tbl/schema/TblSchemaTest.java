@@ -24,7 +24,6 @@
 
 package keyhub.data.tbl.schema;
 
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
@@ -41,7 +40,7 @@ public class TblSchemaTest {
             TblColumnSchema<?> firstColumn = TblColumnSchema.of("testConstructor", String.class);
             List<TblColumnSchema> schemas = List.of(firstColumn);
 
-            TblSchema tblSchema = TblSchema.of(schemas);
+            TblSchema tblSchema = TblSchema.from(schemas);
 
             assertEquals(1, tblSchema.getColumnSize());
             TblColumnSchema<?> testColumnSchema = tblSchema.getColumnSchema(0);
@@ -57,7 +56,7 @@ public class TblSchemaTest {
             TblColumnSchema<?> firstColumn = TblColumnSchema.of("testFindColumnSchema", String.class);
             List<TblColumnSchema> schemas = List.of(firstColumn);
 
-            TblSchema tblSchema = TblSchema.of(schemas);
+            TblSchema tblSchema = TblSchema.from(schemas);
 
             Optional<TblColumnSchema> result = tblSchema.findColumnSchema("testFindColumnSchema");
             assertNotNull(result.orElse(null));}
@@ -71,8 +70,8 @@ public class TblSchemaTest {
             TblColumnSchema<?> firstColumn = TblColumnSchema.of("testEquals1", String.class);
             TblColumnSchema<?> secondColumn = TblColumnSchema.of("testEquals2", String.class);
             List<TblColumnSchema> schemas = List.of(firstColumn, secondColumn);
-            TblSchema tblSchema1 = TblSchema.of(schemas);
-            TblSchema tblSchema2 = TblSchema.of(schemas);
+            TblSchema tblSchema1 = TblSchema.from(schemas);
+            TblSchema tblSchema2 = TblSchema.from(schemas);
 
             assertEquals(tblSchema1, tblSchema2);
         }
@@ -82,10 +81,10 @@ public class TblSchemaTest {
             TblColumnSchema<?> firstColumn = TblColumnSchema.of("testEquals1", String.class);
             TblColumnSchema<?> secondColumn = TblColumnSchema.of("testEquals2", String.class);
             List<TblColumnSchema> schemas1 = List.of(firstColumn, secondColumn);
-            TblSchema tblSchema1 = TblSchema.of(schemas1);
+            TblSchema tblSchema1 = TblSchema.from(schemas1);
 
             List<TblColumnSchema> schemas2 = List.of(firstColumn);
-            TblSchema tblSchema2 = TblSchema.of(schemas2);
+            TblSchema tblSchema2 = TblSchema.from(schemas2);
 
             assertNotEquals(tblSchema1, tblSchema2);
         }

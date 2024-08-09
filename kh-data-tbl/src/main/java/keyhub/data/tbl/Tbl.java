@@ -31,6 +31,7 @@ import keyhub.data.tbl.operator.TblOperatorType;
 import keyhub.data.tbl.row.TblRow;
 import keyhub.data.tbl.schema.TblColumnSchema;
 import keyhub.data.tbl.schema.TblSchema;
+import keyhub.data.tbl.selector.TblSelector;
 
 import java.util.*;
 
@@ -83,8 +84,10 @@ public interface Tbl extends DataObject {
     int getColumnIndex(String column);
 
     Tbl select(String... columns);
+    Tbl select(List<String> columns);
     Tbl where(String column, TblOperatorType operator, Object value);
     Tbl where(String column, TblOperatorType operator);
+    TblSelector selector();
 
     TblJoin leftJoin(Tbl right);
     TblJoin innerJoin(Tbl right);
