@@ -22,13 +22,26 @@
  * SOFTWARE.
  */
 
-package keyhub.data.tbl.operator;
+package keyhub.data.tbl.selector;
 
 import keyhub.data.tbl.Tbl;
+import keyhub.data.tbl.operator.TblOperatorType;
 
-public interface TblOperator {
-    static TblOperatorBuilder builder() {
-        return TblOperatorBuilder.of();
+public class SimpleTblSelector extends TblSelectorImplement {
+    public SimpleTblSelector(Tbl tbl) {
+        super(tbl);
     }
-    Tbl getResult();
+
+    @Override
+    protected void computeWhere(String column, TblOperatorType operator, Object value) {
+        this.tbl = this.tbl.where(column, operator, value);
+    }
+    @Override
+    protected void computeWhere(String column, TblOperatorType operator) {
+        this.tbl = this.tbl.where(column, operator);
+    }
+    @Override
+    protected void computeSelect() {
+        this.tbl = this.tbl.select(selectColumns);
+    }
 }

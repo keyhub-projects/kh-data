@@ -34,6 +34,7 @@ import keyhub.data.tbl.operator.TblOperatorType;
 import keyhub.data.tbl.schema.TblSchema;
 import keyhub.data.tbl.row.TblRow;
 import keyhub.data.tbl.schema.TblColumnSchema;
+import keyhub.data.tbl.selector.TblSelector;
 
 import java.util.*;
 
@@ -101,6 +102,11 @@ public class RowSetTblImplement extends TblImplement {
 
     @Override
     public Tbl select(String... columns) {
+        return select(List.of(columns));
+    }
+
+    @Override
+    public Tbl select(List<String> columns) {
         List<TblColumnSchema> columnSchemas = new ArrayList<>();
         for (String column : columns){
             Optional<TblColumnSchema> schema = this.schema.findColumnSchema(column);
@@ -137,6 +143,11 @@ public class RowSetTblImplement extends TblImplement {
                 .tbl(this)
                 .column(column)
                 .build();
+    }
+
+    @Override
+    public TblSelector selector() {
+        return TblSelector.from(this);
     }
 
     @Override

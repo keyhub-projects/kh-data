@@ -25,9 +25,9 @@
 package keyhub.data.tbl.implement.rowset;
 
 import keyhub.data.tbl.Tbl;
+import keyhub.data.tbl.operator.TblOperatorType;
 import keyhub.data.tbl.schema.TblColumnSchema;
 import keyhub.data.tbl.schema.TblSchema;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
@@ -52,11 +52,49 @@ public class RowSetTblImplementTest {
                     List.of("D", "E", "F"),
                     List.of("G", "H", "I")
             );
-            TblSchema schema = TblSchema.of(schemas);
+            TblSchema schema = TblSchema.from(schemas);
             Tbl tblInstance = Tbl.of(schema, inputData);
 
             // Select specific columns
             Tbl resultTbl = tblInstance.select("column1", "column2");
+
+            // Assertions
+            assertEquals(2, resultTbl.getSchema().getColumnSize());
+            assertEquals(3, resultTbl.count());
+
+            List<String> expectedColumns = Arrays.asList("column1", "column2");
+            assertEquals(expectedColumns, resultTbl.getColumns());
+
+            String expectedFirstRowFirstColumn = "A";
+            assertEquals(expectedFirstRowFirstColumn, resultTbl.getRow(0).findCell("column1").orElseThrow());
+
+            String expectedFirstRowSecondColumn = "B";
+            assertEquals(expectedFirstRowSecondColumn, resultTbl.getRow(0).findCell("column2").orElseThrow());
+        }
+    }
+
+    @Nested
+    class SelectorTest {
+        @Test
+        void testSelectorMethod() {
+            List<TblColumnSchema> schemas = List.of(
+                    TblColumnSchema.of("column1", String.class),
+                    TblColumnSchema.of("column2", String.class),
+                    TblColumnSchema.of("column3", String.class)
+            );
+            List<List<Object>> inputData = List.of(
+                    List.of("A", "B", "C"),
+                    List.of("D", "E", "F"),
+                    List.of("G", "H", "I")
+            );
+            TblSchema schema = TblSchema.from(schemas);
+            Tbl tblInstance = Tbl.of(schema, inputData);
+
+            // Use selector to select specific columns
+            Tbl resultTbl = tblInstance.selector()
+                    .select("column1", "column2")
+                    .where("column1", TblOperatorType.GREATER_THAN_OR_EQUAL, "A")
+                    .toTbl();
 
             // Assertions
             assertEquals(2, resultTbl.getSchema().getColumnSize());

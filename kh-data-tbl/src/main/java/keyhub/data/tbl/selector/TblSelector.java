@@ -22,13 +22,22 @@
  * SOFTWARE.
  */
 
-package keyhub.data.tbl.operator;
+package keyhub.data.tbl.selector;
 
 import keyhub.data.tbl.Tbl;
+import keyhub.data.tbl.operator.TblOperatorType;
 
-public interface TblOperator {
-    static TblOperatorBuilder builder() {
-        return TblOperatorBuilder.of();
+import java.util.List;
+
+public interface TblSelector {
+    static TblSelector from(Tbl tbl){
+        return TblSelectorImplement.from(tbl);
     }
-    Tbl getResult();
+    TblSelector select(String... columns);
+    TblSelector select(List<String> columns);
+    TblSelector selectAll();
+    TblSelector where(String column, TblOperatorType operator);
+    TblSelector where(String column, TblOperatorType operator, Object value);
+
+    Tbl toTbl();
 }

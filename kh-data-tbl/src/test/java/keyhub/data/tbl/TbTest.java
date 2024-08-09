@@ -28,7 +28,6 @@ import keyhub.data.tbl.operator.TblOperatorType;
 import keyhub.data.tbl.row.TblRow;
 import keyhub.data.tbl.schema.TblColumnSchema;
 import keyhub.data.tbl.schema.TblSchema;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
@@ -96,7 +95,7 @@ public class TbTest {
             List<TblColumnSchema> columnSchemas = new ArrayList<>();
             columnSchemas.add(TblColumnSchema.of("key1", String.class));
             columnSchemas.add(TblColumnSchema.of("key2", Integer.class));
-            TblSchema schema = TblSchema.of(columnSchemas);
+            TblSchema schema = TblSchema.from(columnSchemas);
 
             Tbl result = Tbl.of(schema, data);
 
@@ -111,7 +110,7 @@ public class TbTest {
             List<TblColumnSchema> columnSchemas = new ArrayList<>();
             columnSchemas.add(TblColumnSchema.of("key1", String.class));
             columnSchemas.add(TblColumnSchema.of("key2", Integer.class));
-            TblSchema schema = TblSchema.of(columnSchemas);
+            TblSchema schema = TblSchema.from(columnSchemas);
 
             Tbl result = Tbl.builder(schema)
                     .addRow(TblRow.of(schema, "value1", 1))
@@ -139,7 +138,7 @@ public class TbTest {
                     List.of("D", "E", "F"),
                     List.of("G", "H", "I")
             );
-            TblSchema schema = TblSchema.of(schemas);
+            TblSchema schema = TblSchema.from(schemas);
             Tbl tblInstance = Tbl.of(schema, inputData);
 
             Map<String, List<Object>> result = tblInstance.toColumnListMap();
@@ -166,7 +165,7 @@ public class TbTest {
                     List.of("D", "E", "F"),
                     List.of("G", "H", "I")
             );
-            TblSchema schema = TblSchema.of(schemas);
+            TblSchema schema = TblSchema.from(schemas);
             Tbl tblInstance = Tbl.of(schema, inputData);
 
             List<Map<String, Object>> result = tblInstance.toRowMapList();
@@ -193,7 +192,7 @@ public class TbTest {
                     List.of("D", "E", "F"),
                     List.of("G", "H", "I")
             );
-            TblSchema schema = TblSchema.of(schemas);
+            TblSchema schema = TblSchema.from(schemas);
             Tbl tblInstance = Tbl.of(schema, inputData);
 
             // Select specific columns
@@ -228,7 +227,7 @@ public class TbTest {
                     List.of("D", "E", "F"),
                     List.of("G", "H", "I")
             );
-            TblSchema schema = TblSchema.of(schemas);
+            TblSchema schema = TblSchema.from(schemas);
             Tbl tblInstance = Tbl.of(schema, inputData);
 
             // Where
