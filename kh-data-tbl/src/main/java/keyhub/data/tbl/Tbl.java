@@ -25,17 +25,17 @@
 package keyhub.data.tbl;
 
 import keyhub.data.DataObject;
-import keyhub.data.tbl.implement.TblImplement;
-import keyhub.data.tbl.join.TblJoin;
-import keyhub.data.tbl.operator.TblOperatorType;
+import keyhub.data.tbl.stream.TblStream;
+import keyhub.data.tbl.stream.join.TblJoin;
+import keyhub.data.tbl.stream.filter.TblFilterType;
 import keyhub.data.tbl.row.TblRow;
 import keyhub.data.tbl.schema.TblColumnSchema;
 import keyhub.data.tbl.schema.TblSchema;
-import keyhub.data.tbl.selector.TblSelector;
+import keyhub.data.tbl.stream.selector.TblSelector;
 
 import java.util.*;
 
-public interface Tbl extends DataObject {
+public interface Tbl extends DataObject, Iterable<TblRow> {
 
     static Tbl empty() {
         return TblImplement.empty();
@@ -83,11 +83,14 @@ public interface Tbl extends DataObject {
     Map<String, Class<?>> getColumnTypes();
     int getColumnIndex(String column);
 
+    TblStream stream();
+
     Tbl select(String... columns);
     Tbl select(List<String> columns);
-    Tbl where(String column, TblOperatorType operator, Object value);
-    Tbl where(String column, TblOperatorType operator);
     TblSelector selector();
+
+    Tbl where(String column, TblFilterType operator, Object value);
+    Tbl where(String column, TblFilterType operator);
 
     TblJoin leftJoin(Tbl right);
     TblJoin innerJoin(Tbl right);
@@ -98,5 +101,4 @@ public interface Tbl extends DataObject {
     Object findCell(String columnName, int rowIndex);
 
     Object getCell(int columnIndex, int rowIndex);
-
 }

@@ -22,20 +22,38 @@
  * SOFTWARE.
  */
 
-package keyhub.data.tbl;
+package keyhub.data.tbl.stream.filter;
 
-import keyhub.data.tbl.row.TblRow;
-import keyhub.data.tbl.schema.TblSchema;
+import keyhub.data.tbl.Tbl;
 
-import java.util.List;
+public abstract class TblFilterBuilderImplement implements TblFilterBuilder {
+    protected Tbl tbl;
+    protected TblFilterType operator;
+    protected String column;
+    protected Object value;
 
-public interface TblBuilder {
-    static TblBuilder forRowSet(TblSchema schema) {
-        return TblBuilderImplement.forRowSet(schema);
+    static TblFilterBuilder of() {
+        return new SimpleTblFilterBuilder();
     }
-    TblBuilder addRawRow(List<Object> row);
-    TblBuilder addRawRows(List<List<Object>> rows);
-    TblBuilder addRow(TblRow row);
-    TblBuilder addRows(List<TblRow> rows);
-    Tbl build();
+
+    @Override
+    public TblFilterBuilder tbl(Tbl tbl){
+        this.tbl = tbl;
+        return this;
+    }
+    @Override
+    public TblFilterBuilder operator(TblFilterType operator){
+        this.operator = operator;
+        return this;
+    }
+    @Override
+    public TblFilterBuilder column(String column){
+        this.column = column;
+        return this;
+    }
+    @Override
+    public TblFilterBuilder value(Object value){
+        this.value = value;
+        return this;
+    }
 }

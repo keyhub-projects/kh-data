@@ -22,20 +22,27 @@
  * SOFTWARE.
  */
 
-package keyhub.data.tbl;
+package keyhub.data.tbl.stream.join;
 
-import keyhub.data.tbl.row.TblRow;
-import keyhub.data.tbl.schema.TblSchema;
+import keyhub.data.tbl.Tbl;
+import keyhub.data.tbl.stream.TblStream;
 
-import java.util.List;
+public interface TblJoin extends TblStream {
+    @Override
+    Tbl toTbl();
 
-public interface TblBuilder {
-    static TblBuilder forRowSet(TblSchema schema) {
-        return TblBuilderImplement.forRowSet(schema);
-    }
-    TblBuilder addRawRow(List<Object> row);
-    TblBuilder addRawRows(List<List<Object>> rows);
-    TblBuilder addRow(TblRow row);
-    TblBuilder addRows(List<TblRow> rows);
-    Tbl build();
+    TblJoin on(String sameKey);
+    TblJoin on(String leftKey, String rightKey);
+
+    TblJoin selectAll();
+    TblJoin selectFromLeft(String column);
+    TblJoin selectFromLeft(String... columns);
+    TblJoin selectAllFromLeft();
+    TblJoin selectFromRight(String column);
+    TblJoin selectFromRight(String... columns);
+    TblJoin selectAllFromRight();
+
+    int getColumnIndexFromLeft(String column);
+    int getColumnIndexFromRight(String column);
+
 }

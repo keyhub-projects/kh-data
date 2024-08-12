@@ -24,7 +24,7 @@
 
 package keyhub.data.tbl;
 
-import keyhub.data.tbl.operator.TblOperatorType;
+import keyhub.data.tbl.stream.filter.TblFilterType;
 import keyhub.data.tbl.row.TblRow;
 import keyhub.data.tbl.schema.TblColumnSchema;
 import keyhub.data.tbl.schema.TblSchema;
@@ -231,7 +231,7 @@ public class TbTest {
             Tbl tblInstance = Tbl.of(schema, inputData);
 
             // Where
-            Tbl resultTbl = tblInstance.where("column1", TblOperatorType.EQUAL,"A");
+            Tbl resultTbl = tblInstance.where("column1", TblFilterType.EQUAL,"A");
 
             // Assertions
             assertEquals(1, resultTbl.count());

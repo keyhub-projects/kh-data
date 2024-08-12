@@ -22,20 +22,35 @@
  * SOFTWARE.
  */
 
-package keyhub.data.tbl;
+package keyhub.data.tbl.stream.join.inner;
 
-import keyhub.data.tbl.row.TblRow;
-import keyhub.data.tbl.schema.TblSchema;
 
+import keyhub.data.tbl.Tbl;
+import keyhub.data.tbl.stream.join.TblJoinImplement;
+
+import java.util.ArrayList;
 import java.util.List;
 
-public interface TblBuilder {
-    static TblBuilder forRowSet(TblSchema schema) {
-        return TblBuilderImplement.forRowSet(schema);
+public class TblInnerJoinImplement extends TblJoinImplement implements TblInnerJoin {
+
+    public TblInnerJoinImplement(Tbl left, Tbl right) {
+        super(left, right);
     }
-    TblBuilder addRawRow(List<Object> row);
-    TblBuilder addRawRows(List<List<Object>> rows);
-    TblBuilder addRow(TblRow row);
-    TblBuilder addRows(List<TblRow> rows);
-    Tbl build();
+
+    @Override
+    public List<List<Object>> computeJoinRawResult(){
+        List<List<Object>> rows = new ArrayList<>();
+        for(int i = 0; i < this.left.count(); i++){
+            for(int j = 0; j < right.count(); j++){
+                boolean isJoined = isJoinedRow(this.left.getRow(i), this.right.getRow(j));
+                if(isJoined){
+                    List<Object> row = new ArrayList<>();
+                    row.addAll(this.left.getRawRow(i));
+                    row.addAll(this.right.getRawRow(j));
+                    rows.add(row);
+                }
+            }
+        }
+        return rows;
+    }
 }

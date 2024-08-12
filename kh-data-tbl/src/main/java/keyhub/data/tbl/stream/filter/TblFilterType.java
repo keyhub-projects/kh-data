@@ -22,20 +22,18 @@
  * SOFTWARE.
  */
 
-package keyhub.data.tbl;
+package keyhub.data.tbl.stream.filter;
 
-import keyhub.data.tbl.row.TblRow;
-import keyhub.data.tbl.schema.TblSchema;
-
-import java.util.List;
-
-public interface TblBuilder {
-    static TblBuilder forRowSet(TblSchema schema) {
-        return TblBuilderImplement.forRowSet(schema);
-    }
-    TblBuilder addRawRow(List<Object> row);
-    TblBuilder addRawRows(List<List<Object>> rows);
-    TblBuilder addRow(TblRow row);
-    TblBuilder addRows(List<TblRow> rows);
-    Tbl build();
+public enum TblFilterType {
+    GREATER_THAN,
+    LESS_THAN,
+    GREATER_THAN_OR_EQUAL,
+    LESS_THAN_OR_EQUAL,
+    EQUAL,
+    NOT_EQUAL,
+    LIKE,
+    IN,
+    NOT_IN,
+    IS_NULL,
+    IS_NOT_NULL
 }

@@ -29,13 +29,30 @@ import keyhub.data.tbl.schema.TblSchema;
 
 import java.util.List;
 
-public interface TblBuilder {
-    static TblBuilder forRowSet(TblSchema schema) {
-        return TblBuilderImplement.forRowSet(schema);
+public abstract class TblBuilderImplement implements TblBuilder {
+    protected final TblSchema schema;
+
+    protected TblBuilderImplement(TblSchema schema) {
+        this.schema = schema;
     }
-    TblBuilder addRawRow(List<Object> row);
-    TblBuilder addRawRows(List<List<Object>> rows);
-    TblBuilder addRow(TblRow row);
-    TblBuilder addRows(List<TblRow> rows);
-    Tbl build();
+
+    public static TblBuilder forRowSet(TblSchema schema){
+        return new RowSetTblBuilder(schema);
+    }
+
+    @Override
+    public TblBuilder addRawRows(List<List<Object>> rows) {
+        for(List<Object> row : rows) {
+            addRawRow(row);
+        }
+        return this;
+    }
+
+    @Override
+    public TblBuilder addRows(List<TblRow> rows) {
+        for(TblRow row : rows) {
+            addRow(row);
+        }
+        return this;
+    }
 }
