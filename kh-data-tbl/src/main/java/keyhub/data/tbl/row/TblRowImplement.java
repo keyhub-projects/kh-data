@@ -43,6 +43,9 @@ public abstract class TblRowImplement implements TblRow {
         }
         return new TblRowValue(schema, values);
     }
+    static TblRow of(List<TblCell> cells) {
+        return new TblRowValue(cells);
+    }
 
     protected abstract TblSchema schema();
     protected abstract List<Object> values();
@@ -56,21 +59,27 @@ public abstract class TblRowImplement implements TblRow {
         return values();
     }
     @Override
-    public <T> Optional<T> findCell(String columnName) {
-        Optional<TblColumnSchema> schema = schema().findColumnSchema(columnName);
-        if (schema.isEmpty()) {
+    public <T> Optional<TblCell<T>> findCell(String columnName) {
+        Optional<TblColumnSchema<?>> opSchema = schema().findColumnSchema(columnName);
+        if (opSchema.isEmpty()) {
             return Optional.empty();
         }
         int index = schema().getColumnNames().indexOf(columnName);
-        Class<T> columnType = (Class<T>) schema.get().getColumnType();
-        return Optional.ofNullable(columnType.cast(values().get(index)));
+
+        TblColumnSchema<T> columnSchema = (TblColumnSchema<T>) opSchema.get();
+        Class<T> columnType = columnSchema.getColumnType();
+        T value = columnType.cast(values().get(index));
+        return Optional.of(TblCell.of(columnSchema, value));
     }
     @Override
-    public <T> T getCell(int columnIndex) {
+    public <T> TblCell<T> getCell(int columnIndex) {
         if(columnIndex < 0 || columnIndex >= schema().getColumnSize()){
             throw new IllegalArgumentException("Column index out of bounds");
         }
-        return (T) values().get(columnIndex);
+        TblColumnSchema<T> columnSchema = (TblColumnSchema<T>) schema().getColumnSchema(columnIndex);
+        @SuppressWarnings("unchecked")
+        T value = (T) values().get(columnIndex);
+        return TblCell.of(columnSchema, value);
     }
 
 }

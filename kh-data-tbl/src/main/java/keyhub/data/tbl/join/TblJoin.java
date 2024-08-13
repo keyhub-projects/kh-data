@@ -22,25 +22,26 @@
  * SOFTWARE.
  */
 
-package keyhub.data.tbl.schema;
+package keyhub.data.tbl.join;
 
-public abstract class TblColumnSchemaImplement<T> implements TblColumnSchema<T> {
-    protected abstract String columnName();
-    protected abstract Class<T> columnType();
+import keyhub.data.tbl.Tbl;
 
-    public static <T> TblColumnSchema<T> of(String columnName, Class<T> columnType){
-        return new TblColumnSchemaValue<>(columnName, columnType);
-    }
-    public String getColumnName(){
-        return columnName();
-    }
-    public Class<T> getColumnType(){
-        return columnType();
-    }
-    public boolean equals(Object o){
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        TblColumnSchema<?> that = (TblColumnSchema<?>) o;
-        return columnName().equals(that.getColumnName()) && columnType().equals(that.getColumnType());
-    }
+public interface TblJoin {
+    Tbl toTbl();
+
+    TblJoin on(String sameKey);
+    TblJoin on(String leftKey, String rightKey);
+
+    TblJoin selectAll();
+    TblJoin selectFromLeft(String column);
+    TblJoin selectFromLeft(String... columns);
+    TblJoin selectAllFromLeft();
+    TblJoin selectFromRight(String column);
+    TblJoin selectFromRight(String... columns);
+    TblJoin selectAllFromRight();
+
+    int getColumnIndexFromLeft(String column);
+    int getColumnIndexFromRight(String column);
+
+
 }

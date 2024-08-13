@@ -26,12 +26,12 @@ package keyhub.data.tbl;
 
 import keyhub.data.DataObject;
 import keyhub.data.tbl.stream.TblStream;
-import keyhub.data.tbl.stream.join.TblJoin;
-import keyhub.data.tbl.stream.filter.TblFilterType;
+import keyhub.data.tbl.join.TblJoin;
+import keyhub.data.tbl.filter.TblFilterType;
 import keyhub.data.tbl.row.TblRow;
 import keyhub.data.tbl.schema.TblColumnSchema;
 import keyhub.data.tbl.schema.TblSchema;
-import keyhub.data.tbl.stream.selector.TblSelector;
+import keyhub.data.tbl.selector.TblSelector;
 
 import java.util.*;
 

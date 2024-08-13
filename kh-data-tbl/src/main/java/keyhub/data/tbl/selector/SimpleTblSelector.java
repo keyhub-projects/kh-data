@@ -22,25 +22,27 @@
  * SOFTWARE.
  */
 
-package keyhub.data.tbl.schema;
+package keyhub.data.tbl.selector;
 
-public abstract class TblColumnSchemaImplement<T> implements TblColumnSchema<T> {
-    protected abstract String columnName();
-    protected abstract Class<T> columnType();
+import keyhub.data.tbl.Tbl;
+import keyhub.data.tbl.filter.TblFilterType;
 
-    public static <T> TblColumnSchema<T> of(String columnName, Class<T> columnType){
-        return new TblColumnSchemaValue<>(columnName, columnType);
+public class SimpleTblSelector extends TblSelectorImplement {
+    public SimpleTblSelector(Tbl tbl) {
+        super(tbl);
     }
-    public String getColumnName(){
-        return columnName();
+
+    @Override
+    protected void computeWhere(String column, TblFilterType operator, Object value) {
+        this.tbl = this.tbl.where(column, operator, value);
     }
-    public Class<T> getColumnType(){
-        return columnType();
+    @Override
+    protected void computeWhere(String column, TblFilterType operator) {
+        this.tbl = this.tbl.where(column, operator);
     }
-    public boolean equals(Object o){
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        TblColumnSchema<?> that = (TblColumnSchema<?>) o;
-        return columnName().equals(that.getColumnName()) && columnType().equals(that.getColumnType());
+    @Override
+    protected void computeSelect() {
+        this.tbl = this.tbl.select(selectColumns);
     }
+
 }

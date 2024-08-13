@@ -22,25 +22,22 @@
  * SOFTWARE.
  */
 
-package keyhub.data.tbl.schema;
+package keyhub.data.tbl.filter;
 
-public abstract class TblColumnSchemaImplement<T> implements TblColumnSchema<T> {
-    protected abstract String columnName();
-    protected abstract Class<T> columnType();
+import keyhub.data.tbl.Tbl;
+import keyhub.data.tbl.schema.TblSchema;
 
-    public static <T> TblColumnSchema<T> of(String columnName, Class<T> columnType){
-        return new TblColumnSchemaValue<>(columnName, columnType);
-    }
-    public String getColumnName(){
-        return columnName();
-    }
-    public Class<T> getColumnType(){
-        return columnType();
-    }
-    public boolean equals(Object o){
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        TblColumnSchema<?> that = (TblColumnSchema<?>) o;
-        return columnName().equals(that.getColumnName()) && columnType().equals(that.getColumnType());
+import java.util.List;
+
+public abstract class TblFilterImplement implements TblFilter {
+
+    public abstract List<List<Object>> rows();
+    public abstract TblSchema schema();
+
+    @Override
+    public Tbl toTbl() {
+        return Tbl.builder(schema())
+                .addRawRows(rows())
+                .build();
     }
 }

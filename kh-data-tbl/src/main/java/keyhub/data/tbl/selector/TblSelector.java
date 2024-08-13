@@ -22,25 +22,22 @@
  * SOFTWARE.
  */
 
-package keyhub.data.tbl.schema;
+package keyhub.data.tbl.selector;
 
-public abstract class TblColumnSchemaImplement<T> implements TblColumnSchema<T> {
-    protected abstract String columnName();
-    protected abstract Class<T> columnType();
+import keyhub.data.tbl.Tbl;
+import keyhub.data.tbl.filter.TblFilterType;
 
-    public static <T> TblColumnSchema<T> of(String columnName, Class<T> columnType){
-        return new TblColumnSchemaValue<>(columnName, columnType);
+import java.util.List;
+
+public interface TblSelector {
+    Tbl toTbl();
+
+    static TblSelector from(Tbl tbl){
+        return TblSelectorImplement.from(tbl);
     }
-    public String getColumnName(){
-        return columnName();
-    }
-    public Class<T> getColumnType(){
-        return columnType();
-    }
-    public boolean equals(Object o){
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        TblColumnSchema<?> that = (TblColumnSchema<?>) o;
-        return columnName().equals(that.getColumnName()) && columnType().equals(that.getColumnType());
-    }
+    TblSelector select(String... columns);
+    TblSelector select(List<String> columns);
+    TblSelector selectAll();
+    TblSelector where(String column, TblFilterType operator);
+    TblSelector where(String column, TblFilterType operator, Object value);
 }

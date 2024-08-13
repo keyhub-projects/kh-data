@@ -26,7 +26,7 @@ package keyhub.data.tbl.operator;
 
 import keyhub.data.tbl.Tbl;
 import keyhub.data.tbl.schema.TblSchema;
-import keyhub.data.tbl.stream.filter.TblFilterType;
+import keyhub.data.tbl.filter.TblFilterType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

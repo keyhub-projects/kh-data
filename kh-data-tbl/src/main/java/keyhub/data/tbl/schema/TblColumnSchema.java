@@ -27,7 +27,7 @@ package keyhub.data.tbl.schema;
 import keyhub.data.DataObject;
 
 public interface TblColumnSchema<T> extends DataObject {
-    static TblColumnSchema<?> of(String columnName, Class<?> columnType) {
+    static <T> TblColumnSchema<T> of(String columnName, Class<T> columnType) {
         return TblColumnSchemaImplement.of(columnName, columnType);
     }
     String getColumnName();

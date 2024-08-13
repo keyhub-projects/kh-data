@@ -24,7 +24,8 @@
 
 package keyhub.data.tbl;
 
-import keyhub.data.tbl.stream.filter.TblFilterType;
+import keyhub.data.tbl.filter.TblFilterType;
+import keyhub.data.tbl.row.TblCell;
 import keyhub.data.tbl.row.TblRow;
 import keyhub.data.tbl.schema.TblColumnSchema;
 import keyhub.data.tbl.schema.TblSchema;
@@ -205,10 +206,10 @@ public class TbTest {
             List<String> expectedColumns = Arrays.asList("column1", "column2");
             assertEquals(expectedColumns, resultTbl.getColumns());
 
-            String expectedFirstRowFirstColumn = "A";
+            TblCell<String> expectedFirstRowFirstColumn = TblCell.of(TblColumnSchema.of("column1", String.class), "A");
             assertEquals(expectedFirstRowFirstColumn, resultTbl.getRow(0).findCell("column1").orElseThrow());
 
-            String expectedFirstRowSecondColumn = "B";
+            TblCell<String> expectedFirstRowSecondColumn = TblCell.of(TblColumnSchema.of("column2", String.class), "B");
             assertEquals(expectedFirstRowSecondColumn, resultTbl.getRow(0).findCell("column2").orElseThrow());
         }
     }

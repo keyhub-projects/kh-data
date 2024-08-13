@@ -22,25 +22,38 @@
  * SOFTWARE.
  */
 
-package keyhub.data.tbl.schema;
+package keyhub.data.tbl.filter;
 
-public abstract class TblColumnSchemaImplement<T> implements TblColumnSchema<T> {
-    protected abstract String columnName();
-    protected abstract Class<T> columnType();
+import keyhub.data.tbl.Tbl;
 
-    public static <T> TblColumnSchema<T> of(String columnName, Class<T> columnType){
-        return new TblColumnSchemaValue<>(columnName, columnType);
+public abstract class TblFilterBuilderImplement implements TblFilterBuilder {
+    protected Tbl tbl;
+    protected TblFilterType operator;
+    protected String column;
+    protected Object value;
+
+    static TblFilterBuilder of() {
+        return new SimpleTblFilterBuilder();
     }
-    public String getColumnName(){
-        return columnName();
+
+    @Override
+    public TblFilterBuilder tbl(Tbl tbl){
+        this.tbl = tbl;
+        return this;
     }
-    public Class<T> getColumnType(){
-        return columnType();
+    @Override
+    public TblFilterBuilder operator(TblFilterType operator){
+        this.operator = operator;
+        return this;
     }
-    public boolean equals(Object o){
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        TblColumnSchema<?> that = (TblColumnSchema<?>) o;
-        return columnName().equals(that.getColumnName()) && columnType().equals(that.getColumnType());
+    @Override
+    public TblFilterBuilder column(String column){
+        this.column = column;
+        return this;
+    }
+    @Override
+    public TblFilterBuilder value(Object value){
+        this.value = value;
+        return this;
     }
 }

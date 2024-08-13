@@ -22,35 +22,47 @@
  * SOFTWARE.
  */
 
-package keyhub.data.tbl.row;
+package keyhub.data.tbl.filter.implement;
 
-import keyhub.data.tbl.schema.TblColumnSchema;
+import keyhub.data.tbl.Tbl;
+import keyhub.data.tbl.filter.TblFilter;
+import keyhub.data.tbl.filter.TblFilterImplement;
 import keyhub.data.tbl.schema.TblSchema;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-public class TblRowValue extends TblRowImplement {
+public class IsNullFilter extends TblFilterImplement {
     private final TblSchema schema;
-    private final List<Object> values;
+    private final List<List<Object>> rows;
 
-    public TblRowValue(TblSchema schema, List<Object> values) {
+    public IsNullFilter(TblSchema schema, List<List<Object>> rows) {
         this.schema = schema;
-        this.values = new ArrayList<>(values);
+        this.rows = rows;
     }
 
-    public TblRowValue(List<TblCell> cells) {
-        List<TblColumnSchema> columns = cells.stream().map(TblCell::getColumnSchema).toList();
-        this.schema = TblSchema.from(columns);
-        this.values = cells.stream().map(TblCell::getValue).toList();
+    public static TblFilter of(Tbl tbl, String column) {
+        TblSchema originSchema = tbl.getSchema();
+        if(!originSchema.contains(column)){
+            throw new IllegalArgumentException("Column not found");
+        }
+        List<List<Object>> originData = tbl.getRawRows();
+        List<List<Object>> filtered = originData.stream().filter(row -> {
+            int index = originSchema.getColumnIndex(column);
+            Optional<Object> cell = Optional.ofNullable(row.get(index));
+            return cell.isEmpty();
+        }).toList();
+
+        return new IsNullFilter(originSchema, filtered);
+    }
+    
+    @Override
+    public List<List<Object>> rows() {
+        return this.rows;
     }
 
     @Override
-    protected TblSchema schema() {
+    public TblSchema schema() {
         return this.schema;
-    }
-    @Override
-    protected List<Object> values() {
-        return this.values;
     }
 }

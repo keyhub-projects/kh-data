@@ -22,25 +22,37 @@
  * SOFTWARE.
  */
 
-package keyhub.data.tbl.schema;
+package keyhub.data.tbl.row;
 
-public abstract class TblColumnSchemaImplement<T> implements TblColumnSchema<T> {
-    protected abstract String columnName();
-    protected abstract Class<T> columnType();
+import keyhub.data.tbl.schema.TblColumnSchema;
 
-    public static <T> TblColumnSchema<T> of(String columnName, Class<T> columnType){
-        return new TblColumnSchemaValue<>(columnName, columnType);
+public class TblCellValue<T> extends TblCellImplement<T> {
+    private final TblColumnSchema<T> columnSchema;
+    private final T value;
+
+    public TblCellValue(TblColumnSchema<T> columnSchema) {
+        this.columnSchema = columnSchema;
+        this.value = null;
     }
-    public String getColumnName(){
-        return columnName();
+
+    public TblCellValue(TblColumnSchema<T> columnSchema, T value) {
+        this.columnSchema = columnSchema;
+        this.value = value;
     }
-    public Class<T> getColumnType(){
-        return columnType();
+    public TblColumnSchema<T> getColumnSchema() {
+        return columnSchema;
     }
-    public boolean equals(Object o){
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        TblColumnSchema<?> that = (TblColumnSchema<?>) o;
-        return columnName().equals(that.getColumnName()) && columnType().equals(that.getColumnType());
+
+    @Override
+    public T value() {
+        return value;
+    }
+    @Override
+    public TblColumnSchema<T> columnSchema() {
+        return columnSchema;
+    }
+    @Override
+    public Class<T> columnType() {
+        return columnSchema.getColumnType();
     }
 }

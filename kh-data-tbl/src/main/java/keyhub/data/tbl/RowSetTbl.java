@@ -25,15 +25,15 @@
 package keyhub.data.tbl;
 
 import keyhub.data.tbl.stream.TblStream;
-import keyhub.data.tbl.stream.join.TblJoin;
-import keyhub.data.tbl.stream.join.inner.TblInnerJoin;
-import keyhub.data.tbl.stream.join.left.TblLeftJoin;
-import keyhub.data.tbl.stream.filter.TblFilter;
-import keyhub.data.tbl.stream.filter.TblFilterType;
+import keyhub.data.tbl.join.TblJoin;
+import keyhub.data.tbl.join.inner.TblInnerJoin;
+import keyhub.data.tbl.join.left.TblLeftJoin;
+import keyhub.data.tbl.filter.TblFilter;
+import keyhub.data.tbl.filter.TblFilterType;
 import keyhub.data.tbl.schema.TblSchema;
 import keyhub.data.tbl.row.TblRow;
 import keyhub.data.tbl.schema.TblColumnSchema;
-import keyhub.data.tbl.stream.selector.TblSelector;
+import keyhub.data.tbl.selector.TblSelector;
 
 import java.util.*;
 
@@ -114,16 +114,17 @@ public class RowSetTbl extends TblImplement {
     public Tbl select(List<String> columns) {
         List<TblColumnSchema> columnSchemas = new ArrayList<>();
         for (String column : columns){
-            Optional<TblColumnSchema> schema = this.schema.findColumnSchema(column);
-            if(schema.isEmpty()){
+            Optional<TblColumnSchema<?>> opSchema = this.schema.findColumnSchema(column);
+            if(opSchema.isEmpty()){
                 throw new IllegalArgumentException("Column not found in schema");
             }
-            columnSchemas.add(schema.get());
+            columnSchemas.add(opSchema.get());
         }
         List<List<Object>> newData = new ArrayList<>();
         for(List<Object> row : this.data){
             List<Object> newRow = new ArrayList<>();
-            for(TblColumnSchema<?> columnSchema : columnSchemas){
+
+            for(TblColumnSchema columnSchema : columnSchemas){
                 int index = this.schema.getColumnIndex(columnSchema.getColumnName());
                 newRow.add(row.get(index));
             }
