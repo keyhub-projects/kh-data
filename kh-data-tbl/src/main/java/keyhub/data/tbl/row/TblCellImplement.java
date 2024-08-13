@@ -70,7 +70,7 @@ public abstract class TblCellImplement<T> implements TblCell<T>{
             return false;
         }
         return value().equals(other.getValue())
-                && columnSchema().equals(other.getColumnSchema());
+                && columnType().equals(other.getColumnType());
     }
 
     public boolean isPresent() {

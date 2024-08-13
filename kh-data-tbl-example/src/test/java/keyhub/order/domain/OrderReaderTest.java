@@ -16,7 +16,7 @@ public class OrderReaderTest {
     private OrderReader orderReader;
 
     @Test
-    public void testFindOrderedDetailViewList() throws IllegalAccessException{
+    public void testFindOrderedDetailViewList(){
 
         /*
         * [
@@ -25,15 +25,16 @@ public class OrderReaderTest {
         *     OrderDetailView[orderId=3, pgId=6, pgState=state3, wmsId=9, wmsState=wmsState3]
         * ]
         */
-        List<OrderDetailView> expected = new ArrayList<>();
-        expected.add(new OrderDetailView(1L, 2L, "pgState1", 3L, "wmsState1"));
-        expected.add(new OrderDetailView(2L, 4L, "pgState2", 6L, "wmsState2"));
-        expected.add(new OrderDetailView(3L, 6L, "pgState3", 9L, "wmsState3"));
 
         List<OrderDetailView> result = orderReader.findOrderedDetailViewList("userId1");
 
         assertNotNull(result);
         assertEquals(3, result.size());
+
+        List<OrderDetailView> expected = new ArrayList<>();
+        expected.add(new OrderDetailView(1L, 2L, "pgState1", 3L, "wmsState1"));
+        expected.add(new OrderDetailView(2L, 4L, "pgState2", 6L, "wmsState2"));
+        expected.add(new OrderDetailView(3L, 6L, "pgState3", 9L, "wmsState3"));
         assertEquals(expected, result);
      }
 }
