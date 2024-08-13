@@ -25,6 +25,7 @@
 package keyhub.data.tbl.stream;
 
 import keyhub.data.tbl.Tbl;
+import keyhub.data.tbl.function.TblRowSelector;
 import keyhub.data.tbl.row.TblRow;
 import keyhub.data.tbl.schema.TblColumn;
 import keyhub.data.tbl.schema.TblSchema;
@@ -32,6 +33,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import static keyhub.data.tbl.function.TblRowPredicate.in;
+import static keyhub.data.tbl.function.TblRowPredicate.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TblStreamTest {
@@ -57,14 +60,17 @@ public class TblStreamTest {
                         TblColumn.of("height", String.class),
                         TblColumn.of("age", Integer.class)
                 )
+//                .select(TblRowSelector.column("name"))
                 .select(
                         tblRow -> TblRow.of(
                                 tblRow.findCell("name").orElseThrow(),
                                 tblRow.findCell("age").orElseThrow()
                         )
                 )
+                .where(is("age", tblCell -> (Integer) tblCell.getValue() > 20))
+                .where(in("name", "Charlie", "Bob"))
                 .toTbl();
         System.out.println(result);
-        assertEquals(3, result.count());
+        assertEquals(2, result.count());
     }
 }

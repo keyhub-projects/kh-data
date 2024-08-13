@@ -58,7 +58,7 @@ public abstract class TblSchemaImplement implements TblSchema{
         return columnTypes();
     }
     @Override
-    public Optional<TblColumn> findColumnSchema(String columnName){
+    public Optional<TblColumn<?>> findColumnSchema(String columnName){
         int index = columnNames().indexOf(columnName);
         if(index == -1){
             return Optional.empty();
@@ -67,9 +67,10 @@ public abstract class TblSchemaImplement implements TblSchema{
     }
 
     @Override
-    public TblColumn<?> getColumnSchema(int index){
+    public <T> TblColumn<T> getColumnSchema(int index){
         String columnName = columnNames().get(index);
-        Class<?> columnType = columnTypes().get(columnName);
+        @SuppressWarnings("unchecked")
+        Class<T> columnType = (Class<T>) columnTypes().get(columnName);
         return TblColumn.of(columnName, columnType);
     }
 

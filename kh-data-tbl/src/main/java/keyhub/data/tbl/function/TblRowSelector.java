@@ -28,7 +28,17 @@ import keyhub.data.tbl.row.TblRow;
 
 import java.util.function.Function;
 
-public interface TblFunction<R> extends Function<TblRow, R> {
-    R apply(TblRow row);
-
+@FunctionalInterface
+public interface TblRowSelector extends Function<TblRow, TblRow> {
+    TblRow apply(TblRow row);
+    // todo
+    static TblRowSelector column(String columnName) {
+        return null;
+    }
+    static TblRowSelector column(int columnIndex) {
+        return null;
+    }
+    static TblRowSelector as(String alias) {
+        return null;
+    }
 }

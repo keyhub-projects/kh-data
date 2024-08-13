@@ -49,9 +49,9 @@ public interface TblSchema extends DataObject {
     List<String> getColumnNames();
     Map<String, Class<?>> getColumnTypes();
 
-    Optional<TblColumn> findColumnSchema(String columnName);
+    Optional<TblColumn<?>> findColumnSchema(String columnName);
 
-    TblColumn<?> getColumnSchema(int index);
+    <T> TblColumn<T> getColumnSchema(int index);
 
     @Override
     boolean equals(Object o);

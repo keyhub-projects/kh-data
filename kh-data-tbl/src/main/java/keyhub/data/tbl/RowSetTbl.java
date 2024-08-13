@@ -115,7 +115,7 @@ public class RowSetTbl extends TblImplement {
     public Tbl select(List<String> columns) {
         List<TblColumn> columnSchemas = new ArrayList<>();
         for (String column : columns){
-            Optional<TblColumn> opSchema = this.schema.findColumnSchema(column);
+            Optional<TblColumn<?>> opSchema = this.schema.findColumnSchema(column);
             if(opSchema.isEmpty()){
                 throw new IllegalArgumentException("Column not found in schema");
             }

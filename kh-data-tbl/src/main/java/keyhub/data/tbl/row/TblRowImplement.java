@@ -64,12 +64,12 @@ public abstract class TblRowImplement implements TblRow {
     }
     @Override
     public <T> Optional<TblCell<T>> findCell(String columnName) {
-        Optional<TblColumn> opSchema = schema().findColumnSchema(columnName);
+        Optional<TblColumn<?>> opSchema = schema().findColumnSchema(columnName);
         if (opSchema.isEmpty()) {
             return Optional.empty();
         }
         int index = schema().getColumnNames().indexOf(columnName);
-
+        @SuppressWarnings("unchecked")
         TblColumn<T> columnSchema = (TblColumn<T>) opSchema.get();
         Class<T> columnType = columnSchema.getColumnType();
         T value = columnType.cast(values().get(index));
@@ -80,7 +80,7 @@ public abstract class TblRowImplement implements TblRow {
         if(columnIndex < 0 || columnIndex >= schema().getColumnSize()){
             throw new IllegalArgumentException("Column index out of bounds");
         }
-        TblColumn<T> columnSchema = (TblColumn<T>) schema().getColumnSchema(columnIndex);
+        TblColumn<T> columnSchema = schema().getColumnSchema(columnIndex);
         @SuppressWarnings("unchecked")
         T value = (T) values().get(columnIndex);
         return TblCell.of(columnSchema, value);

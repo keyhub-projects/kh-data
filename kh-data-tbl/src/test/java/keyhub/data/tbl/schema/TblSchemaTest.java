@@ -58,7 +58,7 @@ public class TblSchemaTest {
 
             TblSchema tblSchema = TblSchema.from(schemas);
 
-            Optional<TblColumn> result = tblSchema.findColumnSchema("testFindColumnSchema");
+            Optional<TblColumn<?>> result = tblSchema.findColumnSchema("testFindColumnSchema");
             assertNotNull(result.orElse(null));}
     }
 

@@ -24,18 +24,12 @@
 
 package keyhub.data.tbl.function;
 
-import keyhub.data.tbl.row.TblRow;
+import keyhub.data.tbl.row.TblCell;
+
+import java.util.function.Predicate;
 
 @FunctionalInterface
-public interface TblSelector extends TblFunction<TblRow> {
-    TblRow apply(TblRow row);
-    default TblSelector column(String columnName) {
-        return null;
-    }
-    default TblSelector column(int columnIndex) {
-        return null;
-    }
-    default TblSelector as(String alias) {
-        return null;
-    }
+public interface TblCellPredicate<T> extends Predicate<TblCell<T>> {
+    @Override
+    boolean test(TblCell tblCell);
 }

@@ -25,8 +25,8 @@
 package keyhub.data.tbl.stream;
 
 import keyhub.data.tbl.Tbl;
-import keyhub.data.tbl.function.TblPredicate;
-import keyhub.data.tbl.function.TblSelector;
+import keyhub.data.tbl.function.TblRowPredicate;
+import keyhub.data.tbl.function.TblRowSelector;
 import keyhub.data.tbl.row.TblCell;
 import keyhub.data.tbl.row.TblRow;
 import keyhub.data.tbl.schema.TblColumn;
@@ -79,13 +79,13 @@ public class TblStreamImplement implements TblStream {
     }
 
     @Override
-    public TblStream select(TblSelector selector) {
+    public TblStream select(TblRowSelector selector) {
         rowStream = rowStream.map(selector);
         return this;
     }
 
     @Override
-    public TblStream where(String column, TblPredicate filter) {
+    public TblStream where(TblRowPredicate filter) {
         rowStream = rowStream.filter(filter);
         return this;
     }

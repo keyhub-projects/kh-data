@@ -29,21 +29,30 @@ import keyhub.data.tbl.row.TblRow;
 import java.util.function.Predicate;
 
 @FunctionalInterface
-public interface TblPredicate extends Predicate<TblRow> {
+public interface TblRowPredicate extends Predicate<TblRow> {
+
     @Override
     boolean test(TblRow tblRow);
 
-    default TblPredicate is(String columnName, TblPredicate predicate) {
-        return predicate;
+    static <T> TblRowPredicate is(String columnName, TblCellPredicate<T> predicate) {
+        return tblRow -> tblRow.findCell(columnName)
+                .map(predicate::test)
+                .orElse(false);
     }
-    default TblPredicate is(int columnIndex, TblPredicate predicate) {
-        return predicate;
+    static <T> TblRowPredicate is(int columnIndex, TblCellPredicate<T> predicate) {
+        return tblRow -> predicate.test(tblRow.getCell(columnIndex));
     }
 
-    default TblPredicate in(String columnName, TblPredicate predicate) {
-        return predicate;
-    }
-    default TblPredicate in(int columnIndex, TblPredicate predicate) {
-        return predicate;
+    static TblRowPredicate in(String columnName, Object ... value){
+        return tblRow -> tblRow.findCell(columnName)
+                .map(cell -> {
+                    for (Object v : value) {
+                        if (cell.getValue().equals(v)) {
+                            return true;
+                        }
+                    }
+                    return false;
+                })
+                .orElse(false);
     }
 }
