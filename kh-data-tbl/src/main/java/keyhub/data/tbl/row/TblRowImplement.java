@@ -60,7 +60,7 @@ public abstract class TblRowImplement implements TblRow {
     }
     @Override
     public <T> Optional<TblCell<T>> findCell(String columnName) {
-        Optional<TblColumnSchema<?>> opSchema = schema().findColumnSchema(columnName);
+        Optional<TblColumnSchema> opSchema = schema().findColumnSchema(columnName);
         if (opSchema.isEmpty()) {
             return Optional.empty();
         }

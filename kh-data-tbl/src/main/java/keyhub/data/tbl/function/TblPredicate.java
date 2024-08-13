@@ -33,17 +33,17 @@ public interface TblPredicate extends Predicate<TblRow> {
     @Override
     boolean test(TblRow tblRow);
 
-    static TblPredicate is(String columnName, TblPredicate predicate) {
+    default TblPredicate is(String columnName, TblPredicate predicate) {
         return predicate;
     }
-    static TblPredicate is(int columnIndex, TblPredicate predicate) {
+    default TblPredicate is(int columnIndex, TblPredicate predicate) {
         return predicate;
     }
 
-    static TblPredicate in(String columnName, TblPredicate predicate) {
+    default TblPredicate in(String columnName, TblPredicate predicate) {
         return predicate;
     }
-    static TblPredicate in(int columnIndex, TblPredicate predicate) {
+    default TblPredicate in(int columnIndex, TblPredicate predicate) {
         return predicate;
     }
 }

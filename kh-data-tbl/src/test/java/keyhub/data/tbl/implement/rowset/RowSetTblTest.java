@@ -92,10 +92,9 @@ public class RowSetTblTest {
             Tbl tblInstance = Tbl.of(schema, inputData);
 
             // Use selector to select specific columns
-            Tbl resultTbl = tblInstance.selector()
+            Tbl resultTbl = tblInstance
                     .select("column1", "column2")
-                    .where("column1", TblFilterType.GREATER_THAN_OR_EQUAL, "A")
-                    .toTbl();
+                    .where("column1", TblFilterType.GREATER_THAN_OR_EQUAL, "A");
 
             // Assertions
             assertEquals(2, resultTbl.getSchema().getColumnSize());

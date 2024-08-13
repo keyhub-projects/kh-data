@@ -26,6 +26,7 @@ package keyhub.data.tbl.stream;
 
 import keyhub.data.tbl.Tbl;
 import keyhub.data.tbl.function.TblFunction;
+import keyhub.data.tbl.function.TblPredicate;
 import keyhub.data.tbl.row.TblRow;
 import java.util.stream.BaseStream;
 
@@ -35,7 +36,6 @@ public interface TblStream extends BaseStream<TblRow, TblStream> {
 
     TblStream with(TblStream tblStream);
     TblStream select(TblFunction<TblRow> mapper);
-
-    TblStream where(Object... args);
+    TblStream where(String column, TblPredicate filter);
 
 }

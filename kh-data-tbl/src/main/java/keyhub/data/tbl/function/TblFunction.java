@@ -29,5 +29,6 @@ import keyhub.data.tbl.row.TblRow;
 import java.util.function.Function;
 
 public interface TblFunction<R> extends Function<TblRow, R> {
+    R apply(TblRow row);
 
 }

@@ -31,7 +31,6 @@ import keyhub.data.tbl.filter.TblFilterType;
 import keyhub.data.tbl.row.TblRow;
 import keyhub.data.tbl.schema.TblColumnSchema;
 import keyhub.data.tbl.schema.TblSchema;
-import keyhub.data.tbl.selector.TblSelector;
 
 import java.util.*;
 
@@ -87,7 +86,6 @@ public interface Tbl extends DataObject, Iterable<TblRow> {
 
     Tbl select(String... columns);
     Tbl select(List<String> columns);
-    TblSelector selector();
 
     Tbl where(String column, TblFilterType operator, Object value);
     Tbl where(String column, TblFilterType operator);

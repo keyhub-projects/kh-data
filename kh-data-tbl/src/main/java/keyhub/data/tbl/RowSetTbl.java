@@ -33,7 +33,6 @@ import keyhub.data.tbl.filter.TblFilterType;
 import keyhub.data.tbl.schema.TblSchema;
 import keyhub.data.tbl.row.TblRow;
 import keyhub.data.tbl.schema.TblColumnSchema;
-import keyhub.data.tbl.selector.TblSelector;
 
 import java.util.*;
 
@@ -114,7 +113,7 @@ public class RowSetTbl extends TblImplement {
     public Tbl select(List<String> columns) {
         List<TblColumnSchema> columnSchemas = new ArrayList<>();
         for (String column : columns){
-            Optional<TblColumnSchema<?>> opSchema = this.schema.findColumnSchema(column);
+            Optional<TblColumnSchema> opSchema = this.schema.findColumnSchema(column);
             if(opSchema.isEmpty()){
                 throw new IllegalArgumentException("Column not found in schema");
             }
@@ -124,7 +123,7 @@ public class RowSetTbl extends TblImplement {
         for(List<Object> row : this.data){
             List<Object> newRow = new ArrayList<>();
 
-            for(TblColumnSchema columnSchema : columnSchemas){
+            for(TblColumnSchema<?> columnSchema : columnSchemas){
                 int index = this.schema.getColumnIndex(columnSchema.getColumnName());
                 newRow.add(row.get(index));
             }
@@ -149,11 +148,6 @@ public class RowSetTbl extends TblImplement {
                 .tbl(this)
                 .column(column)
                 .build();
-    }
-
-    @Override
-    public TblSelector selector() {
-        return TblSelector.from(this);
     }
 
     @Override
