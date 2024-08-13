@@ -24,10 +24,11 @@
 
 package keyhub.data.tbl.row;
 
-import keyhub.data.tbl.schema.TblColumnSchema;
+import keyhub.data.tbl.schema.TblColumn;
 import keyhub.data.tbl.schema.TblSchema;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 public abstract class TblRowImplement implements TblRow {
@@ -42,6 +43,9 @@ public abstract class TblRowImplement implements TblRow {
             }
         }
         return new TblRowValue(schema, values);
+    }
+    static TblRow of(TblCell... cells) {
+        return new TblRowValue(cells);
     }
     static TblRow of(List<TblCell> cells) {
         return new TblRowValue(cells);
@@ -60,13 +64,13 @@ public abstract class TblRowImplement implements TblRow {
     }
     @Override
     public <T> Optional<TblCell<T>> findCell(String columnName) {
-        Optional<TblColumnSchema> opSchema = schema().findColumnSchema(columnName);
+        Optional<TblColumn> opSchema = schema().findColumnSchema(columnName);
         if (opSchema.isEmpty()) {
             return Optional.empty();
         }
         int index = schema().getColumnNames().indexOf(columnName);
 
-        TblColumnSchema<T> columnSchema = (TblColumnSchema<T>) opSchema.get();
+        TblColumn<T> columnSchema = (TblColumn<T>) opSchema.get();
         Class<T> columnType = columnSchema.getColumnType();
         T value = columnType.cast(values().get(index));
         return Optional.of(TblCell.of(columnSchema, value));
@@ -76,10 +80,28 @@ public abstract class TblRowImplement implements TblRow {
         if(columnIndex < 0 || columnIndex >= schema().getColumnSize()){
             throw new IllegalArgumentException("Column index out of bounds");
         }
-        TblColumnSchema<T> columnSchema = (TblColumnSchema<T>) schema().getColumnSchema(columnIndex);
+        TblColumn<T> columnSchema = (TblColumn<T>) schema().getColumnSchema(columnIndex);
         @SuppressWarnings("unchecked")
         T value = (T) values().get(columnIndex);
         return TblCell.of(columnSchema, value);
     }
-
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!(obj instanceof TblRow other)) {
+            return false;
+        }
+        return values().equals(other.toList())
+                && schema().equals(other.getSchema());
+    }
+    @Override
+    public int hashCode() {
+        return Objects.hash(values(), schema());
+    }
+    @Override
+    public String toString() {
+        return values().toString();
+    }
 }

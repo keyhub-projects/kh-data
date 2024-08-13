@@ -29,7 +29,7 @@ import keyhub.data.tbl.stream.TblStream;
 import keyhub.data.tbl.join.TblJoin;
 import keyhub.data.tbl.filter.TblFilterType;
 import keyhub.data.tbl.row.TblRow;
-import keyhub.data.tbl.schema.TblColumnSchema;
+import keyhub.data.tbl.schema.TblColumn;
 import keyhub.data.tbl.schema.TblSchema;
 
 import java.util.*;
@@ -73,7 +73,7 @@ public interface Tbl extends DataObject, Iterable<TblRow> {
     List<TblRow> getRows();
     List<Object> getRawRow(int index);
     List<List<Object>> getRawRows();
-    TblColumnSchema<?> getColumnSchema(int index);
+    TblColumn<?> getColumnSchema(int index);
     TblSchema getSchema();
     int getColumnSize();
     String getColumn(int index);

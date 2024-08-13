@@ -35,6 +35,9 @@ public interface TblRow extends DataObject {
     static TblRow of(TblSchema schema, Object... values) {
         return TblRowImplement.of(schema, Arrays.stream(values).toList());
     }
+    static TblRow of(TblCell... cells) {
+        return TblRowImplement.of(cells);
+    }
     static TblRow of(List<TblCell> cells) {
         return TblRowImplement.of(cells);
     }

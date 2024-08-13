@@ -26,11 +26,15 @@ package keyhub.data.tbl.schema;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 public abstract class TblSchemaImplement implements TblSchema{
-    public static TblSchema from(List<TblColumnSchema> tblColumnSchemas){
-        return new TblSchemaValue(tblColumnSchemas);
+    public static TblSchema from(List<TblColumn> tblColumns){
+        return new TblSchemaValue(tblColumns);
+    }
+    public static TblSchema from(TblSchema tblSchema) {
+        return new TblSchemaValue(tblSchema);
     }
     public static TblSchemaValue.TblSchemaValueBuilder builder(){
         return new TblSchemaValue.TblSchemaValueBuilder();
@@ -54,7 +58,7 @@ public abstract class TblSchemaImplement implements TblSchema{
         return columnTypes();
     }
     @Override
-    public Optional<TblColumnSchema> findColumnSchema(String columnName){
+    public Optional<TblColumn> findColumnSchema(String columnName){
         int index = columnNames().indexOf(columnName);
         if(index == -1){
             return Optional.empty();
@@ -63,10 +67,10 @@ public abstract class TblSchemaImplement implements TblSchema{
     }
 
     @Override
-    public TblColumnSchema<?> getColumnSchema(int index){
+    public TblColumn<?> getColumnSchema(int index){
         String columnName = columnNames().get(index);
         Class<?> columnType = columnTypes().get(columnName);
-        return TblColumnSchema.of(columnName, columnType);
+        return TblColumn.of(columnName, columnType);
     }
 
     @Override
@@ -80,15 +84,21 @@ public abstract class TblSchemaImplement implements TblSchema{
     }
 
     @Override
-    public boolean equals(Object o){
-        if(this == o){
+    public boolean equals(Object obj) {
+        if (this == obj) {
             return true;
         }
-        if(o == null || getClass() != o.getClass()){
+        if (!(obj instanceof TblSchema other)) {
             return false;
         }
-        TblSchemaImplement that = (TblSchemaImplement) o;
-        return columnNames().equals(that.columnNames()) && columnTypes().equals(that.columnTypes());
+        return columnNames().equals(other.getColumnNames()) && columnTypes().equals(other.getColumnTypes());
     }
-
+    @Override
+    public int hashCode() {
+        return Objects.hash(columnNames(), columnTypes());
+    }
+    @Override
+    public String toString() {
+        return columnNames().toString();
+    }
 }

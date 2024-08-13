@@ -24,7 +24,7 @@
 
 package keyhub.data.tbl.row;
 
-import keyhub.data.tbl.schema.TblColumnSchema;
+import keyhub.data.tbl.schema.TblColumn;
 
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -34,14 +34,14 @@ import java.util.stream.Stream;
 
 public interface TblCell<T> {
 
-    static<T> TblCell<T> empty(TblColumnSchema<T> columnSchema) {
+    static<T> TblCell<T> empty(TblColumn<T> columnSchema) {
         return TblCellImplement.empty(columnSchema);
     }
-    static <T> TblCell<T> of(TblColumnSchema<T> columnSchema, T value) {
+    static <T> TblCell<T> of(TblColumn<T> columnSchema, T value) {
         return TblCellImplement.of(columnSchema, value);
     }
     T getValue();
-    TblColumnSchema<T> getColumnSchema();
+    TblColumn<T> getColumnSchema();
     Class<T> getColumnType();
     boolean isPresent();
     boolean isEmpty();

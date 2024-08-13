@@ -24,7 +24,7 @@
 
 package keyhub.data.tbl.row;
 
-import keyhub.data.tbl.schema.TblColumnSchema;
+import keyhub.data.tbl.schema.TblColumn;
 
 import java.util.NoSuchElementException;
 import java.util.Objects;
@@ -35,16 +35,16 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 public abstract class TblCellImplement<T> implements TblCell<T>{
-    static<T> TblCell<T> empty(TblColumnSchema<T> columnSchema) {
+    static<T> TblCell<T> empty(TblColumn<T> columnSchema) {
         return new TblCellValue<>(columnSchema);
     }
-    static <T> TblCell<T> of(TblColumnSchema<T> columnSchema, T value) {
+    static <T> TblCell<T> of(TblColumn<T> columnSchema, T value) {
         return new TblCellValue<>(columnSchema, value);
     }
 
     public abstract T value();
     public abstract Class<T> columnType();
-    public abstract TblColumnSchema<T> columnSchema();
+    public abstract TblColumn<T> columnSchema();
 
     @Override
     public T getValue() {
@@ -54,7 +54,7 @@ public abstract class TblCellImplement<T> implements TblCell<T>{
         return value();
     }
     @Override
-    public TblColumnSchema<T> getColumnSchema() {
+    public TblColumn<T> getColumnSchema() {
         return columnSchema();
     }
     @Override
@@ -62,28 +62,20 @@ public abstract class TblCellImplement<T> implements TblCell<T>{
         return columnType();
     }
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (!(obj instanceof TblCell<?> other)) {
-            return false;
-        }
-        return value().equals(other.getValue())
-                && columnType().equals(other.getColumnType());
-    }
-
     public boolean isPresent() {
         return value() != null;
     }
+    @Override
     public boolean isEmpty() {
         return value() == null;
     }
+    @Override
     public void ifPresent(Consumer<? super T> action) {
         if (value() != null) {
             action.accept(value());
         }
     }
+    @Override
     public void ifPresentOrElse(Consumer<? super T> action, Runnable emptyAction) {
         if (value() != null) {
             action.accept(value());
@@ -91,6 +83,7 @@ public abstract class TblCellImplement<T> implements TblCell<T>{
             emptyAction.run();
         }
     }
+    @Override
     public TblCell<T> filter(Predicate<? super T> predicate) {
         Objects.requireNonNull(predicate);
         if (isEmpty()) {
@@ -99,6 +92,7 @@ public abstract class TblCellImplement<T> implements TblCell<T>{
             return predicate.test(value()) ? this : empty(columnSchema());
         }
     }
+    @Override
     public <U> TblCell<U> map(Function<? super T, ? extends U> mapper) {
         Objects.requireNonNull(mapper);
         if (isEmpty()) {
@@ -107,10 +101,11 @@ public abstract class TblCellImplement<T> implements TblCell<T>{
             return empty;
         } else {
             @SuppressWarnings("unchecked")
-            TblColumnSchema<U> columnSchema = (TblColumnSchema<U>) columnSchema();
+            TblColumn<U> columnSchema = (TblColumn<U>) columnSchema();
             return TblCell.of(columnSchema, mapper.apply(value()));
         }
     }
+    @Override
     public <U> TblCell<U> flatMap(Function<? super T, ? extends TblCell<? extends U>> mapper) {
         Objects.requireNonNull(mapper);
         if (isEmpty()) {
@@ -123,6 +118,7 @@ public abstract class TblCellImplement<T> implements TblCell<T>{
             return Objects.requireNonNull(r);
         }
     }
+    @Override
     public TblCell<T> or(Supplier<? extends TblCell<? extends T>> supplier) {
         Objects.requireNonNull(supplier);
         if (isPresent()) {
@@ -133,6 +129,7 @@ public abstract class TblCellImplement<T> implements TblCell<T>{
             return Objects.requireNonNull(r);
         }
     }
+    @Override
     public Stream<T> stream() {
         if (isEmpty()) {
             return Stream.empty();
@@ -140,24 +137,39 @@ public abstract class TblCellImplement<T> implements TblCell<T>{
             return Stream.of(value());
         }
     }
+    @Override
     public T orElse(T other) {
         return value() != null ? value() : other;
     }
+    @Override
     public T orElseGet(Supplier<? extends T> supplier) {
         return value() != null ? value() : supplier.get();
     }
+    @Override
     public T orElseThrow() {
         if (value() == null) {
             throw new NoSuchElementException("No value present");
         }
         return value();
     }
+    @Override
     public <X extends Throwable> T orElseThrow(Supplier<? extends X> exceptionSupplier) throws X {
         if (value() != null) {
             return value();
         } else {
             throw exceptionSupplier.get();
         }
+    }
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!(obj instanceof TblCell<?> other)) {
+            return false;
+        }
+        return value().equals(other.getValue())
+                && columnType().equals(other.getColumnType());
     }
     @Override
     public int hashCode() {

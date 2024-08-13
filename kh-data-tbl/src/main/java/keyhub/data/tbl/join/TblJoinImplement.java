@@ -26,7 +26,7 @@ package keyhub.data.tbl.join;
 
 import keyhub.data.tbl.Tbl;
 import keyhub.data.tbl.row.TblRow;
-import keyhub.data.tbl.schema.TblColumnSchema;
+import keyhub.data.tbl.schema.TblColumn;
 import keyhub.data.tbl.schema.TblSchema;
 import keyhub.data.tbl.schema.TblSchemaValue;
 
@@ -94,11 +94,11 @@ public abstract class TblJoinImplement implements TblJoin {
     protected TblSchema computeJoinSchema(){
         TblSchemaValue.TblSchemaValueBuilder builder = TblSchemaValue.builder();
         selectColumns.get(0).forEach(index -> {
-            TblColumnSchema<?> columnSchema = left.getColumnSchema(index);
+            TblColumn<?> columnSchema = left.getColumnSchema(index);
             builder.addColumn(columnSchema);
         });
         selectColumns.get(1).forEach(index -> {
-            TblColumnSchema<?> columnSchema = right.getColumnSchema(index);
+            TblColumn<?> columnSchema = right.getColumnSchema(index);
             builder.addColumn(columnSchema);
         });
         return builder.build();

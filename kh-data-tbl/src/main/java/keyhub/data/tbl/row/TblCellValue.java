@@ -24,22 +24,22 @@
 
 package keyhub.data.tbl.row;
 
-import keyhub.data.tbl.schema.TblColumnSchema;
+import keyhub.data.tbl.schema.TblColumn;
 
 public class TblCellValue<T> extends TblCellImplement<T> {
-    private final TblColumnSchema<T> columnSchema;
+    private final TblColumn<T> columnSchema;
     private final T value;
 
-    public TblCellValue(TblColumnSchema<T> columnSchema) {
+    public TblCellValue(TblColumn<T> columnSchema) {
         this.columnSchema = columnSchema;
         this.value = null;
     }
 
-    public TblCellValue(TblColumnSchema<T> columnSchema, T value) {
+    public TblCellValue(TblColumn<T> columnSchema, T value) {
         this.columnSchema = columnSchema;
         this.value = value;
     }
-    public TblColumnSchema<T> getColumnSchema() {
+    public TblColumn<T> getColumnSchema() {
         return columnSchema;
     }
 
@@ -48,7 +48,7 @@ public class TblCellValue<T> extends TblCellImplement<T> {
         return value;
     }
     @Override
-    public TblColumnSchema<T> columnSchema() {
+    public TblColumn<T> columnSchema() {
         return columnSchema;
     }
     @Override

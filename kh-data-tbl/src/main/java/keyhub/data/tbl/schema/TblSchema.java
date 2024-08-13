@@ -31,8 +31,11 @@ import java.util.Map;
 import java.util.Optional;
 
 public interface TblSchema extends DataObject {
-    static TblSchema from(List<TblColumnSchema> tblColumnSchemas) {
-        return TblSchemaImplement.from(tblColumnSchemas);
+    static TblSchema from(List<TblColumn> tblColumns) {
+        return TblSchemaImplement.from(tblColumns);
+    }
+    static TblSchema from(TblSchema tblSchema) {
+        return TblSchemaImplement.from(tblSchema);
     }
     static TblSchemaValue.TblSchemaValueBuilder builder() {
         return TblSchemaImplement.builder();
@@ -46,9 +49,9 @@ public interface TblSchema extends DataObject {
     List<String> getColumnNames();
     Map<String, Class<?>> getColumnTypes();
 
-    Optional<TblColumnSchema> findColumnSchema(String columnName);
+    Optional<TblColumn> findColumnSchema(String columnName);
 
-    TblColumnSchema<?> getColumnSchema(int index);
+    TblColumn<?> getColumnSchema(int index);
 
     @Override
     boolean equals(Object o);

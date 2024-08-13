@@ -24,14 +24,39 @@
 
 package keyhub.data.tbl.schema;
 
-import keyhub.data.DataObject;
+import java.util.Objects;
 
-public interface TblColumnSchema<T> extends DataObject {
-    static <T> TblColumnSchema<T> of(String columnName, Class<T> columnType) {
-        return TblColumnSchemaImplement.of(columnName, columnType);
+public abstract class TblColumnImplement<T> implements TblColumn<T> {
+    protected abstract String columnName();
+    protected abstract Class<T> columnType();
+
+    public static <T> TblColumn<T> of(String columnName, Class<T> columnType){
+        return new TblColumnValue<>(columnName, columnType);
     }
-    String getColumnName();
-    Class<T> getColumnType();
+    public String getColumnName(){
+        return columnName();
+    }
+    public Class<T> getColumnType(){
+        return columnType();
+    }
+
     @Override
-    boolean equals(Object o);
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!(obj instanceof TblColumn other)) {
+            return false;
+        }
+        return Objects.equals(columnName(), other.getColumnName())
+                && Objects.equals(columnType(), other.getColumnType());
+    }
+    @Override
+    public int hashCode() {
+        return Objects.hash(columnName(), columnType());
+    }
+    @Override
+    public String toString() {
+        return columnName() + "(" + columnType().getSimpleName() + ")";
+    }
 }

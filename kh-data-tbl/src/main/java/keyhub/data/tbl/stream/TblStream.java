@@ -25,17 +25,24 @@
 package keyhub.data.tbl.stream;
 
 import keyhub.data.tbl.Tbl;
-import keyhub.data.tbl.function.TblFunction;
 import keyhub.data.tbl.function.TblPredicate;
+import keyhub.data.tbl.function.TblSelector;
 import keyhub.data.tbl.row.TblRow;
+import keyhub.data.tbl.schema.TblColumn;
+
 import java.util.stream.BaseStream;
+import java.util.stream.Stream;
 
 public interface TblStream extends BaseStream<TblRow, TblStream> {
+    static TblStream from(Stream<TblRow> rowStream) {
+        return TblStreamImplement.from(rowStream);
+    }
 
     Tbl toTbl();
 
-    TblStream with(TblStream tblStream);
-    TblStream select(TblFunction<TblRow> mapper);
+    TblStream select(String... columns);
+    TblStream select(TblColumn... columns);
+    TblStream select(TblSelector selector);
     TblStream where(String column, TblPredicate filter);
 
 }

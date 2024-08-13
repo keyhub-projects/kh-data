@@ -24,23 +24,22 @@
 
 package keyhub.data.tbl.schema;
 
-public abstract class TblColumnSchemaImplement<T> implements TblColumnSchema<T> {
-    protected abstract String columnName();
-    protected abstract Class<T> columnType();
+public class TblColumnValue<T> extends TblColumnImplement<T> {
+    private final String columnName;
+    private final Class<T> columnType;
 
-    public static <T> TblColumnSchema<T> of(String columnName, Class<T> columnType){
-        return new TblColumnSchemaValue<>(columnName, columnType);
+    @Override
+    protected String columnName() {
+        return this.columnName;
     }
-    public String getColumnName(){
-        return columnName();
+
+    @Override
+    protected Class<T> columnType() {
+        return this.columnType;
     }
-    public Class<T> getColumnType(){
-        return columnType();
-    }
-    public boolean equals(Object o){
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        TblColumnSchema<?> that = (TblColumnSchema<?>) o;
-        return columnName().equals(that.getColumnName()) && columnType().equals(that.getColumnType());
+
+    public TblColumnValue(String columnName, Class<T> columnType) {
+        this.columnName = columnName;
+        this.columnType = columnType;
     }
 }

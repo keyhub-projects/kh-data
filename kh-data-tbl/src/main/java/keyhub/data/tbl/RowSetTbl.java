@@ -32,9 +32,11 @@ import keyhub.data.tbl.filter.TblFilter;
 import keyhub.data.tbl.filter.TblFilterType;
 import keyhub.data.tbl.schema.TblSchema;
 import keyhub.data.tbl.row.TblRow;
-import keyhub.data.tbl.schema.TblColumnSchema;
+import keyhub.data.tbl.schema.TblColumn;
 
 import java.util.*;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 public class RowSetTbl extends TblImplement {
     private final List<List<Object>> data;
@@ -100,8 +102,8 @@ public class RowSetTbl extends TblImplement {
 
     @Override
     public TblStream stream() {
-        // todo
-        return null;
+        Stream<TblRow> rowStream = StreamSupport.stream(spliterator(), false);
+        return TblStream.from(rowStream);
     }
 
     @Override
@@ -111,9 +113,9 @@ public class RowSetTbl extends TblImplement {
 
     @Override
     public Tbl select(List<String> columns) {
-        List<TblColumnSchema> columnSchemas = new ArrayList<>();
+        List<TblColumn> columnSchemas = new ArrayList<>();
         for (String column : columns){
-            Optional<TblColumnSchema> opSchema = this.schema.findColumnSchema(column);
+            Optional<TblColumn> opSchema = this.schema.findColumnSchema(column);
             if(opSchema.isEmpty()){
                 throw new IllegalArgumentException("Column not found in schema");
             }
@@ -123,7 +125,7 @@ public class RowSetTbl extends TblImplement {
         for(List<Object> row : this.data){
             List<Object> newRow = new ArrayList<>();
 
-            for(TblColumnSchema<?> columnSchema : columnSchemas){
+            for(TblColumn<?> columnSchema : columnSchemas){
                 int index = this.schema.getColumnIndex(columnSchema.getColumnName());
                 newRow.add(row.get(index));
             }
@@ -166,7 +168,7 @@ public class RowSetTbl extends TblImplement {
                 .map(row -> {
                     Map<String, Object> rowMap = new HashMap<>();
                     for(int i = 0; i < this.schema.getColumnSize(); i++){
-                        TblColumnSchema<?> columnSchema = this.schema.getColumnSchema(i);
+                        TblColumn<?> columnSchema = this.schema.getColumnSchema(i);
                         rowMap.put(columnSchema.getColumnName(), row.get(i));
                     }
                     return rowMap;
@@ -178,7 +180,7 @@ public class RowSetTbl extends TblImplement {
     public Map<String, List<Object>> toColumnListMap() {
         Map<String, List<Object>> columnListMap = new HashMap<>();
         for(int i = 0; i < this.schema.getColumnSize(); i++){
-            TblColumnSchema<?> columnSchema = this.schema.getColumnSchema(i);
+            TblColumn<?> columnSchema = this.schema.getColumnSchema(i);
             List<Object> columnList = new ArrayList<>();
             for(List<Object> row : this.data){
                 columnList.add(row.get(i));

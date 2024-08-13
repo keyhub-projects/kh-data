@@ -38,11 +38,18 @@ public class TblSchemaValue extends TblSchemaImplement {
         this.columnTypes = new HashMap<>();
     }
 
-    public TblSchemaValue(List<TblColumnSchema> schemas){
-        this.columnNames = schemas.stream().map(TblColumnSchema::getColumnName).toList();
+    public TblSchemaValue(List<TblColumn> schemas){
+        this.columnNames = schemas.stream().map(TblColumn::getColumnName).toList();
         this.columnTypes = new HashMap<>();
         schemas.forEach(schema -> this.columnTypes.put(schema.getColumnName(), schema.getColumnType()));
     }
+
+    public TblSchemaValue(TblSchema tblSchema) {
+        this.columnNames = tblSchema.getColumnNames();
+        this.columnTypes = new HashMap<>();
+        tblSchema.getColumnTypes().forEach(this.columnTypes::put);
+    }
+
     public TblSchemaValue(TblSchemaValueBuilder builder) {
         this.columnNames = builder.columnNames;
         this.columnTypes = new HashMap<>();
@@ -69,13 +76,13 @@ public class TblSchemaValue extends TblSchemaImplement {
             this.columnTypes.put(columnName, columnType);
             return this;
         }
-        public TblSchemaValueBuilder addColumn(TblColumnSchema<?> tblColumnSchema) {
-            this.columnNames.add(tblColumnSchema.getColumnName());
-            this.columnTypes.put(tblColumnSchema.getColumnName(), tblColumnSchema.getColumnType());
+        public TblSchemaValueBuilder addColumn(TblColumn<?> tblColumn) {
+            this.columnNames.add(tblColumn.getColumnName());
+            this.columnTypes.put(tblColumn.getColumnName(), tblColumn.getColumnType());
             return this;
         }
-        public TblSchemaValueBuilder addColumns(List<TblColumnSchema<?>> tblColumnSchemas) {
-            tblColumnSchemas.forEach(this::addColumn);
+        public TblSchemaValueBuilder addColumns(List<TblColumn<?>> tblColumns) {
+            tblColumns.forEach(this::addColumn);
             return this;
         }
         public TblSchemaValue build() {

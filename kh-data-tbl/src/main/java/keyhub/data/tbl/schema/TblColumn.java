@@ -24,22 +24,14 @@
 
 package keyhub.data.tbl.schema;
 
-public class TblColumnSchemaValue<T> extends TblColumnSchemaImplement<T> {
-    private final String columnName;
-    private final Class<T> columnType;
+import keyhub.data.DataObject;
 
+public interface TblColumn<T> extends DataObject {
+    static <T> TblColumn<T> of(String columnName, Class<T> columnType) {
+        return TblColumnImplement.of(columnName, columnType);
+    }
+    String getColumnName();
+    Class<T> getColumnType();
     @Override
-    protected String columnName() {
-        return this.columnName;
-    }
-
-    @Override
-    protected Class<T> columnType() {
-        return this.columnType;
-    }
-
-    public TblColumnSchemaValue(String columnName, Class<T> columnType) {
-        this.columnName = columnName;
-        this.columnType = columnType;
-    }
+    boolean equals(Object o);
 }

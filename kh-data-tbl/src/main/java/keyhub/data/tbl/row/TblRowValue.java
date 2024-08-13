@@ -24,7 +24,7 @@
 
 package keyhub.data.tbl.row;
 
-import keyhub.data.tbl.schema.TblColumnSchema;
+import keyhub.data.tbl.schema.TblColumn;
 import keyhub.data.tbl.schema.TblSchema;
 
 import java.util.ArrayList;
@@ -39,8 +39,14 @@ public class TblRowValue extends TblRowImplement {
         this.values = new ArrayList<>(values);
     }
 
+    public TblRowValue(TblCell... cells) {
+        List<TblColumn> columns = List.of(cells).stream().map(TblCell::getColumnSchema).toList();
+        this.schema = TblSchema.from(columns);
+        this.values = List.of(cells).stream().map(TblCell::getValue).toList();
+    }
+
     public TblRowValue(List<TblCell> cells) {
-        List<TblColumnSchema> columns = cells.stream().map(TblCell::getColumnSchema).toList();
+        List<TblColumn> columns = cells.stream().map(TblCell::getColumnSchema).toList();
         this.schema = TblSchema.from(columns);
         this.values = cells.stream().map(TblCell::getValue).toList();
     }

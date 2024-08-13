@@ -30,7 +30,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class TblColumnSchemaTest {
+class TblColumnTest {
     @Nested
     class CreateColumnSchemaTest {
         @Test
@@ -38,10 +38,10 @@ class TblColumnSchemaTest {
             String expectedColumnName = "testGetColumnName";
             Class<String> expectedColumnType = String.class;
 
-            TblColumnSchema<?> tblColumnSchema = TblColumnSchema.of(expectedColumnName, expectedColumnType);
+            TblColumn<?> tblColumn = TblColumn.of(expectedColumnName, expectedColumnType);
 
-            assertEquals("testGetColumnName", tblColumnSchema.getColumnName());
-            assertEquals(String.class, tblColumnSchema.getColumnType());
+            assertEquals("testGetColumnName", tblColumn.getColumnName());
+            assertEquals(String.class, tblColumn.getColumnType());
         }
     }
 
@@ -49,39 +49,39 @@ class TblColumnSchemaTest {
     class EqualsTest {
         @Test
         void testEquals_sameObject() {
-            TblColumnSchema<?> schema1 = TblColumnSchema.of("id", Integer.class);
-            TblColumnSchema<?> schema2 = schema1;
+            TblColumn<?> schema1 = TblColumn.of("id", Integer.class);
+            TblColumn<?> schema2 = schema1;
 
             assertEquals(schema1, schema2);
         }
 
         @Test
         void testEquals_equalObjects() {
-            TblColumnSchema<?> schema1 = TblColumnSchema.of("id", Integer.class);
-            TblColumnSchema<?> schema2 = TblColumnSchema.of("id", Integer.class);
+            TblColumn<?> schema1 = TblColumn.of("id", Integer.class);
+            TblColumn<?> schema2 = TblColumn.of("id", Integer.class);
 
             assertEquals(schema1, schema2);
         }
 
         @Test
         void testEquals_diffColumnName() {
-            TblColumnSchema<?> schema1 = TblColumnSchema.of("id", Integer.class);
-            TblColumnSchema<?> schema2 = TblColumnSchema.of("name", Integer.class);
+            TblColumn<?> schema1 = TblColumn.of("id", Integer.class);
+            TblColumn<?> schema2 = TblColumn.of("name", Integer.class);
 
             Assertions.assertNotEquals(schema1, schema2);
         }
 
         @Test
         void testEquals_diffColumnType() {
-            TblColumnSchema<?> schema1 = TblColumnSchema.of("id", Integer.class);
-            TblColumnSchema<?> schema2 = TblColumnSchema.of("id", String.class);
+            TblColumn<?> schema1 = TblColumn.of("id", Integer.class);
+            TblColumn<?> schema2 = TblColumn.of("id", String.class);
 
             Assertions.assertNotEquals(schema1, schema2);
         }
 
         @Test
         void testEquals_compareToNull() {
-            TblColumnSchema<?> schema1 = TblColumnSchema.of("id", Integer.class);
+            TblColumn<?> schema1 = TblColumn.of("id", Integer.class);
 
             Assertions.assertNotEquals(schema1, null);
         }

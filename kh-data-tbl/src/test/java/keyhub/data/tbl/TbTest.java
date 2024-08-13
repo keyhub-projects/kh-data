@@ -27,7 +27,7 @@ package keyhub.data.tbl;
 import keyhub.data.tbl.filter.TblFilterType;
 import keyhub.data.tbl.row.TblCell;
 import keyhub.data.tbl.row.TblRow;
-import keyhub.data.tbl.schema.TblColumnSchema;
+import keyhub.data.tbl.schema.TblColumn;
 import keyhub.data.tbl.schema.TblSchema;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -93,9 +93,9 @@ public class TbTest {
             row2.add(2);
             data.add(row2);
 
-            List<TblColumnSchema> columnSchemas = new ArrayList<>();
-            columnSchemas.add(TblColumnSchema.of("key1", String.class));
-            columnSchemas.add(TblColumnSchema.of("key2", Integer.class));
+            List<TblColumn> columnSchemas = new ArrayList<>();
+            columnSchemas.add(TblColumn.of("key1", String.class));
+            columnSchemas.add(TblColumn.of("key2", Integer.class));
             TblSchema schema = TblSchema.from(columnSchemas);
 
             Tbl result = Tbl.of(schema, data);
@@ -108,9 +108,9 @@ public class TbTest {
 
         @Test
         public void testBuilderMethod() {
-            List<TblColumnSchema> columnSchemas = new ArrayList<>();
-            columnSchemas.add(TblColumnSchema.of("key1", String.class));
-            columnSchemas.add(TblColumnSchema.of("key2", Integer.class));
+            List<TblColumn> columnSchemas = new ArrayList<>();
+            columnSchemas.add(TblColumn.of("key1", String.class));
+            columnSchemas.add(TblColumn.of("key2", Integer.class));
             TblSchema schema = TblSchema.from(columnSchemas);
 
             Tbl result = Tbl.builder(schema)
@@ -129,10 +129,10 @@ public class TbTest {
     class ToColumnListMapTest{
         @Test
         void testToColumnListMapMethod() {
-            List<TblColumnSchema> schemas = List.of(
-                    TblColumnSchema.of("column1", String.class),
-                    TblColumnSchema.of("column2", String.class),
-                    TblColumnSchema.of("column3", String.class)
+            List<TblColumn> schemas = List.of(
+                    TblColumn.of("column1", String.class),
+                    TblColumn.of("column2", String.class),
+                    TblColumn.of("column3", String.class)
             );
             List<List<Object>> inputData = List.of(
                     List.of("A", "B", "C"),
@@ -156,10 +156,10 @@ public class TbTest {
     class ToRowMapListTest{
         @Test
         void testToRowMapListMethod() {
-            List<TblColumnSchema> schemas = List.of(
-                    TblColumnSchema.of("column1", String.class),
-                    TblColumnSchema.of("column2", String.class),
-                    TblColumnSchema.of("column3", String.class)
+            List<TblColumn> schemas = List.of(
+                    TblColumn.of("column1", String.class),
+                    TblColumn.of("column2", String.class),
+                    TblColumn.of("column3", String.class)
             );
             List<List<Object>> inputData = List.of(
                     List.of("A", "B", "C"),
@@ -183,10 +183,10 @@ public class TbTest {
     class SelectTest {
         @Test
         void testSelectMethod() {
-            List<TblColumnSchema> schemas = List.of(
-                    TblColumnSchema.of("column1", String.class),
-                    TblColumnSchema.of("column2", String.class),
-                    TblColumnSchema.of("column3", String.class)
+            List<TblColumn> schemas = List.of(
+                    TblColumn.of("column1", String.class),
+                    TblColumn.of("column2", String.class),
+                    TblColumn.of("column3", String.class)
             );
             List<List<Object>> inputData = List.of(
                     List.of("A", "B", "C"),
@@ -206,10 +206,10 @@ public class TbTest {
             List<String> expectedColumns = Arrays.asList("column1", "column2");
             assertEquals(expectedColumns, resultTbl.getColumns());
 
-            TblCell<String> expectedFirstRowFirstColumn = TblCell.of(TblColumnSchema.of("column1", String.class), "A");
+            TblCell<String> expectedFirstRowFirstColumn = TblCell.of(TblColumn.of("column1", String.class), "A");
             assertEquals(expectedFirstRowFirstColumn, resultTbl.getRow(0).findCell("column1").orElseThrow());
 
-            TblCell<String> expectedFirstRowSecondColumn = TblCell.of(TblColumnSchema.of("column2", String.class), "B");
+            TblCell<String> expectedFirstRowSecondColumn = TblCell.of(TblColumn.of("column2", String.class), "B");
             assertEquals(expectedFirstRowSecondColumn, resultTbl.getRow(0).findCell("column2").orElseThrow());
         }
     }
@@ -218,10 +218,10 @@ public class TbTest {
     class WhereTest{
         @Test
         void testWhereMethod() {
-            List<TblColumnSchema> schemas = List.of(
-                    TblColumnSchema.of("column1", String.class),
-                    TblColumnSchema.of("column2", String.class),
-                    TblColumnSchema.of("column3", String.class)
+            List<TblColumn> schemas = List.of(
+                    TblColumn.of("column1", String.class),
+                    TblColumn.of("column2", String.class),
+                    TblColumn.of("column3", String.class)
             );
             List<List<Object>> inputData = List.of(
                     List.of("A", "B", "C"),
