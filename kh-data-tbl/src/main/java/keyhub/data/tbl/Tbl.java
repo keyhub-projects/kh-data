@@ -27,7 +27,6 @@ package keyhub.data.tbl;
 import keyhub.data.DataObject;
 import keyhub.data.tbl.stream.TblStream;
 import keyhub.data.tbl.join.TblJoin;
-import keyhub.data.tbl.filter.TblFilterType;
 import keyhub.data.tbl.row.TblRow;
 import keyhub.data.tbl.schema.TblColumn;
 import keyhub.data.tbl.schema.TblSchema;
@@ -83,12 +82,6 @@ public interface Tbl extends DataObject, Iterable<TblRow> {
     int getColumnIndex(String column);
 
     TblStream stream();
-
-    Tbl select(String... columns);
-    Tbl select(List<String> columns);
-
-    Tbl where(String column, TblFilterType operator, Object value);
-    Tbl where(String column, TblFilterType operator);
 
     TblJoin leftJoin(Tbl right);
     TblJoin innerJoin(Tbl right);

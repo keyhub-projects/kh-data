@@ -24,8 +24,6 @@
 
 package keyhub.data.tbl;
 
-import keyhub.data.tbl.filter.TblFilterType;
-import keyhub.data.tbl.row.TblCell;
 import keyhub.data.tbl.row.TblRow;
 import keyhub.data.tbl.schema.TblColumn;
 import keyhub.data.tbl.schema.TblSchema;
@@ -179,64 +177,4 @@ public class TbTest {
         }
     }
 
-    @Nested
-    class SelectTest {
-        @Test
-        void testSelectMethod() {
-            List<TblColumn> schemas = List.of(
-                    TblColumn.of("column1", String.class),
-                    TblColumn.of("column2", String.class),
-                    TblColumn.of("column3", String.class)
-            );
-            List<List<Object>> inputData = List.of(
-                    List.of("A", "B", "C"),
-                    List.of("D", "E", "F"),
-                    List.of("G", "H", "I")
-            );
-            TblSchema schema = TblSchema.from(schemas);
-            Tbl tblInstance = Tbl.of(schema, inputData);
-
-            // Select specific columns
-            Tbl resultTbl = tblInstance.select("column1", "column2");
-
-            // Assertions
-            assertEquals(2, resultTbl.getSchema().getColumnSize());
-            assertEquals(3, resultTbl.count());
-
-            List<String> expectedColumns = Arrays.asList("column1", "column2");
-            assertEquals(expectedColumns, resultTbl.getColumns());
-
-            TblCell<String> expectedFirstRowFirstColumn = TblCell.of(TblColumn.of("column1", String.class), "A");
-            assertEquals(expectedFirstRowFirstColumn, resultTbl.getRow(0).findCell("column1").orElseThrow());
-
-            TblCell<String> expectedFirstRowSecondColumn = TblCell.of(TblColumn.of("column2", String.class), "B");
-            assertEquals(expectedFirstRowSecondColumn, resultTbl.getRow(0).findCell("column2").orElseThrow());
-        }
-    }
-
-    @Nested
-    class WhereTest{
-        @Test
-        void testWhereMethod() {
-            List<TblColumn> schemas = List.of(
-                    TblColumn.of("column1", String.class),
-                    TblColumn.of("column2", String.class),
-                    TblColumn.of("column3", String.class)
-            );
-            List<List<Object>> inputData = List.of(
-                    List.of("A", "B", "C"),
-                    List.of("D", "E", "F"),
-                    List.of("G", "H", "I")
-            );
-            TblSchema schema = TblSchema.from(schemas);
-            Tbl tblInstance = Tbl.of(schema, inputData);
-
-            // Where
-            Tbl resultTbl = tblInstance.where("column1", TblFilterType.EQUAL,"A");
-
-            // Assertions
-            assertEquals(1, resultTbl.count());
-            assertEquals(3, resultTbl.getSchema().getColumnSize());
-        }
-    }
 }

@@ -28,8 +28,6 @@ import keyhub.data.tbl.stream.TblStream;
 import keyhub.data.tbl.join.TblJoin;
 import keyhub.data.tbl.join.inner.TblInnerJoin;
 import keyhub.data.tbl.join.left.TblLeftJoin;
-import keyhub.data.tbl.filter.TblFilter;
-import keyhub.data.tbl.filter.TblFilterType;
 import keyhub.data.tbl.schema.TblSchema;
 import keyhub.data.tbl.row.TblRow;
 import keyhub.data.tbl.schema.TblColumn;
@@ -104,52 +102,6 @@ public class RowSetTbl extends TblImplement {
     public TblStream stream() {
         Stream<TblRow> rowStream = StreamSupport.stream(spliterator(), false);
         return TblStream.from(rowStream);
-    }
-
-    @Override
-    public Tbl select(String... columns) {
-        return select(List.of(columns));
-    }
-
-    @Override
-    public Tbl select(List<String> columns) {
-        List<TblColumn> columnSchemas = new ArrayList<>();
-        for (String column : columns){
-            Optional<TblColumn<?>> opSchema = this.schema.findColumnSchema(column);
-            if(opSchema.isEmpty()){
-                throw new IllegalArgumentException("Column not found in schema");
-            }
-            columnSchemas.add(opSchema.get());
-        }
-        List<List<Object>> newData = new ArrayList<>();
-        for(List<Object> row : this.data){
-            List<Object> newRow = new ArrayList<>();
-
-            for(TblColumn<?> columnSchema : columnSchemas){
-                int index = this.schema.getColumnIndex(columnSchema.getColumnName());
-                newRow.add(row.get(index));
-            }
-            newData.add(newRow);
-        }
-        return new RowSetTbl(TblSchema.from(columnSchemas), newData);
-    }
-
-    @Override
-    public Tbl where(String column, TblFilterType operator, Object value) {
-        return TblFilter.builder()
-                .operator(operator)
-                .tbl(this)
-                .column(column)
-                .value(value)
-                .build();
-    }
-    @Override
-    public Tbl where(String column, TblFilterType operator) {
-        return TblFilter.builder()
-                .operator(operator)
-                .tbl(this)
-                .column(column)
-                .build();
     }
 
     @Override

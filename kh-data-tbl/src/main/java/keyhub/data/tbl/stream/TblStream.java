@@ -41,7 +41,7 @@ public interface TblStream extends BaseStream<TblRow, TblStream> {
     Tbl toTbl();
 
     TblStream select(String... columns);
-    TblStream select(TblColumn... columns);
+    TblStream select(TblColumn<?>... columns);
     TblStream select(TblRowSelector selector);
     TblStream where(TblRowPredicate filter);
 }

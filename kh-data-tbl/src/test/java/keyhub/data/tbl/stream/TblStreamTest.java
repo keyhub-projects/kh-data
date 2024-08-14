@@ -25,7 +25,6 @@
 package keyhub.data.tbl.stream;
 
 import keyhub.data.tbl.Tbl;
-import keyhub.data.tbl.function.TblRowSelector;
 import keyhub.data.tbl.row.TblRow;
 import keyhub.data.tbl.schema.TblColumn;
 import keyhub.data.tbl.schema.TblSchema;
@@ -67,7 +66,7 @@ public class TblStreamTest {
                                 tblRow.findCell("age").orElseThrow()
                         )
                 )
-                .where(is("age", tblCell -> (Integer) tblCell.getValue() > 20))
+                .where(is("age", age -> (Integer) age.getValue() > 20))
                 .where(in("name", "Charlie", "Bob"))
                 .toTbl();
         System.out.println(result);
