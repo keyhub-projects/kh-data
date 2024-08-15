@@ -22,12 +22,22 @@
  * SOFTWARE.
  */
 
-package keyhub.data.tbl.function;
+package keyhub.data.tbl.stream;
 
-import keyhub.data.tbl.row.TblCell;
+import keyhub.data.tbl.function.TblJoinColumnSelector;
+import keyhub.data.tbl.function.TblJoinSchemaPredicate;
 
+public interface TblJoinStream {
+    // 스트림을 위해선 순서가 중요해.. sorted join 이 기본 골자이기 때문
+    // 소티드에 따라, right는 데이터그램으로 처리된다.
+    // 1. 순서대로 on 조건 처리
+    // left는 on 조건으로 right를 다 확인 => 소티드일 경우, 스코프만 확인
 
-@FunctionalInterface
-public interface TblCellPredicate{
-    boolean test(TblCell tblCell);
+    static TblJoinStream of(TblStream leftStream, TblStream rightStream, TblJoinSchemaPredicate[] joinFilters) {
+        return TblJoinStreamImplement.of(leftStream, rightStream, joinFilters);
+    }
+
+    TblJoinStream select(TblJoinColumnSelector... selectors);
+
+    TblStream toJoinedStream();
 }

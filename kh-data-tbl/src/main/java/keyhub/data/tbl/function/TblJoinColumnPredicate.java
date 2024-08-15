@@ -24,10 +24,9 @@
 
 package keyhub.data.tbl.function;
 
-import keyhub.data.tbl.row.TblCell;
+import keyhub.data.tbl.schema.TblColumn;
 
+public interface TblJoinColumnPredicate {
+    boolean test(TblColumn<?> leftColumn, TblColumn<?> rightColumn);
 
-@FunctionalInterface
-public interface TblCellPredicate{
-    boolean test(TblCell tblCell);
 }

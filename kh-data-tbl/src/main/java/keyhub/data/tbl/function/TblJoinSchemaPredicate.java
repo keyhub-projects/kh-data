@@ -24,14 +24,34 @@
 
 package keyhub.data.tbl.function;
 
-import keyhub.data.tbl.row.TblCell;
-import keyhub.data.tbl.row.TblRow;
+import keyhub.data.tbl.schema.TblColumn;
+import keyhub.data.tbl.schema.TblSchema;
 
 @FunctionalInterface
-public interface TblColumnSelector{
-    TblCell<?> apply(TblRow row);
+public interface TblJoinSchemaPredicate {
+    boolean test(TblSchema left, TblSchema right);
 
-    static TblColumnSelector column(String columnName) {
-        return row -> row.findCell(columnName).orElse(null);
+    static TblJoinSchemaPredicate on(String leftColumnName, String rightColumnName, TblJoinColumnPredicate predicate){
+        return (left, right) -> {
+            TblColumn<?> leftColumn = left.findColumnSchema(leftColumnName).orElse(null);
+            TblColumn<?> rightColumn = right.findColumnSchema(rightColumnName).orElse(null);
+            if(leftColumn == null || rightColumn == null) {
+                return false;
+            }
+            return predicate.test(leftColumn, rightColumn);
+        };
+    }
+
+    static TblJoinSchemaPredicate on(String columnName, TblJoinColumnPredicate predicate) {
+        return on(columnName, columnName, predicate);
+    }
+
+    static TblJoinSchemaPredicate and(String columnName, TblJoinColumnPredicate predicate) {
+        return on(columnName, columnName, predicate);
+    }
+
+    static TblJoinSchemaPredicate and(String leftColumnName, String rightColumnName, TblJoinColumnPredicate predicate){
+        return on(leftColumnName, rightColumnName, predicate);
     }
 }
+

@@ -25,9 +25,19 @@
 package keyhub.data.tbl.function;
 
 import keyhub.data.tbl.row.TblCell;
-
+import keyhub.data.tbl.row.TblRow;
 
 @FunctionalInterface
-public interface TblCellPredicate{
-    boolean test(TblCell tblCell);
+public interface TblJoinColumnSelector {
+    TblCell<?> apply(TblRow leftRow, TblRow rightRow);
+
+    static TblJoinColumnSelector rightColumn(String columnName) {
+        return (leftRow, rightRow) -> rightRow.findCell(columnName).orElse(null);
+    }
+
+    static TblJoinColumnSelector leftColumn(String columnName) {
+        return (leftRow, rightRow) -> leftRow.findCell(columnName).orElse(null);
+    }
+
+
 }

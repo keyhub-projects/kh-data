@@ -27,10 +27,12 @@ package keyhub.data.tbl.stream;
 import keyhub.data.tbl.Tbl;
 import keyhub.data.tbl.schema.TblColumn;
 import keyhub.data.tbl.schema.TblSchema;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import static keyhub.data.tbl.function.TblJoinSchemaPredicate.on;
 import static keyhub.data.tbl.function.TblRowPredicate.is;
 import static keyhub.data.tbl.function.TblColumnSelector.column;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -66,5 +68,35 @@ public class TblStreamTest {
                 .toTbl();
         System.out.println(result);
         assertEquals(2, result.count());
+    }
+
+    @Nested
+    public class JoinTest{
+        @Test
+        public void testInnerJoin(){
+            TblSchema schema1 = TblSchema.from(List.of(
+                    TblColumn.of("name", String.class),
+                    TblColumn.of("age", Integer.class)
+            ));
+            Tbl tbl1 = Tbl.of(schema1, List.of(
+                    List.of("Alice", 20),
+                    List.of("Bob", 30),
+                    List.of("Charlie", 40)
+            ));
+
+            TblSchema schema2 = TblSchema.from(List.of(
+                    TblColumn.of("name", String.class),
+                    TblColumn.of("height", Double.class)
+            ));
+            Tbl tbl2 = Tbl.of(schema2, List.of(
+                    List.of("Alice", 160.0),
+                    List.of("Bob", 170.0),
+                    List.of("David", 180.0)
+            ));
+
+            TblJoinStream joinStream = tbl1.stream()
+                    .innerJoin(tbl2.stream(), on("name", TblColumn::equals));
+
+        }
     }
 }

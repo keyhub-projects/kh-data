@@ -31,15 +31,14 @@ import java.util.function.Predicate;
 @FunctionalInterface
 public interface TblRowPredicate extends Predicate<TblRow> {
 
-    @Override
     boolean test(TblRow tblRow);
 
-    static <T> TblRowPredicate is(String columnName, TblCellPredicate<T> predicate) {
+    static TblRowPredicate is(String columnName, TblCellPredicate predicate) {
         return tblRow -> tblRow.findCell(columnName)
                 .map(predicate::test)
                 .orElse(false);
     }
-    static <T> TblRowPredicate is(int columnIndex, TblCellPredicate<T> predicate) {
+    static TblRowPredicate is(int columnIndex, TblCellPredicate predicate) {
         return tblRow -> predicate.test(tblRow.getCell(columnIndex));
     }
 }

@@ -41,7 +41,6 @@ public abstract class TblImplement implements Tbl {
         this.schema = schema;
     }
 
-
     public static Tbl empty() {
         return TblBuilder.forRowSet(TblSchema.empty()).build();
     }

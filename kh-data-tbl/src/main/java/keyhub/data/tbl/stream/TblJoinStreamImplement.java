@@ -22,12 +22,33 @@
  * SOFTWARE.
  */
 
-package keyhub.data.tbl.function;
+package keyhub.data.tbl.stream;
 
-import keyhub.data.tbl.row.TblCell;
+import keyhub.data.tbl.function.TblJoinColumnSelector;
+import keyhub.data.tbl.function.TblJoinSchemaPredicate;
 
+public class TblJoinStreamImplement implements TblJoinStream{
+    TblStream leftStream;
+    TblStream rightStream;
 
-@FunctionalInterface
-public interface TblCellPredicate{
-    boolean test(TblCell tblCell);
+    public TblJoinStreamImplement(TblStream leftStream, TblStream rightStream) {
+        this.leftStream = leftStream;
+        this.rightStream = rightStream;
+    }
+
+    public static TblJoinStream of(TblStream leftStream, TblStream rightStream, TblJoinSchemaPredicate[] joinFilters) {
+        TblJoinStreamImplement stream = new TblJoinStreamImplement(leftStream, rightStream);
+        // todo
+        return stream;
+    }
+
+    @Override
+    public TblJoinStream select(TblJoinColumnSelector ...selector) {
+        return null;
+    }
+
+    @Override
+    public TblStream toJoinedStream() {
+        return null;
+    }
 }
