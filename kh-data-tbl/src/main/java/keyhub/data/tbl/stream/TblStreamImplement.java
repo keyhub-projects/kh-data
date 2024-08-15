@@ -25,7 +25,6 @@
 package keyhub.data.tbl.stream;
 
 import keyhub.data.tbl.Tbl;
-import keyhub.data.tbl.function.TblJoinSchemaPredicate;
 import keyhub.data.tbl.function.TblRowPredicate;
 import keyhub.data.tbl.function.TblColumnSelector;
 import keyhub.data.tbl.row.TblCell;
@@ -103,21 +102,6 @@ public class TblStreamImplement implements TblStream {
     public TblStream where(TblRowPredicate filter) {
         rowStream = rowStream.filter(filter);
         return this;
-    }
-
-    @Override
-    public TblJoinStream innerJoin(TblStream other, TblJoinSchemaPredicate... joinFilter) {
-        TblSchema leftSchema = getSchema();
-        TblSchema rightSchema = other.getSchema();
-        if(!Stream.of(joinFilter).allMatch(f -> f.test(leftSchema, rightSchema))) {
-            throw new IllegalArgumentException("No join condition found");
-        }
-        return TblJoinStream.of(this, other, joinFilter);
-    }
-
-    @Override
-    public TblJoinStream leftJoin(TblStream other, TblJoinSchemaPredicate... joinFilter) {
-        return null;
     }
 
     public Iterator<TblRow> iterator() {

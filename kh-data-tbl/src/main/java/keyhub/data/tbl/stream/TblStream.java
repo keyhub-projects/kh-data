@@ -25,7 +25,6 @@
 package keyhub.data.tbl.stream;
 
 import keyhub.data.tbl.Tbl;
-import keyhub.data.tbl.function.TblJoinSchemaPredicate;
 import keyhub.data.tbl.function.TblRowPredicate;
 import keyhub.data.tbl.function.TblColumnSelector;
 import keyhub.data.tbl.row.TblRow;
@@ -47,8 +46,5 @@ public interface TblStream {
     TblStream select(TblColumn<?>... columns);
     TblStream select(TblColumnSelector... selector);
     TblStream where(TblRowPredicate filter);
-
-    TblJoinStream innerJoin(TblStream other, TblJoinSchemaPredicate... joinFilter);
-    TblJoinStream leftJoin(TblStream other, TblJoinSchemaPredicate... joinFilter);
 
 }
