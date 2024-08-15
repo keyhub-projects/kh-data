@@ -26,7 +26,7 @@ package keyhub.data.tbl.stream;
 
 import keyhub.data.tbl.Tbl;
 import keyhub.data.tbl.function.TblRowPredicate;
-import keyhub.data.tbl.function.TblRowSelector;
+import keyhub.data.tbl.function.TblColumnSelector;
 import keyhub.data.tbl.row.TblCell;
 import keyhub.data.tbl.row.TblRow;
 import keyhub.data.tbl.schema.TblColumn;
@@ -49,10 +49,14 @@ public class TblStreamImplement implements TblStream {
 
     @Override
     public Tbl toTbl() {
-        List<TblRow> rows = rowStream.toList();
-        return Tbl.builder(rows.getFirst().getSchema())
-                .addRows(rows)
-                .build();
+        try{
+            List<TblRow> rows = rowStream.toList();
+            return Tbl.builder(rows.getFirst().getSchema())
+                    .addRows(rows)
+                    .build();
+        }finally {
+            close();
+        }
     }
 
     @Override
@@ -79,8 +83,13 @@ public class TblStreamImplement implements TblStream {
     }
 
     @Override
-    public TblStream select(TblRowSelector selector) {
-        rowStream = rowStream.map(selector);
+    public TblStream select(TblColumnSelector... selector) {
+        rowStream = rowStream.map(row -> {
+            List<TblCell> cells = Stream.of(selector)
+                    .map(s -> s.apply(row))
+                    .collect(Collectors.toList());
+            return TblRow.of(cells);
+        });
         return this;
     }
 

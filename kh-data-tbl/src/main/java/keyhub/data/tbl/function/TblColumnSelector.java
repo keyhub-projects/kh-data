@@ -24,21 +24,16 @@
 
 package keyhub.data.tbl.function;
 
+import keyhub.data.tbl.row.TblCell;
 import keyhub.data.tbl.row.TblRow;
 
 import java.util.function.Function;
 
 @FunctionalInterface
-public interface TblRowSelector extends Function<TblRow, TblRow> {
-    TblRow apply(TblRow row);
-    // todo
-    static TblRowSelector column(String columnName) {
-        return null;
-    }
-    static TblRowSelector column(int columnIndex) {
-        return null;
-    }
-    static TblRowSelector as(String alias) {
-        return null;
+public interface TblColumnSelector extends Function<TblRow, TblCell<?>> {
+    TblCell<?> apply(TblRow row);
+
+    static TblColumnSelector column(String columnName) {
+        return row -> row.findCell(columnName).orElse(null);
     }
 }

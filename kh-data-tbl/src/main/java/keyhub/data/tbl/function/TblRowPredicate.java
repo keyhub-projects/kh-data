@@ -42,17 +42,4 @@ public interface TblRowPredicate extends Predicate<TblRow> {
     static <T> TblRowPredicate is(int columnIndex, TblCellPredicate<T> predicate) {
         return tblRow -> predicate.test(tblRow.getCell(columnIndex));
     }
-
-    static TblRowPredicate in(String columnName, Object ... value){
-        return tblRow -> tblRow.findCell(columnName)
-                .map(cell -> {
-                    for (Object v : value) {
-                        if (cell.getValue().equals(v)) {
-                            return true;
-                        }
-                    }
-                    return false;
-                })
-                .orElse(false);
-    }
 }

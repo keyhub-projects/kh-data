@@ -26,7 +26,7 @@ package keyhub.data.tbl.stream;
 
 import keyhub.data.tbl.Tbl;
 import keyhub.data.tbl.function.TblRowPredicate;
-import keyhub.data.tbl.function.TblRowSelector;
+import keyhub.data.tbl.function.TblColumnSelector;
 import keyhub.data.tbl.row.TblRow;
 import keyhub.data.tbl.schema.TblColumn;
 
@@ -42,6 +42,7 @@ public interface TblStream extends BaseStream<TblRow, TblStream> {
 
     TblStream select(String... columns);
     TblStream select(TblColumn<?>... columns);
-    TblStream select(TblRowSelector selector);
+    TblStream select(TblColumnSelector... selector);
+
     TblStream where(TblRowPredicate filter);
 }
