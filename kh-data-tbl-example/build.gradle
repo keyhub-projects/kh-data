@@ -25,7 +25,7 @@ repositories {
 
 dependencies {
     // 메이븐 레포지토리를 사용하는 경우
-    implementation 'io.github.keyhub-projects:kh-data:2.0.0'
+    implementation 'io.github.keyhub-projects:kh-data:2.0.1'
     // 메이븐 레포지토리가 아닌, 다른 모듈을 사용하기 - kh-data의 kh-data-tbl 사용하기
 //    implementation project(':kh-data-tbl')
     implementation 'org.springframework.boot:spring-boot-starter-web'
