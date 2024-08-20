@@ -40,6 +40,7 @@ public interface TblCell<T> {
     static <T> TblCell<T> of(TblColumn<T> columnSchema, T value) {
         return TblCellImplement.of(columnSchema, value);
     }
+
     T getValue();
     TblColumn<T> getColumnSchema();
     Class<T> getColumnType();

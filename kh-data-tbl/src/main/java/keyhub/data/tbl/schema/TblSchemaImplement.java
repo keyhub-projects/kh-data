@@ -24,10 +24,7 @@
 
 package keyhub.data.tbl.schema;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 public abstract class TblSchemaImplement implements TblSchema{
     public static TblSchema from(List<TblColumn> tblColumns){
@@ -73,6 +70,14 @@ public abstract class TblSchemaImplement implements TblSchema{
         Class<T> columnType = (Class<T>) columnTypes().get(columnName);
         return TblColumn.of(columnName, columnType);
     }
+    @Override
+    public List<TblColumn> getColumnSchemas(){
+        List<TblColumn> columns = new ArrayList<>();
+        for(int i = 0; i < getColumnSize(); i++){
+            columns.add(getColumnSchema(i));
+        }
+        return columns;
+    }
 
     @Override
     public int getColumnIndex(String columnName){
@@ -101,5 +106,9 @@ public abstract class TblSchemaImplement implements TblSchema{
     @Override
     public String toString() {
         return columnNames().toString();
+    }
+    @Override
+    public Iterator<TblColumn> iterator(){
+        return this.getColumnSchemas().iterator();
     }
 }

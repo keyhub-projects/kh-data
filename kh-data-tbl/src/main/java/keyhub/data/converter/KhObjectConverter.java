@@ -27,7 +27,7 @@ package keyhub.data.converter;
 import java.lang.reflect.Field;
 import java.util.*;
 
-public class ObjectConverter {
+public class KhObjectConverter {
     public static Map<String, Object> convertToMap(Object object){
         Map<String, Object> map = new WeakHashMap<>();
         Field[] fields = object.getClass().getDeclaredFields();

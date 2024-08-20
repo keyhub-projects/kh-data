@@ -27,9 +27,7 @@ package keyhub.data.tbl.row;
 import keyhub.data.tbl.schema.TblColumn;
 import keyhub.data.tbl.schema.TblSchema;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 public abstract class TblRowImplement implements TblRow {
     public static TblRow of(TblSchema schema, List<Object> values) {
@@ -86,6 +84,14 @@ public abstract class TblRowImplement implements TblRow {
         return TblCell.of(columnSchema, value);
     }
     @Override
+    public List<TblCell> getCells(){
+        List<TblCell> celss = new ArrayList<>();
+        for(int i = 0; i < schema().getColumnSize(); i++){
+            celss.add(getCell(i));
+        }
+        return celss;
+    }
+    @Override
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
@@ -103,5 +109,9 @@ public abstract class TblRowImplement implements TblRow {
     @Override
     public String toString() {
         return values().toString();
+    }
+    @Override
+    public Iterator<TblCell> iterator() {
+        return this.getCells().iterator();
     }
 }

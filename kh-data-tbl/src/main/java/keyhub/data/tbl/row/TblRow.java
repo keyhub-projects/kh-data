@@ -31,7 +31,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-public interface TblRow extends DataObject {
+public interface TblRow extends DataObject, Iterable<TblCell> {
     static TblRow of(TblSchema schema, Object... values) {
         return TblRowImplement.of(schema, Arrays.stream(values).toList());
     }
@@ -49,4 +49,6 @@ public interface TblRow extends DataObject {
     List<Object> toList();
     <T> Optional<TblCell<T>> findCell(String columnName);
     <T> TblCell<T> getCell(int columnIndex);
+
+    List<TblCell> getCells();
 }

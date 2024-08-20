@@ -24,7 +24,7 @@
 
 package keyhub.data.tbl;
 
-import keyhub.data.converter.ObjectConverter;
+import keyhub.data.converter.KhObjectConverter;
 import keyhub.data.tbl.row.TblRow;
 import keyhub.data.tbl.schema.TblColumn;
 import keyhub.data.tbl.schema.TblSchema;
@@ -60,7 +60,7 @@ public abstract class TblImplement implements Tbl {
     }
 
     public static Tbl fromObjects(List<?> objectList) {
-        List<Map<String, Object>> mapList = ObjectConverter.convertToMapList(objectList);
+        List<Map<String, Object>> mapList = KhObjectConverter.convertToMapList(objectList);
         return fromRowMapList(mapList);
     }
 

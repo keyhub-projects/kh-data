@@ -30,7 +30,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-public interface TblSchema extends DataObject {
+public interface TblSchema extends DataObject, Iterable<TblColumn> {
+    static TblSchema empty() {
+        return TblSchemaImplement.empty();
+    }
     static TblSchema from(List<TblColumn> tblColumns) {
         return TblSchemaImplement.from(tblColumns);
     }
@@ -39,10 +42,6 @@ public interface TblSchema extends DataObject {
     }
     static TblSchemaValue.TblSchemaValueBuilder builder() {
         return TblSchemaImplement.builder();
-    }
-
-    static TblSchema empty() {
-        return TblSchemaImplement.empty();
     }
 
     int getColumnSize();
@@ -55,6 +54,8 @@ public interface TblSchema extends DataObject {
 
     @Override
     boolean equals(Object o);
+
+    List<TblColumn> getColumnSchemas();
 
     int getColumnIndex(String columnName);
 
