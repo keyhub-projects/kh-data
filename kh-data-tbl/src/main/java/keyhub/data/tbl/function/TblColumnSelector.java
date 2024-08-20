@@ -24,14 +24,22 @@
 
 package keyhub.data.tbl.function;
 
-import keyhub.data.tbl.row.TblCell;
-import keyhub.data.tbl.row.TblRow;
+import keyhub.data.tbl.schema.TblColumn;
+import keyhub.data.tbl.schema.TblSchema;
+
+import java.util.function.Function;
 
 @FunctionalInterface
-public interface TblColumnSelector{
-    TblCell<?> apply(TblRow row);
+public interface TblColumnSelector extends Function<TblSchema, TblColumn<?>> {
+    TblColumn<?> apply(TblSchema schema);
 
-    static TblColumnSelector column(String columnName) {
-        return row -> row.findCell(columnName).orElse(null);
+    static TblColumnSelector column(String columnName){
+        return schema -> {
+            int index = schema.getColumnIndex(columnName);
+            if(index == -1){
+                throw new IllegalArgumentException("Column not found");
+            }
+            return schema.getColumnSchema(index);
+        };
     }
 }

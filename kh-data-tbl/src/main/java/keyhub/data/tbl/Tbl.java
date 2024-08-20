@@ -25,6 +25,7 @@
 package keyhub.data.tbl;
 
 import keyhub.data.DataObject;
+import keyhub.data.tbl.row.TblCell;
 import keyhub.data.tbl.stream.TblStream;
 import keyhub.data.tbl.join.TblJoin;
 import keyhub.data.tbl.row.TblRow;
@@ -38,27 +39,21 @@ public interface Tbl extends DataObject, Iterable<TblRow> {
     static Tbl empty() {
         return TblImplement.empty();
     }
-
     static Tbl empty(TblSchema schema) {
         return TblImplement.empty(schema);
     }
-
     static Tbl from(List<?> objectList) {
         return TblImplement.from(objectList);
     }
-
     static Tbl fromObjects(List<?> objectList) {
         return TblImplement.fromObjects(objectList);
     }
-
     static Tbl of(TblSchema schema, List<List<Object>> data) {
         return TblImplement.of(schema, data);
     }
-
     static Tbl fromRowMapList(List<Map<String, Object>> rowMapList) {
         return TblImplement.fromRowMapList(rowMapList);
     }
-
     static Tbl fromColumnListMap(Map<String, List<Object>> columnListMap) {
         return TblImplement.fromColumnListMap(columnListMap);
     }
@@ -75,11 +70,13 @@ public interface Tbl extends DataObject, Iterable<TblRow> {
     TblColumn<?> getColumnSchema(int index);
     TblSchema getSchema();
     int getColumnSize();
-    String getColumn(int index);
-    List<String> getColumns();
+    String getColumnName(int index);
+    List<String> getColumnNames();
     Class<?> getColumnType(int index);
     Map<String, Class<?>> getColumnTypes();
     int getColumnIndex(String column);
+    TblCell<?> getCell(int columnIndex, int rowIndex);
+    Optional<TblCell<?>> findCell(String columnName, int rowIndex);
 
     TblStream stream();
 
@@ -89,7 +86,4 @@ public interface Tbl extends DataObject, Iterable<TblRow> {
     List<Map<String, Object>> toRowMapList();
     Map<String, List<Object>> toColumnListMap();
 
-    Object findCell(String columnName, int rowIndex);
-
-    Object getCell(int columnIndex, int rowIndex);
 }

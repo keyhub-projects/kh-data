@@ -24,6 +24,7 @@
 
 package keyhub.data.tbl;
 
+import keyhub.data.tbl.row.TblCell;
 import keyhub.data.tbl.stream.TblStream;
 import keyhub.data.tbl.join.TblJoin;
 import keyhub.data.tbl.join.inner.TblInnerJoin;
@@ -58,7 +59,7 @@ public class RowSetTbl extends TblImplement {
     }
 
     @Override
-    public Optional<Object> findCell(String columnName, int rowIndex){
+    public Optional<TblCell<?>> findCell(String columnName, int rowIndex){
         int columnIndex = this.schema.getColumnIndex(columnName);
         if(columnIndex == -1){
             return Optional.empty();
@@ -67,16 +68,16 @@ public class RowSetTbl extends TblImplement {
     }
 
     @Override
-    public Object getCell(int columnIndex, int rowIndex){
+    public TblCell<?> getCell(int columnIndex, int rowIndex){
         if(columnIndex < 0 || columnIndex >= this.schema.getColumnSize()){
             throw new IllegalArgumentException("Column index out of bounds");
         }
         if(rowIndex < 0 || rowIndex >= this.data.size()){
             throw new IllegalArgumentException("Row index out of bounds");
         }
-        return data.get(rowIndex).get(columnIndex);
+        var value = this.data.get(rowIndex).get(columnIndex);
+        return TblCell.of(this.schema.getColumnSchema(columnIndex), value);
     }
-
 
     @Override
     public List<TblRow> getRows() {

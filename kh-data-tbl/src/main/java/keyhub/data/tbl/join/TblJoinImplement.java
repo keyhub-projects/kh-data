@@ -25,6 +25,7 @@
 package keyhub.data.tbl.join;
 
 import keyhub.data.tbl.Tbl;
+import keyhub.data.tbl.function.TblColumnSelector;
 import keyhub.data.tbl.row.TblRow;
 import keyhub.data.tbl.schema.TblColumn;
 import keyhub.data.tbl.schema.TblSchema;
@@ -110,9 +111,14 @@ public abstract class TblJoinImplement implements TblJoin {
             for(int k = 0; k < this.selectColumns.get(0).size() + this.selectColumns.get(1).size(); k++){
                 newRow.add(null);
             }
-            selectColumns.get(0).forEach(index -> newRow.set(index, row.get(index)));
+            for(int i = 0; i < this.selectColumns.get(0).size(); i++){
+                int index = this.selectColumns.get(0).get(i);
+                newRow.set(i, row.get(index));
+            }
             for(int j = 0; j < selectColumns.get(1).size(); j++){
-                newRow.set(selectColumns.get(0).size() + j, row.get(selectColumns.get(1).get(j) + selectColumns.get(0).size()));
+                int index = selectColumns.get(1).get(j);
+                int startRightIndex = selectColumns.get(0).size();
+                newRow.set(startRightIndex + j, row.get(index + left.getColumnSize()));
             }
             rows.add(newRow);
         }
@@ -125,6 +131,16 @@ public abstract class TblJoinImplement implements TblJoin {
         selectAllFromRight();
         return this;
     }
+
+    @Override
+    public TblJoin selectFromLeft(TblColumnSelector... selectors){
+        for(TblColumnSelector selector : selectors){
+            TblColumn<?> column = selector.apply(left.getSchema());
+            selectFromLeft(column.getColumnName());
+        }
+        return this;
+    }
+
     @Override
     public TblJoin selectFromLeft(String column){
         int index = getColumnIndexFromLeft(column);
@@ -144,8 +160,17 @@ public abstract class TblJoinImplement implements TblJoin {
     @Override
     public TblJoin selectAllFromLeft(){
         this.selectColumns.getFirst().clear();
-        for(int i = 0; i < left.getColumns().size(); i++){
+        for(int i = 0; i < left.getColumnNames().size(); i++){
             this.selectColumns.getFirst().add(i);
+        }
+        return this;
+    }
+
+    @Override
+    public TblJoin selectFromRight(TblColumnSelector... selectors){
+        for(TblColumnSelector selector : selectors){
+            TblColumn<?> column = selector.apply(right.getSchema());
+            selectFromRight(column.getColumnName());
         }
         return this;
     }
@@ -168,7 +193,7 @@ public abstract class TblJoinImplement implements TblJoin {
     @Override
     public TblJoin selectAllFromRight(){
         this.selectColumns.get(1).clear();
-        for(int i = 0; i < right.getColumns().size(); i++){
+        for(int i = 0; i < right.getColumnNames().size(); i++){
             this.selectColumns.get(1).add(i);
         }
         return this;

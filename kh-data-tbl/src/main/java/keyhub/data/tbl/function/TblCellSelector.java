@@ -24,9 +24,16 @@
 
 package keyhub.data.tbl.function;
 
-import keyhub.data.tbl.schema.TblColumn;
+import keyhub.data.tbl.row.TblCell;
+import keyhub.data.tbl.row.TblRow;
 
-public interface TblJoinColumnPredicate {
-    boolean test(TblColumn<?> leftColumn, TblColumn<?> rightColumn);
+import java.util.function.Function;
 
+@FunctionalInterface
+public interface TblCellSelector extends Function<TblRow, TblCell<?>> {
+    TblCell<?> apply(TblRow row);
+
+    static TblCellSelector column(String columnName) {
+        return row -> row.findCell(columnName).orElse(null);
+    }
 }

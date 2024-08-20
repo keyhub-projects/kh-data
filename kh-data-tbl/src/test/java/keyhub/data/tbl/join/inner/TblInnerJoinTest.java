@@ -25,6 +25,7 @@
 package keyhub.data.tbl.join.inner;
 
 import keyhub.data.tbl.Tbl;
+import keyhub.data.tbl.function.TblColumnSelector;
 import keyhub.data.tbl.schema.TblSchema;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -35,6 +36,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static keyhub.data.tbl.function.TblColumnSelector.column;
 
 class TblInnerJoinTest {
 
@@ -84,4 +87,31 @@ class TblInnerJoinTest {
         Assertions.assertEquals(expected, result.toColumnListMap());
     }
 
+    @Test
+    void testInnerJoinByTblCellSelector(){
+        Tbl left = mockTbl1;
+        Tbl right = mockTbl2;
+
+        Tbl result = left.innerJoin(right)
+                .on("column3")
+                .selectFromLeft(
+                        column("column1"),
+                        column("column2")
+                )
+                .selectFromRight(
+                        column("column3"),
+                        column("column4")
+                )
+                .toTbl();
+
+        Map<String, List<Object>> expected = new HashMap<>();
+        expected.put("column1", Arrays.asList("value1", "value2"));
+        expected.put("column2", Arrays.asList(
+                LocalDateTime.of(2021, 1, 1, 0, 0),
+                LocalDateTime.of(2021, 1, 2, 0, 0)
+        ));
+        expected.put("column3", Arrays.asList(1, 2));
+        expected.put("column4", Arrays.asList("A", "B"));
+        Assertions.assertEquals(expected, result.toColumnListMap());
+    }
 }

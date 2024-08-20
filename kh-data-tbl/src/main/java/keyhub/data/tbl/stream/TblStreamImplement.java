@@ -26,7 +26,7 @@ package keyhub.data.tbl.stream;
 
 import keyhub.data.tbl.Tbl;
 import keyhub.data.tbl.function.TblRowPredicate;
-import keyhub.data.tbl.function.TblColumnSelector;
+import keyhub.data.tbl.function.TblCellSelector;
 import keyhub.data.tbl.row.TblCell;
 import keyhub.data.tbl.row.TblRow;
 import keyhub.data.tbl.schema.TblColumn;
@@ -88,7 +88,7 @@ public class TblStreamImplement implements TblStream {
     }
 
     @Override
-    public TblStream select(TblColumnSelector... selector) {
+    public TblStream select(TblCellSelector... selector) {
         rowStream = rowStream.map(row -> {
             List<TblCell> cells = Stream.of(selector)
                     .map(s -> s.apply(row))

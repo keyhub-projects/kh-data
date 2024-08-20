@@ -26,8 +26,10 @@ package keyhub.data.tbl.function;
 
 import keyhub.data.tbl.row.TblCell;
 
+import java.util.function.Predicate;
+
 
 @FunctionalInterface
-public interface TblCellPredicate{
+public interface TblCellPredicate extends Predicate<TblCell<?>> {
     boolean test(TblCell tblCell);
 }

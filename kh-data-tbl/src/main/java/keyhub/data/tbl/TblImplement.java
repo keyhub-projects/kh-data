@@ -118,12 +118,12 @@ public abstract class TblImplement implements Tbl {
     }
 
     @Override
-    public String getColumn(int index) {
+    public String getColumnName(int index) {
         return schema.getColumnNames().get(index);
     }
 
     @Override
-    public List<String> getColumns() {
+    public List<String> getColumnNames() {
         return schema.getColumnNames();
     }
 
