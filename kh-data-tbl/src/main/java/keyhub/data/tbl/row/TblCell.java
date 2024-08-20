@@ -25,38 +25,36 @@
 package keyhub.data.tbl.row;
 
 import keyhub.data.tbl.schema.TblColumn;
-import keyhub.data.tbl.schema.TblSchema;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 
-public class TblRowValue extends TblRowImplement {
-    private final TblSchema schema;
-    private final List<Object> values;
+public interface TblCell<T> {
 
-    public TblRowValue(TblSchema schema, List<Object> values) {
-        this.schema = schema;
-        this.values = new ArrayList<>(values);
+    static<T> TblCell<T> empty(TblColumn<T> columnSchema) {
+        return TblCellImplement.empty(columnSchema);
+    }
+    static <T> TblCell<T> of(TblColumn<T> columnSchema, T value) {
+        return TblCellImplement.of(columnSchema, value);
     }
 
-    public TblRowValue(TblCell... cells) {
-        List<TblColumn> columns = List.of(cells).stream().map(TblCell::getColumnSchema).toList();
-        this.schema = TblSchema.from(columns);
-        this.values = List.of(cells).stream().map(TblCell::getValue).toList();
-    }
-
-    public TblRowValue(List<TblCell> cells) {
-        List<TblColumn> columns = cells.stream().map(TblCell::getColumnSchema).toList();
-        this.schema = TblSchema.from(columns);
-        this.values = cells.stream().map(TblCell::getValue).toList();
-    }
-
-    @Override
-    protected TblSchema schema() {
-        return this.schema;
-    }
-    @Override
-    protected List<Object> values() {
-        return this.values;
-    }
+    T getValue();
+    TblColumn<T> getColumnSchema();
+    Class<T> getColumnType();
+    boolean isPresent();
+    boolean isEmpty();
+    void ifPresent(Consumer<? super T> action);
+    void ifPresentOrElse(Consumer<? super T> action, Runnable emptyAction);
+    TblCell<T> filter(Predicate<? super T> predicate);
+    <U> TblCell<U> map(Function<? super T, ? extends U> mapper);
+    <U> TblCell<U> flatMap(Function<? super T, ? extends TblCell<? extends U>> mapper);
+    TblCell<T> or(Supplier<? extends TblCell<? extends T>> supplier);
+    Stream<T> stream();
+    T orElse(T other);
+    T orElseGet(Supplier<? extends T> supplier);
+    T orElseThrow();
+    <X extends Throwable> T orElseThrow(Supplier<? extends X> exceptionSupplier) throws X;
 }

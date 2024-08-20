@@ -22,22 +22,24 @@
  * SOFTWARE.
  */
 
-package keyhub.data.tbl.selector;
+package keyhub.data.tbl.schema;
 
-import keyhub.data.tbl.Tbl;
-import keyhub.data.tbl.operator.TblOperatorType;
+public class TblColumnValue<T> extends TblColumnImplement<T> {
+    private final String columnName;
+    private final Class<T> columnType;
 
-import java.util.List;
-
-public interface TblSelector {
-    static TblSelector from(Tbl tbl){
-        return TblSelectorImplement.from(tbl);
+    @Override
+    protected String columnName() {
+        return this.columnName;
     }
-    TblSelector select(String... columns);
-    TblSelector select(List<String> columns);
-    TblSelector selectAll();
-    TblSelector where(String column, TblOperatorType operator);
-    TblSelector where(String column, TblOperatorType operator, Object value);
 
-    Tbl toTbl();
+    @Override
+    protected Class<T> columnType() {
+        return this.columnType;
+    }
+
+    public TblColumnValue(String columnName, Class<T> columnType) {
+        this.columnName = columnName;
+        this.columnType = columnType;
+    }
 }

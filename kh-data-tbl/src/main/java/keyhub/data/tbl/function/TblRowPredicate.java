@@ -22,38 +22,23 @@
  * SOFTWARE.
  */
 
-package keyhub.data.tbl.operator;
+package keyhub.data.tbl.function;
 
-import keyhub.data.tbl.Tbl;
+import keyhub.data.tbl.row.TblRow;
 
-public abstract class TblOperatorBuilderImplement implements TblOperatorBuilder{
-    protected Tbl tbl;
-    protected TblOperatorType operator;
-    protected String column;
-    protected Object value;
+import java.util.function.Predicate;
 
-    static TblOperatorBuilder of() {
-        return new SimpleTblOperatorBuilder();
-    }
+@FunctionalInterface
+public interface TblRowPredicate extends Predicate<TblRow> {
 
-    @Override
-    public TblOperatorBuilder tbl(Tbl tbl){
-        this.tbl = tbl;
-        return this;
+    boolean test(TblRow tblRow);
+
+    static TblRowPredicate is(String columnName, TblCellPredicate predicate) {
+        return tblRow -> tblRow.findCell(columnName)
+                .map(predicate::test)
+                .orElse(false);
     }
-    @Override
-    public TblOperatorBuilder operator(TblOperatorType operator){
-        this.operator = operator;
-        return this;
-    }
-    @Override
-    public TblOperatorBuilder column(String column){
-        this.column = column;
-        return this;
-    }
-    @Override
-    public TblOperatorBuilder value(Object value){
-        this.value = value;
-        return this;
+    static TblRowPredicate is(int columnIndex, TblCellPredicate predicate) {
+        return tblRow -> predicate.test(tblRow.getCell(columnIndex));
     }
 }

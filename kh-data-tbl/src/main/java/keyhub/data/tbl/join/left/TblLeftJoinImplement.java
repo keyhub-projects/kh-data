@@ -55,7 +55,7 @@ public class TblLeftJoinImplement extends TblJoinImplement implements TblLeftJoi
             }
             if(!anyMatched){
                 List<Object> emptyRow = new ArrayList<>();
-                emptyRow.addAll(left.getRawRow(i));
+                var _ignore = emptyRow.addAll(left.getRawRow(i));
                 for(int k = 0; k < right.getColumnSize(); k++){
                     emptyRow.add(null);
                 }

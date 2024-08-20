@@ -31,17 +31,24 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-public interface TblRow extends DataObject {
+public interface TblRow extends DataObject, Iterable<TblCell> {
     static TblRow of(TblSchema schema, Object... values) {
         return TblRowImplement.of(schema, Arrays.stream(values).toList());
     }
-
+    static TblRow of(TblCell... cells) {
+        return TblRowImplement.of(cells);
+    }
+    static TblRow of(List<TblCell> cells) {
+        return TblRowImplement.of(cells);
+    }
     static TblRow of(TblSchema schema, List<Object> values) {
         return TblRowImplement.of(schema, values);
     }
 
     TblSchema getSchema();
     List<Object> toList();
-    <T> Optional<T> findCell(String columnName);
-    <T> T getCell(int columnIndex);
+    <T> Optional<TblCell<T>> findCell(String columnName);
+    <T> TblCell<T> getCell(int columnIndex);
+
+    List<TblCell> getCells();
 }

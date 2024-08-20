@@ -36,6 +36,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static keyhub.data.tbl.function.TblColumnSelector.column;
+
 class TblLeftJoinTest {
 
     Tbl mockTbl1;
@@ -81,6 +83,34 @@ class TblLeftJoinTest {
                 LocalDateTime.of(2021, 1, 3, 0, 0))
         );
         expected.put("column3", Arrays.asList(1, 2, null));
+        expected.put("column4", Arrays.asList("A", "B", null));
+        Assertions.assertEquals(expected, result.toColumnListMap());
+    }
+
+
+    @Test
+    void testInnerJoinByTblCellSelector(){
+        Tbl left = mockTbl1;
+        Tbl right = mockTbl2;
+
+        Tbl result = left.leftJoin(right)
+                .on("column3")
+                .selectFromLeft(
+                        column("column1"),
+                        column("column2")
+                )
+                .selectFromRight(
+                        column("column4")
+                )
+                .toTbl();
+
+        Map<String, List<Object>> expected = new HashMap<>();
+        expected.put("column1", Arrays.asList("value1", "value2", "value3"));
+        expected.put("column2", Arrays.asList(
+                LocalDateTime.of(2021, 1, 1, 0, 0),
+                LocalDateTime.of(2021, 1, 2, 0, 0),
+                LocalDateTime.of(2021, 1, 3, 0, 0))
+        );
         expected.put("column4", Arrays.asList("A", "B", null));
         Assertions.assertEquals(expected, result.toColumnListMap());
     }

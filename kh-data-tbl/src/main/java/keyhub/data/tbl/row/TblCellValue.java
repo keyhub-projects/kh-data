@@ -22,24 +22,37 @@
  * SOFTWARE.
  */
 
-package keyhub.data.tbl.schema;
+package keyhub.data.tbl.row;
 
-public class TblColumnSchemaValue<T> extends TblColumnSchemaImplement<T> {
-    private final String columnName;
-    private final Class<T> columnType;
+import keyhub.data.tbl.schema.TblColumn;
 
-    @Override
-    protected String columnName() {
-        return this.columnName;
+public class TblCellValue<T> extends TblCellImplement<T> {
+    private final TblColumn<T> columnSchema;
+    private final T value;
+
+    public TblCellValue(TblColumn<T> columnSchema) {
+        this.columnSchema = columnSchema;
+        this.value = null;
+    }
+
+    public TblCellValue(TblColumn<T> columnSchema, T value) {
+        this.columnSchema = columnSchema;
+        this.value = value;
+    }
+    public TblColumn<T> getColumnSchema() {
+        return columnSchema;
     }
 
     @Override
-    protected Class<T> columnType() {
-        return this.columnType;
+    public T value() {
+        return value;
     }
-
-    public TblColumnSchemaValue(String columnName, Class<T> columnType) {
-        this.columnName = columnName;
-        this.columnType = columnType;
+    @Override
+    public TblColumn<T> columnSchema() {
+        return columnSchema;
+    }
+    @Override
+    public Class<T> columnType() {
+        return columnSchema.getColumnType();
     }
 }

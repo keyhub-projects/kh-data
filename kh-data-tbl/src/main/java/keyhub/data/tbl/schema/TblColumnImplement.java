@@ -22,46 +22,41 @@
  * SOFTWARE.
  */
 
-package keyhub.data.tbl.implement.rowset;
+package keyhub.data.tbl.schema;
 
-import keyhub.data.tbl.Tbl;
-import keyhub.data.tbl.TblBuilder;
-import keyhub.data.tbl.implement.TblBuilderImplement;
-import keyhub.data.tbl.row.TblRow;
-import keyhub.data.tbl.schema.TblSchema;
+import java.util.Objects;
 
-import java.util.ArrayList;
-import java.util.List;
+public abstract class TblColumnImplement<T> implements TblColumn<T> {
+    protected abstract String columnName();
+    protected abstract Class<T> columnType();
 
-public class RowSetTblBuilder extends TblBuilderImplement {
-    private final List<List<Object>> rows = new ArrayList<>();
-
-    public RowSetTblBuilder(TblSchema schema) {
-        super(schema);
+    public static <T> TblColumn<T> of(String columnName, Class<T> columnType){
+        return new TblColumnValue<>(columnName, columnType);
+    }
+    public String getColumnName(){
+        return columnName();
+    }
+    public Class<T> getColumnType(){
+        return columnType();
     }
 
     @Override
-    public Tbl build() {
-        return new RowSetTblImplement(this.schema, this.rows);
-    }
-
-    @Override
-    public TblBuilder addRawRow(List<Object> row) {
-        for(int i = 0; i < row.size(); i++) {
-            String columnName = this.schema.getColumnNames().get(i);
-            if(row.get(i) != null && !this.schema.getColumnTypes().get(columnName).isInstance(row.get(i))) {
-                throw new IllegalArgumentException("Row value type does not match schema");
-            }
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
         }
-        this.rows.add(row);
-        return this;
+        if (!(obj instanceof TblColumn other)) {
+            return false;
+        }
+        return Objects.equals(columnName(), other.getColumnName())
+                && Objects.equals(columnType(), other.getColumnType());
     }
-
     @Override
-    public TblBuilder addRow(TblRow row) {
-        List<Object> rawRow = row.toList();
-        this.rows.add(rawRow);
-        return this;
+    public int hashCode() {
+        return Objects.hash(columnName(), columnType());
     }
-
+    @Override
+    public String toString() {
+        return columnName() + "(" + columnType().getSimpleName() + ")";
+    }
 }

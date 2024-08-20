@@ -22,13 +22,31 @@
  * SOFTWARE.
  */
 
-package keyhub.data.tbl.operator;
+package keyhub.data.converter;
 
-import keyhub.data.tbl.Tbl;
+import java.lang.reflect.Field;
+import java.util.*;
 
-public interface TblOperator {
-    static TblOperatorBuilder builder() {
-        return TblOperatorBuilder.of();
+public class KhObjectConverter {
+    public static Map<String, Object> convertToMap(Object object){
+        Map<String, Object> map = new WeakHashMap<>();
+        Field[] fields = object.getClass().getDeclaredFields();
+        for(Field field : fields){
+            field.setAccessible(true);
+            try {
+                map.put(field.getName(), field.get(object));
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException("Failed to convert object to map", e);
+            }
+        }
+        return map;
     }
-    Tbl getResult();
+
+    public static List<Map<String, Object>> convertToMapList(List<?> objectList) {
+        List<Map<String, Object>> mapList = new ArrayList<>();
+        for(Object object : objectList){
+            mapList.add(convertToMap(object));
+        }
+        return mapList;
+    }
 }

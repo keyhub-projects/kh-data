@@ -22,22 +22,16 @@
  * SOFTWARE.
  */
 
-package keyhub.data.tbl.operator;
+package keyhub.data.tbl.schema;
 
-import keyhub.data.tbl.Tbl;
-import keyhub.data.tbl.schema.TblSchema;
+import keyhub.data.DataObject;
 
-import java.util.List;
-
-public abstract class TblOperatorImplement implements TblOperator{
-
-    public abstract List<List<Object>> rows();
-    public abstract TblSchema schema();
-
-    @Override
-    public Tbl getResult() {
-        return Tbl.builder(schema())
-                .addRawRows(rows())
-                .build();
+public interface TblColumn<T> extends DataObject {
+    static <T> TblColumn<T> of(String columnName, Class<T> columnType) {
+        return TblColumnImplement.of(columnName, columnType);
     }
+    String getColumnName();
+    Class<T> getColumnType();
+    @Override
+    boolean equals(Object o);
 }

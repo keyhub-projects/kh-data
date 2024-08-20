@@ -22,47 +22,37 @@
  * SOFTWARE.
  */
 
-package keyhub.data.tbl.operator.implement;
+package keyhub.data.tbl;
 
-import keyhub.data.tbl.Tbl;
-import keyhub.data.tbl.operator.TblOperator;
-import keyhub.data.tbl.operator.TblOperatorImplement;
+import keyhub.data.tbl.row.TblRow;
 import keyhub.data.tbl.schema.TblSchema;
 
 import java.util.List;
-import java.util.Optional;
 
-public class NotEqualOperator extends TblOperatorImplement {
-    private final TblSchema schema;
-    private final List<List<Object>> rows;
+public abstract class TblBuilderImplement implements TblBuilder {
+    protected final TblSchema schema;
 
-    public NotEqualOperator(TblSchema schema, List<List<Object>> rows) {
+    protected TblBuilderImplement(TblSchema schema) {
         this.schema = schema;
-        this.rows = rows;
     }
 
-    public static TblOperator of(Tbl tbl, String column, Object value) {
-        TblSchema originSchema = tbl.getSchema();
-        if(!originSchema.contains(column)){
-            throw new IllegalArgumentException("Column not found");
+    public static TblBuilder forRowSet(TblSchema schema){
+        return new RowSetTblBuilder(schema);
+    }
+
+    @Override
+    public TblBuilder addRawRows(List<List<Object>> rows) {
+        for(List<Object> row : rows) {
+            addRawRow(row);
         }
-        List<List<Object>> originData = tbl.getRawRows();
-        List<List<Object>> filtered = originData.stream().filter(row -> {
-            int index = originSchema.getColumnIndex(column);
-            Optional<Object> cell = Optional.ofNullable(row.get(index));
-            return cell.isEmpty() || !cell.get().equals(value);
-        }).toList();
-
-        return new NotEqualOperator(originSchema, filtered);
-    }
-    
-    @Override
-    public List<List<Object>> rows() {
-        return this.rows;
+        return this;
     }
 
     @Override
-    public TblSchema schema() {
-        return this.schema;
+    public TblBuilder addRows(List<TblRow> rows) {
+        for(TblRow row : rows) {
+            addRow(row);
+        }
+        return this;
     }
 }

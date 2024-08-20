@@ -24,7 +24,6 @@
 
 package keyhub.data.tbl;
 
-import keyhub.data.tbl.implement.TblBuilderImplement;
 import keyhub.data.tbl.row.TblRow;
 import keyhub.data.tbl.schema.TblSchema;
 

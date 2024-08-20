@@ -22,31 +22,14 @@
  * SOFTWARE.
  */
 
-package keyhub.data.converter;
+package keyhub.data.tbl.function;
 
-import java.lang.reflect.Field;
-import java.util.*;
+import keyhub.data.tbl.row.TblCell;
 
-public class ObjectConverter {
-    public static Map<String, Object> convertToMap(Object object){
-        Map<String, Object> map = new WeakHashMap<>();
-        Field[] fields = object.getClass().getDeclaredFields();
-        for(Field field : fields){
-            field.setAccessible(true);
-            try {
-                map.put(field.getName(), field.get(object));
-            } catch (IllegalAccessException e) {
-                throw new RuntimeException("Failed to convert object to map", e);
-            }
-        }
-        return map;
-    }
+import java.util.function.Predicate;
 
-    public static List<Map<String, Object>> convertToMapList(List<?> objectList) {
-        List<Map<String, Object>> mapList = new ArrayList<>();
-        for(Object object : objectList){
-            mapList.add(convertToMap(object));
-        }
-        return mapList;
-    }
+
+@FunctionalInterface
+public interface TblCellPredicate extends Predicate<TblCell<?>> {
+    boolean test(TblCell tblCell);
 }

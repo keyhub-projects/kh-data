@@ -22,25 +22,24 @@
  * SOFTWARE.
  */
 
-package keyhub.data.tbl.schema;
+package keyhub.data.tbl.function;
 
-public abstract class TblColumnSchemaImplement<T> implements TblColumnSchema<T> {
-    protected abstract String columnName();
-    protected abstract Class<T> columnType();
+import keyhub.data.tbl.schema.TblColumn;
+import keyhub.data.tbl.schema.TblSchema;
 
-    public static TblColumnSchema<?> of(String columnName, Class<?> columnType){
-        return new TblColumnSchemaValue<>(columnName, columnType);
-    }
-    public String getColumnName(){
-        return columnName();
-    }
-    public Class<T> getColumnType(){
-        return columnType();
-    }
-    public boolean equals(Object o){
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        TblColumnSchema<?> that = (TblColumnSchema<?>) o;
-        return columnName().equals(that.getColumnName()) && columnType().equals(that.getColumnType());
+import java.util.function.Function;
+
+@FunctionalInterface
+public interface TblColumnSelector extends Function<TblSchema, TblColumn<?>> {
+    TblColumn<?> apply(TblSchema schema);
+
+    static TblColumnSelector column(String columnName){
+        return schema -> {
+            int index = schema.getColumnIndex(columnName);
+            if(index == -1){
+                throw new IllegalArgumentException("Column not found");
+            }
+            return schema.getColumnSchema(index);
+        };
     }
 }

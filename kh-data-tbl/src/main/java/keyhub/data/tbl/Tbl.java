@@ -25,42 +25,35 @@
 package keyhub.data.tbl;
 
 import keyhub.data.DataObject;
-import keyhub.data.tbl.implement.TblImplement;
+import keyhub.data.tbl.row.TblCell;
+import keyhub.data.tbl.stream.TblStream;
 import keyhub.data.tbl.join.TblJoin;
-import keyhub.data.tbl.operator.TblOperatorType;
 import keyhub.data.tbl.row.TblRow;
-import keyhub.data.tbl.schema.TblColumnSchema;
+import keyhub.data.tbl.schema.TblColumn;
 import keyhub.data.tbl.schema.TblSchema;
-import keyhub.data.tbl.selector.TblSelector;
 
 import java.util.*;
 
-public interface Tbl extends DataObject {
+public interface Tbl extends DataObject, Iterable<TblRow> {
 
     static Tbl empty() {
         return TblImplement.empty();
     }
-
     static Tbl empty(TblSchema schema) {
         return TblImplement.empty(schema);
     }
-
     static Tbl from(List<?> objectList) {
         return TblImplement.from(objectList);
     }
-
     static Tbl fromObjects(List<?> objectList) {
         return TblImplement.fromObjects(objectList);
     }
-
     static Tbl of(TblSchema schema, List<List<Object>> data) {
         return TblImplement.of(schema, data);
     }
-
     static Tbl fromRowMapList(List<Map<String, Object>> rowMapList) {
         return TblImplement.fromRowMapList(rowMapList);
     }
-
     static Tbl fromColumnListMap(Map<String, List<Object>> columnListMap) {
         return TblImplement.fromColumnListMap(columnListMap);
     }
@@ -74,29 +67,23 @@ public interface Tbl extends DataObject {
     List<TblRow> getRows();
     List<Object> getRawRow(int index);
     List<List<Object>> getRawRows();
-    TblColumnSchema<?> getColumnSchema(int index);
+    TblColumn<?> getColumnSchema(int index);
     TblSchema getSchema();
     int getColumnSize();
-    String getColumn(int index);
-    List<String> getColumns();
+    String getColumnName(int index);
+    List<String> getColumnNames();
     Class<?> getColumnType(int index);
     Map<String, Class<?>> getColumnTypes();
     int getColumnIndex(String column);
+    TblCell<?> getCell(int columnIndex, int rowIndex);
+    Optional<TblCell<?>> findCell(String columnName, int rowIndex);
 
-    Tbl select(String... columns);
-    Tbl select(List<String> columns);
-    Tbl where(String column, TblOperatorType operator, Object value);
-    Tbl where(String column, TblOperatorType operator);
-    TblSelector selector();
+    TblStream stream();
 
     TblJoin leftJoin(Tbl right);
     TblJoin innerJoin(Tbl right);
 
     List<Map<String, Object>> toRowMapList();
     Map<String, List<Object>> toColumnListMap();
-
-    Object findCell(String columnName, int rowIndex);
-
-    Object getCell(int columnIndex, int rowIndex);
 
 }

@@ -22,16 +22,29 @@
  * SOFTWARE.
  */
 
-package keyhub.data.tbl.schema;
+package keyhub.data.tbl.stream;
 
-import keyhub.data.DataObject;
+import keyhub.data.tbl.Tbl;
+import keyhub.data.tbl.function.TblRowPredicate;
+import keyhub.data.tbl.function.TblCellSelector;
+import keyhub.data.tbl.row.TblRow;
+import keyhub.data.tbl.schema.TblColumn;
+import keyhub.data.tbl.schema.TblSchema;
 
-public interface TblColumnSchema<T> extends DataObject {
-    static TblColumnSchema<?> of(String columnName, Class<?> columnType) {
-        return TblColumnSchemaImplement.of(columnName, columnType);
+import java.util.stream.Stream;
+
+public interface TblStream {
+    static TblStream from(Stream<TblRow> rowStream) {
+        return TblStreamImplement.from(rowStream);
     }
-    String getColumnName();
-    Class<T> getColumnType();
-    @Override
-    boolean equals(Object o);
+
+    TblSchema getSchema();
+
+    Tbl toTbl();
+
+    TblStream select(String... columns);
+    TblStream select(TblColumn<?>... columns);
+    TblStream select(TblCellSelector... selector);
+    TblStream where(TblRowPredicate filter);
+
 }

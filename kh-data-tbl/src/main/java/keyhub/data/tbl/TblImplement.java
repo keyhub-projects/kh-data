@@ -22,16 +22,17 @@
  * SOFTWARE.
  */
 
-package keyhub.data.tbl.implement;
+package keyhub.data.tbl;
 
-import keyhub.data.converter.ObjectConverter;
-import keyhub.data.tbl.Tbl;
-import keyhub.data.tbl.TblBuilder;
-import keyhub.data.tbl.schema.TblColumnSchema;
+import keyhub.data.converter.KhObjectConverter;
+import keyhub.data.tbl.row.TblRow;
+import keyhub.data.tbl.schema.TblColumn;
 import keyhub.data.tbl.schema.TblSchema;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public abstract class TblImplement implements Tbl {
     protected final TblSchema schema;
@@ -39,7 +40,6 @@ public abstract class TblImplement implements Tbl {
     protected TblImplement(TblSchema schema) {
         this.schema = schema;
     }
-
 
     public static Tbl empty() {
         return TblBuilder.forRowSet(TblSchema.empty()).build();
@@ -60,13 +60,13 @@ public abstract class TblImplement implements Tbl {
     }
 
     public static Tbl fromObjects(List<?> objectList) {
-        List<Map<String, Object>> mapList = ObjectConverter.convertToMapList(objectList);
+        List<Map<String, Object>> mapList = KhObjectConverter.convertToMapList(objectList);
         return fromRowMapList(mapList);
     }
 
     public static Tbl fromRowMapList(List<Map<String, Object>> rowMapList) {
-        List<TblColumnSchema> keyMap = rowMapList.getFirst().entrySet().stream()
-                .map(entry -> (TblColumnSchema)(TblColumnSchema.of(entry.getKey(), entry.getValue().getClass())))
+        List<TblColumn> keyMap = rowMapList.getFirst().entrySet().stream()
+                .map(entry -> (TblColumn)(TblColumn.of(entry.getKey(), entry.getValue().getClass())))
                 .toList();
         TblSchema schema = TblSchema.from(keyMap);
         TblBuilder builder = TblBuilder.forRowSet(schema);
@@ -80,8 +80,8 @@ public abstract class TblImplement implements Tbl {
     }
 
     public static Tbl fromColumnListMap(Map<String, List<Object>> columnListMap){
-        List<TblColumnSchema> keyMap = columnListMap.entrySet().stream()
-                .map(entry -> (TblColumnSchema)(TblColumnSchema.of(entry.getKey(), entry.getValue().getFirst().getClass())))
+        List<TblColumn> keyMap = columnListMap.entrySet().stream()
+                .map(entry -> (TblColumn)(TblColumn.of(entry.getKey(), entry.getValue().getFirst().getClass())))
                 .toList();
         TblSchema schema = TblSchema.from(keyMap);
         TblBuilder builder = TblBuilder.forRowSet(schema);
@@ -102,10 +102,8 @@ public abstract class TblImplement implements Tbl {
                 .build();
     }
 
-
-
     @Override
-    public TblColumnSchema<?> getColumnSchema(int index) {
+    public TblColumn<?> getColumnSchema(int index) {
         return schema.getColumnSchema(index);
     }
 
@@ -120,12 +118,12 @@ public abstract class TblImplement implements Tbl {
     }
 
     @Override
-    public String getColumn(int index) {
+    public String getColumnName(int index) {
         return schema.getColumnNames().get(index);
     }
 
     @Override
-    public List<String> getColumns() {
+    public List<String> getColumnNames() {
         return schema.getColumnNames();
     }
 
@@ -144,4 +142,28 @@ public abstract class TblImplement implements Tbl {
         return schema.getColumnIndex(column);
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!(obj instanceof Tbl other)) {
+            return false;
+        }
+        return this.getSchema().equals(other.getSchema())
+                && this.getRows().equals(other.getRows());
+    }
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.getSchema(), this.getRows());
+    }
+    @Override
+    public String toString() {
+        return "[" + this.schema + ", " + this.getRows().toString() + "]";
+    }
+
+    @Override
+    public Iterator<TblRow> iterator() {
+        return this.getRows().iterator();
+    }
 }

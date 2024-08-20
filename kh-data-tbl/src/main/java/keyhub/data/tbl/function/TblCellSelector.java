@@ -22,26 +22,18 @@
  * SOFTWARE.
  */
 
-package keyhub.data.tbl.selector;
+package keyhub.data.tbl.function;
 
-import keyhub.data.tbl.Tbl;
-import keyhub.data.tbl.operator.TblOperatorType;
+import keyhub.data.tbl.row.TblCell;
+import keyhub.data.tbl.row.TblRow;
 
-public class SimpleTblSelector extends TblSelectorImplement {
-    public SimpleTblSelector(Tbl tbl) {
-        super(tbl);
-    }
+import java.util.function.Function;
 
-    @Override
-    protected void computeWhere(String column, TblOperatorType operator, Object value) {
-        this.tbl = this.tbl.where(column, operator, value);
-    }
-    @Override
-    protected void computeWhere(String column, TblOperatorType operator) {
-        this.tbl = this.tbl.where(column, operator);
-    }
-    @Override
-    protected void computeSelect() {
-        this.tbl = this.tbl.select(selectColumns);
+@FunctionalInterface
+public interface TblCellSelector extends Function<TblRow, TblCell<?>> {
+    TblCell<?> apply(TblRow row);
+
+    static TblCellSelector column(String columnName) {
+        return row -> row.findCell(columnName).orElse(null);
     }
 }
