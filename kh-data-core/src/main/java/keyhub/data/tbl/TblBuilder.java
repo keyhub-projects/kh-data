@@ -28,7 +28,6 @@ import keyhub.data.row.Row;
 import keyhub.data.schema.Schema;
 
 import java.util.List;
-import java.util.Scanner;
 
 public interface TblBuilder {
     static TblBuilder forRowSet(Schema schema) {
@@ -40,31 +39,4 @@ public interface TblBuilder {
     TblBuilder addRows(List<Row> rows);
     Tbl build();
 
-    public class Main {
-        public static void main(String[] args){
-            Scanner in=new Scanner(System.in);
-            int n = in.nextInt();
-            String[] str = new String[n];
-            for(int i=0; i<n; i++) {
-                str[i] = in.nextLine();
-            }
-            Main m = new Main();
-            for(String s : m.solution(str)){
-                System.out.println(s);
-            }
-        }
-
-        public String[] solution(String[] str){
-            String[] result = new String[str.length+1];
-            for(int i=0; i<str.length; i++){
-                char[] arr = str[i].toCharArray();
-                StringBuilder sb = new StringBuilder();
-                for(int j=arr.length-1; j >= 0; j--){
-                    sb.append(arr[j]);
-                }
-                result[i] = sb.toString();
-            }
-            return result;
-        }
-    }
 }
