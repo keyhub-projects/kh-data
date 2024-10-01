@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package keyhub.data.tbl.stream;
+package keyhub.data.tbl.query;
 
 import keyhub.data.tbl.Tbl;
 import keyhub.data.column.Column;
@@ -35,7 +35,7 @@ import static keyhub.data.function.RowPredicate.is;
 import static keyhub.data.function.CellSelector.column;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class TblStreamTest {
+public class TblQueryFactoryTest {
 
     @Test
     public void testTblStream(){
@@ -51,7 +51,7 @@ public class TblStreamTest {
                 List.of("Charlie", 40, 180.0, 70.0f)
         ));
 
-        Tbl result = tbl.stream()
+        Tbl result = tbl.query()
                 .select("name", "age", "height")
                 .select(
                         Column.of("name", String.class),

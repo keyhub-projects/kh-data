@@ -25,17 +25,11 @@
 package keyhub.data.tbl;
 
 import keyhub.data.cell.Cell;
-import keyhub.data.tbl.stream.TblStream;
-import keyhub.data.tbl.join.TblJoin;
-import keyhub.data.tbl.join.inner.TblInnerJoin;
-import keyhub.data.tbl.join.left.TblLeftJoin;
 import keyhub.data.schema.Schema;
 import keyhub.data.row.Row;
 import keyhub.data.column.Column;
 
 import java.util.*;
-import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 public class RowSetTbl extends TblImplement {
     private final List<List<Object>> data;
@@ -92,27 +86,6 @@ public class RowSetTbl extends TblImplement {
             throw new IllegalArgumentException("Row index out of bounds");
         }
         return this.data.get(index);
-    }
-
-    @Override
-    public List<List<Object>> getRawRows() {
-        return this.data;
-    }
-
-    @Override
-    public TblStream stream() {
-        Stream<Row> rowStream = StreamSupport.stream(spliterator(), false);
-        return TblStream.from(rowStream);
-    }
-
-    @Override
-    public TblJoin leftJoin(Tbl right) {
-        return TblLeftJoin.of(this, right);
-    }
-
-    @Override
-    public TblJoin innerJoin(Tbl right) {
-        return TblInnerJoin.of(this, right);
     }
 
     @Override

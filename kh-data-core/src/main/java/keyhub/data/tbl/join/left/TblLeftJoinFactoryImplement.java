@@ -25,15 +25,15 @@
 package keyhub.data.tbl.join.left;
 
 import keyhub.data.tbl.Tbl;
-import keyhub.data.tbl.join.TblJoinImplement;
+import keyhub.data.tbl.join.TblJoinFactoryImplement;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class TblLeftJoinImplement extends TblJoinImplement implements TblLeftJoin {
+public class TblLeftJoinFactoryImplement extends TblJoinFactoryImplement implements TblLeftJoinFactory {
 
 
-    public TblLeftJoinImplement(Tbl left, Tbl right) {
+    public TblLeftJoinFactoryImplement(Tbl left, Tbl right) {
         super(left, right);
     }
 

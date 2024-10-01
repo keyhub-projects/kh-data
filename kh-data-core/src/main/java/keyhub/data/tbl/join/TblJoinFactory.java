@@ -22,13 +22,31 @@
  * SOFTWARE.
  */
 
-package keyhub.data.tbl.join.left;
+package keyhub.data.tbl.join;
 
 import keyhub.data.tbl.Tbl;
-import keyhub.data.tbl.join.TblJoin;
+import keyhub.data.function.ColumnSelector;
 
-public interface TblLeftJoin extends TblJoin {
-    static TblJoin of(Tbl left, Tbl right) {
-        return new TblLeftJoinImplement(left, right);
-    }
+public interface TblJoinFactory {
+    Tbl toTbl();
+
+    TblJoinFactory on(String sameKey);
+    TblJoinFactory on(String leftKey, String rightKey);
+
+    TblJoinFactory selectAll();
+
+    TblJoinFactory selectFromLeft(ColumnSelector... selectors);
+    TblJoinFactory selectFromLeft(String column);
+    TblJoinFactory selectFromLeft(String... columns);
+    TblJoinFactory selectAllFromLeft();
+
+    TblJoinFactory selectFromRight(ColumnSelector... selectors);
+    TblJoinFactory selectFromRight(String column);
+    TblJoinFactory selectFromRight(String... columns);
+    TblJoinFactory selectAllFromRight();
+
+    int getColumnIndexFromLeft(String column);
+    int getColumnIndexFromRight(String column);
+
+
 }

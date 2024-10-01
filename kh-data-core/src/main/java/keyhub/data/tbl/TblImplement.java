@@ -28,11 +28,17 @@ import keyhub.data.converter.KhObjectConverter;
 import keyhub.data.row.Row;
 import keyhub.data.column.Column;
 import keyhub.data.schema.Schema;
+import keyhub.data.tbl.join.TblJoinFactory;
+import keyhub.data.tbl.join.inner.TblInnerJoinFactory;
+import keyhub.data.tbl.join.left.TblLeftJoinFactory;
+import keyhub.data.tbl.query.TblQueryFactory;
 
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 public abstract class TblImplement implements Tbl {
     protected final Schema schema;
@@ -52,6 +58,12 @@ public abstract class TblImplement implements Tbl {
     public static Tbl from(List<?> objectList) {
         if(objectList.isEmpty()) {
             return empty();
+        }
+        if(objectList.getFirst() instanceof Row row){
+            List<Row> list = (List<Row>) objectList;
+            return Tbl.builder(row.getSchema())
+                    .addRows(list)
+                    .build();
         }
         if(objectList.getFirst() instanceof Map) {
             return fromRowMapList((List<Map<String, Object>>) objectList);
@@ -73,22 +85,6 @@ public abstract class TblImplement implements Tbl {
         for(Map<String, Object> rowMap : rowMapList) {
             List<Object> row = keyMap.stream()
                     .map(columnSchema -> rowMap.getOrDefault(columnSchema.getColumnName(), null))
-                    .toList();
-            builder.addRawRow(row);
-        }
-        return builder.build();
-    }
-
-    public static Tbl fromColumnListMap(Map<String, List<Object>> columnListMap){
-        List<Column> keyMap = columnListMap.entrySet().stream()
-                .map(entry -> (Column)(Column.of(entry.getKey(), entry.getValue().getFirst().getClass())))
-                .toList();
-        Schema schema = Schema.from(keyMap);
-        TblBuilder builder = TblBuilder.forRowSet(schema);
-        for(int i = 0; i < columnListMap.get(keyMap.getFirst().getColumnName()).size(); i++) {
-            int finalI = i;
-            List<Object> row = keyMap.stream()
-                    .map(columnSchema -> columnListMap.get(columnSchema.getColumnName()).get(finalI))
                     .toList();
             builder.addRawRow(row);
         }
@@ -123,18 +119,8 @@ public abstract class TblImplement implements Tbl {
     }
 
     @Override
-    public List<String> getColumnNames() {
-        return schema.getColumnNames();
-    }
-
-    @Override
     public Class<?> getColumnType(int index) {
         return schema.getColumnTypes().get(schema.getColumnNames().get(index));
-    }
-
-    @Override
-    public Map<String, Class<?>> getColumnTypes() {
-        return schema.getColumnTypes();
     }
 
     @Override
@@ -166,4 +152,23 @@ public abstract class TblImplement implements Tbl {
     public Iterator<Row> iterator() {
         return this.getRows().iterator();
     }
+
+    @Override
+    public Stream<Row> stream() {
+        return StreamSupport.stream(spliterator(), false);
+    }
+    @Override
+    public TblQueryFactory query(){
+        Stream<Row> rowStream = StreamSupport.stream(spliterator(), false);
+        return TblQueryFactory.from(rowStream);
+    }
+    @Override
+    public TblJoinFactory leftJoin(Tbl right) {
+        return TblLeftJoinFactory.of(this, right);
+    }
+    @Override
+    public TblJoinFactory innerJoin(Tbl right) {
+        return TblInnerJoinFactory.of(this, right);
+    }
+
 }

@@ -31,6 +31,7 @@ import java.util.function.Function;
 
 @FunctionalInterface
 public interface CellSelector extends Function<Row, Cell<?>> {
+    @Override
     Cell<?> apply(Row row);
 
     static CellSelector column(String columnName) {

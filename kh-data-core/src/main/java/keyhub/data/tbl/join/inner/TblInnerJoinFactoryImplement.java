@@ -22,42 +22,35 @@
  * SOFTWARE.
  */
 
-package keyhub.data.tbl;
+package keyhub.data.tbl.join.inner;
 
-import keyhub.data.row.Row;
-import keyhub.data.schema.Schema;
+
+import keyhub.data.tbl.Tbl;
+import keyhub.data.tbl.join.TblJoinFactoryImplement;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class RowSetTblBuilder extends TblBuilderImplement {
-    private final List<List<Object>> rows = new ArrayList<>();
+public class TblInnerJoinFactoryImplement extends TblJoinFactoryImplement implements TblInnerJoinFactory {
 
-    public RowSetTblBuilder(Schema schema) {
-        super(schema);
+    public TblInnerJoinFactoryImplement(Tbl left, Tbl right) {
+        super(left, right);
     }
 
     @Override
-    public Tbl build() {
-        return new RowSetTbl(this.schema, this.rows);
-    }
-
-    @Override
-    public TblBuilder addRawRow(List<Object> row) {
-        for(int i = 0; i < row.size(); i++) {
-            String columnName = this.schema.getColumnNames().get(i);
-            if(row.get(i) != null && !this.schema.getColumnTypes().get(columnName).isInstance(row.get(i))) {
-                throw new IllegalArgumentException("Row value type does not match schema");
+    public List<List<Object>> computeJoinRawResult(){
+        List<List<Object>> rows = new ArrayList<>();
+        for(int i = 0; i < this.left.count(); i++){
+            for(int j = 0; j < right.count(); j++){
+                boolean isJoined = isJoinedRow(this.left.getRow(i), this.right.getRow(j));
+                if(isJoined){
+                    List<Object> row = new ArrayList<>();
+                    row.addAll(this.left.getRawRow(i));
+                    row.addAll(this.right.getRawRow(j));
+                    rows.add(row);
+                }
             }
         }
-        this.rows.add(row);
-        return this;
-    }
-
-    @Override
-    public TblBuilder addRow(Row row) {
-        List<Object> rawRow = row.toList();
-        this.rows.add(rawRow);
-        return this;
+        return rows;
     }
 }

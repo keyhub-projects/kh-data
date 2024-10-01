@@ -22,31 +22,7 @@
  * SOFTWARE.
  */
 
-package keyhub.data.tbl.join;
+package keyhub.data.fbl.map;
 
-import keyhub.data.tbl.Tbl;
-import keyhub.data.function.ColumnSelector;
-
-public interface TblJoin {
-    Tbl toTbl();
-
-    TblJoin on(String sameKey);
-    TblJoin on(String leftKey, String rightKey);
-
-    TblJoin selectAll();
-
-    TblJoin selectFromLeft(ColumnSelector... selectors);
-    TblJoin selectFromLeft(String column);
-    TblJoin selectFromLeft(String... columns);
-    TblJoin selectAllFromLeft();
-
-    TblJoin selectFromRight(ColumnSelector... selectors);
-    TblJoin selectFromRight(String column);
-    TblJoin selectFromRight(String... columns);
-    TblJoin selectAllFromRight();
-
-    int getColumnIndexFromLeft(String column);
-    int getColumnIndexFromRight(String column);
-
-
+public interface FblMapper {
 }

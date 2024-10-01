@@ -22,42 +22,7 @@
  * SOFTWARE.
  */
 
-package keyhub.data.tbl;
+package keyhub.data.fbl.reduce;
 
-import keyhub.data.row.Row;
-import keyhub.data.schema.Schema;
-
-import java.util.ArrayList;
-import java.util.List;
-
-public class RowSetTblBuilder extends TblBuilderImplement {
-    private final List<List<Object>> rows = new ArrayList<>();
-
-    public RowSetTblBuilder(Schema schema) {
-        super(schema);
-    }
-
-    @Override
-    public Tbl build() {
-        return new RowSetTbl(this.schema, this.rows);
-    }
-
-    @Override
-    public TblBuilder addRawRow(List<Object> row) {
-        for(int i = 0; i < row.size(); i++) {
-            String columnName = this.schema.getColumnNames().get(i);
-            if(row.get(i) != null && !this.schema.getColumnTypes().get(columnName).isInstance(row.get(i))) {
-                throw new IllegalArgumentException("Row value type does not match schema");
-            }
-        }
-        this.rows.add(row);
-        return this;
-    }
-
-    @Override
-    public TblBuilder addRow(Row row) {
-        List<Object> rawRow = row.toList();
-        this.rows.add(rawRow);
-        return this;
-    }
+public interface FblReducer {
 }

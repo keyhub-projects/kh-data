@@ -30,7 +30,7 @@ import java.util.function.Predicate;
 
 @FunctionalInterface
 public interface RowPredicate extends Predicate<Row> {
-
+    @Override
     boolean test(Row row);
 
     static RowPredicate is(String columnName, CellPredicate predicate) {

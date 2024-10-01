@@ -31,7 +31,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class SchemaValue extends SchemaImplement {
+public final class SchemaValue extends SchemaImplement {
     private final List<String> columnNames;
     private final Map<String, Class<?>> columnTypes;
 

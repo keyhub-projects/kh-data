@@ -25,13 +25,14 @@
 package keyhub.data.tbl;
 
 import keyhub.data.cell.Cell;
-import keyhub.data.tbl.stream.TblStream;
-import keyhub.data.tbl.join.TblJoin;
+import keyhub.data.tbl.join.TblJoinFactory;
 import keyhub.data.row.Row;
 import keyhub.data.column.Column;
 import keyhub.data.schema.Schema;
+import keyhub.data.tbl.query.TblQueryFactory;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 public interface Tbl extends Iterable<Row> {
 
@@ -41,20 +42,11 @@ public interface Tbl extends Iterable<Row> {
     static Tbl empty(Schema schema) {
         return TblImplement.empty(schema);
     }
-    static Tbl from(List<?> objectList) {
-        return TblImplement.from(objectList);
+    static Tbl from(List<?> list) {
+        return TblImplement.from(list);
     }
-    static Tbl fromObjects(List<?> objectList) {
-        return TblImplement.fromObjects(objectList);
-    }
-    static Tbl of(Schema schema, List<List<Object>> data) {
-        return TblImplement.of(schema, data);
-    }
-    static Tbl fromRowMapList(List<Map<String, Object>> rowMapList) {
-        return TblImplement.fromRowMapList(rowMapList);
-    }
-    static Tbl fromColumnListMap(Map<String, List<Object>> columnListMap) {
-        return TblImplement.fromColumnListMap(columnListMap);
+    static Tbl of(Schema schema, List<List<Object>> rawRows){
+        return TblImplement.of(schema, rawRows);
     }
 
     static TblBuilder builder(Schema schema){
@@ -65,22 +57,19 @@ public interface Tbl extends Iterable<Row> {
     Row getRow(int index);
     List<Row> getRows();
     List<Object> getRawRow(int index);
-    List<List<Object>> getRawRows();
     Column<?> getColumnSchema(int index);
     Schema getSchema();
     int getColumnSize();
     String getColumnName(int index);
-    List<String> getColumnNames();
     Class<?> getColumnType(int index);
-    Map<String, Class<?>> getColumnTypes();
     int getColumnIndex(String column);
     Cell<?> getCell(int columnIndex, int rowIndex);
     Optional<Cell<?>> findCell(String columnName, int rowIndex);
 
-    TblStream stream();
-
-    TblJoin leftJoin(Tbl right);
-    TblJoin innerJoin(Tbl right);
+    Stream<Row> stream();
+    TblQueryFactory query();
+    TblJoinFactory leftJoin(Tbl right);
+    TblJoinFactory innerJoin(Tbl right);
 
     List<Map<String, Object>> toRowMapList();
     Map<String, List<Object>> toColumnListMap();

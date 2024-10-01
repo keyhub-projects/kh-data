@@ -38,5 +38,4 @@ public interface TblBuilder {
     TblBuilder addRow(Row row);
     TblBuilder addRows(List<Row> rows);
     Tbl build();
-
 }

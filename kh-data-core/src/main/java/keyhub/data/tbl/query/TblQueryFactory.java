@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package keyhub.data.tbl.stream;
+package keyhub.data.tbl.query;
 
 import keyhub.data.tbl.Tbl;
 import keyhub.data.function.RowPredicate;
@@ -33,14 +33,14 @@ import keyhub.data.schema.Schema;
 
 import java.util.stream.Stream;
 
-public interface TblStream {
-    static TblStream from(Stream<Row> rowStream) {
-        return TblStreamImplement.from(rowStream);
+public interface TblQueryFactory {
+    static TblQueryFactory from(Stream<Row> rowStream) {
+        return TblQueryFactoryImplement.from(rowStream);
     }
     Schema getSchema();
     Tbl toTbl();
-    TblStream select(String... columns);
-    TblStream select(Column<?>... columns);
-    TblStream select(CellSelector... selector);
-    TblStream where(RowPredicate filter);
+    TblQueryFactory select(String... columns);
+    TblQueryFactory select(Column<?>... columns);
+    TblQueryFactory select(CellSelector... selector);
+    TblQueryFactory where(RowPredicate filter);
 }

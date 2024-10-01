@@ -24,7 +24,7 @@
 
 package keyhub.data.column;
 
-public class ColumnValue<T> extends ColumnImplement<T> {
+public final class ColumnValue<T> extends ColumnImplement<T> {
     private final String columnName;
     private final Class<T> columnType;
 

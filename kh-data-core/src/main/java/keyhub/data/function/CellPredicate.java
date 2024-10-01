@@ -31,5 +31,6 @@ import java.util.function.Predicate;
 
 @FunctionalInterface
 public interface CellPredicate extends Predicate<Cell<?>> {
+    @Override
     boolean test(Cell cell);
 }

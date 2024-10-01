@@ -34,14 +34,14 @@ import keyhub.data.schema.SchemaValue;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class TblJoinImplement implements TblJoin {
+public abstract class TblJoinFactoryImplement implements TblJoinFactory {
     protected final Tbl left;
     protected final Tbl right;
     protected final List<List<Integer>> selectColumns;
     protected final List<List<Integer>> joinColumns;
 
 
-    public TblJoinImplement(Tbl left, Tbl right) {
+    public TblJoinFactoryImplement(Tbl left, Tbl right) {
         this.left = left;
         this.right = right;
         this.selectColumns = new ArrayList<>();
@@ -53,12 +53,12 @@ public abstract class TblJoinImplement implements TblJoin {
     }
 
     @Override
-    public TblJoin on(String key){
+    public TblJoinFactory on(String key){
         return on(key, key);
     }
 
     @Override
-    public TblJoin on(String leftKey, String rightKey){
+    public TblJoinFactory on(String leftKey, String rightKey){
         int leftIndex = getColumnIndexFromLeft(leftKey);
         if(leftIndex == -1){
             throw new IllegalArgumentException("Key not found");
@@ -77,8 +77,8 @@ public abstract class TblJoinImplement implements TblJoin {
         computePreProcess();
         List<List<Object>> rawRows = computeJoinRawResult();
         Schema schema = computeJoinSchema();
-        List<List<Object>> rows = computeJoinData(rawRows);
-        return Tbl.of(schema, rows);
+        List<List<Object>> joinedRawRows = computeJoinData(rawRows);
+        return Tbl.of(schema, joinedRawRows);
     }
     protected void computePreProcess(){
         // Do nothing
@@ -126,14 +126,14 @@ public abstract class TblJoinImplement implements TblJoin {
     }
 
     @Override
-    public TblJoin selectAll(){
+    public TblJoinFactory selectAll(){
         selectAllFromLeft();
         selectAllFromRight();
         return this;
     }
 
     @Override
-    public TblJoin selectFromLeft(ColumnSelector... selectors){
+    public TblJoinFactory selectFromLeft(ColumnSelector... selectors){
         for(ColumnSelector selector : selectors){
             Column<?> column = selector.apply(left.getSchema());
             selectFromLeft(column.getColumnName());
@@ -142,7 +142,7 @@ public abstract class TblJoinImplement implements TblJoin {
     }
 
     @Override
-    public TblJoin selectFromLeft(String column){
+    public TblJoinFactory selectFromLeft(String column){
         int index = getColumnIndexFromLeft(column);
         if(index == -1){
             throw new IllegalArgumentException("Left Key not found");
@@ -151,23 +151,23 @@ public abstract class TblJoinImplement implements TblJoin {
         return this;
     }
     @Override
-    public TblJoin selectFromLeft(String... columns){
+    public TblJoinFactory selectFromLeft(String... columns){
         for(String column : columns){
             selectFromLeft(column);
         }
         return this;
     }
     @Override
-    public TblJoin selectAllFromLeft(){
+    public TblJoinFactory selectAllFromLeft(){
         this.selectColumns.getFirst().clear();
-        for(int i = 0; i < left.getColumnNames().size(); i++){
+        for(int i = 0; i < left.getColumnSize(); i++){
             this.selectColumns.getFirst().add(i);
         }
         return this;
     }
 
     @Override
-    public TblJoin selectFromRight(ColumnSelector... selectors){
+    public TblJoinFactory selectFromRight(ColumnSelector... selectors){
         for(ColumnSelector selector : selectors){
             Column<?> column = selector.apply(right.getSchema());
             selectFromRight(column.getColumnName());
@@ -175,7 +175,7 @@ public abstract class TblJoinImplement implements TblJoin {
         return this;
     }
     @Override
-    public TblJoin selectFromRight(String column){
+    public TblJoinFactory selectFromRight(String column){
         int index = getColumnIndexFromRight(column);
         if(index == -1){
             throw new IllegalArgumentException("Right Key not found");
@@ -184,16 +184,16 @@ public abstract class TblJoinImplement implements TblJoin {
         return this;
     }
     @Override
-    public TblJoin selectFromRight(String... columns){
+    public TblJoinFactory selectFromRight(String... columns){
         for(String column : columns){
             selectFromRight(column);
         }
         return this;
     }
     @Override
-    public TblJoin selectAllFromRight(){
+    public TblJoinFactory selectAllFromRight(){
         this.selectColumns.get(1).clear();
-        for(int i = 0; i < right.getColumnNames().size(); i++){
+        for(int i = 0; i < right.getColumnSize(); i++){
             this.selectColumns.get(1).add(i);
         }
         return this;

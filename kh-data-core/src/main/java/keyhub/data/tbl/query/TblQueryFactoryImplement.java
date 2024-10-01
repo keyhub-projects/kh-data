@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package keyhub.data.tbl.stream;
+package keyhub.data.tbl.query;
 
 import keyhub.data.tbl.Tbl;
 import keyhub.data.function.RowPredicate;
@@ -37,14 +37,14 @@ import java.util.List;
 import java.util.Spliterator;
 import java.util.stream.*;
 
-public class TblStreamImplement implements TblStream {
+public class TblQueryFactoryImplement implements TblQueryFactory {
     private Stream<Row> rowStream;
 
-    public TblStreamImplement(Stream<Row> rowStream) {
+    public TblQueryFactoryImplement(Stream<Row> rowStream) {
         this.rowStream = rowStream;
     }
-    public static TblStream from(Stream<Row> rowStream) {
-        return new TblStreamImplement(rowStream);
+    public static TblQueryFactory from(Stream<Row> rowStream) {
+        return new TblQueryFactoryImplement(rowStream);
     }
 
     @Override
@@ -65,7 +65,7 @@ public class TblStreamImplement implements TblStream {
     }
 
     @Override
-    public TblStream select(String... columnNames) {
+    public TblQueryFactory select(String... columnNames) {
         rowStream = rowStream.map(row -> {
             List<Cell> cells = Stream.of(columnNames)
                     .map(columnName -> row.findCell(columnName).orElseThrow())
@@ -76,7 +76,7 @@ public class TblStreamImplement implements TblStream {
     }
 
     @Override
-    public TblStream select(Column... columns) {
+    public TblQueryFactory select(Column... columns) {
         rowStream = rowStream.map(row -> {
             Schema schema = Schema.from(List.of(columns));
             List<Cell> cells = Stream.of(columns)
@@ -88,7 +88,7 @@ public class TblStreamImplement implements TblStream {
     }
 
     @Override
-    public TblStream select(CellSelector... selector) {
+    public TblQueryFactory select(CellSelector... selector) {
         rowStream = rowStream.map(row -> {
             List<Cell> cells = Stream.of(selector)
                     .map(s -> s.apply(row))
@@ -99,7 +99,7 @@ public class TblStreamImplement implements TblStream {
     }
 
     @Override
-    public TblStream where(RowPredicate filter) {
+    public TblQueryFactory where(RowPredicate filter) {
         rowStream = rowStream.filter(filter);
         return this;
     }
@@ -116,22 +116,22 @@ public class TblStreamImplement implements TblStream {
         return rowStream.isParallel();
     }
 
-    public TblStream sequential() {
+    public TblQueryFactory sequential() {
         rowStream.sequential();
         return this;
     }
 
-    public TblStream parallel() {
+    public TblQueryFactory parallel() {
         rowStream.parallel();
         return this;
     }
 
-    public TblStream unordered() {
+    public TblQueryFactory unordered() {
         rowStream = rowStream.unordered();
         return this;
     }
 
-    public TblStream onClose(Runnable closeHandler) {
+    public TblQueryFactory onClose(Runnable closeHandler) {
         rowStream = rowStream.onClose(closeHandler);
         return this;
     }

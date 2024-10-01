@@ -56,29 +56,6 @@ public class TbTest {
         }
 
         @Test
-        public void testOfMethodWithColumnListMap() {
-            Map<String, List<Object>> columnListMap = new HashMap<>();
-            List<Object> columnList1 = new ArrayList<>();
-            columnList1.add("value1");
-            columnList1.add("value2");
-            columnList1.add("value3");
-            columnListMap.put("key1", columnList1);
-
-            List<Object> columnList2 = new ArrayList<>();
-            columnList2.add(1);
-            columnList2.add(2);
-            columnList2.add(3);
-            columnListMap.put("key2", columnList2);
-
-            Tbl result = Tbl.fromColumnListMap(columnListMap);
-
-            assertNotNull(result);
-            assertEquals(2, result.getColumnSize());
-            assertEquals(String.class, result.getColumnType(0));
-            assertEquals(Integer.class, result.getColumnType(1));
-        }
-
-        @Test
         public void testOfMethodWithSchemaAndData() {
             List<List<Object>> data = new ArrayList<>();
             List<Object> row1 = new ArrayList<>();

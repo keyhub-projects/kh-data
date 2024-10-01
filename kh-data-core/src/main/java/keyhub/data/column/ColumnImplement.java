@@ -57,6 +57,6 @@ public abstract class ColumnImplement<T> implements Column<T> {
     }
     @Override
     public String toString() {
-        return columnName() + "(" + columnType().getSimpleName() + ")";
+        return columnName() + ": " + columnType().getSimpleName();
     }
 }

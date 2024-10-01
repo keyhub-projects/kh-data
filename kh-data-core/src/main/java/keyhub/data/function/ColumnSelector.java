@@ -31,6 +31,7 @@ import java.util.function.Function;
 
 @FunctionalInterface
 public interface ColumnSelector extends Function<Schema, Column<?>> {
+    @Override
     Column<?> apply(Schema schema);
 
     static ColumnSelector column(String columnName){

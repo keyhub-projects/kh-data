@@ -26,7 +26,7 @@ package keyhub.data.cell;
 
 import keyhub.data.column.Column;
 
-public class CellValue<T> extends CellImplement<T> {
+public final class CellValue<T> extends CellImplement<T> {
     private final Column<T> columnSchema;
     private final T value;
 
