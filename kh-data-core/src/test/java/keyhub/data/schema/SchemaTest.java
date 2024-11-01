@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package keyhub.data.tbl.schema;
+package keyhub.data.schema;
 
 import keyhub.data.column.Column;
 import keyhub.data.schema.Schema;

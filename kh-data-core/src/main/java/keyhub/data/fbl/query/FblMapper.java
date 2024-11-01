@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package keyhub.data.fbl.map;
+package keyhub.data.fbl.query;
 
 public interface FblMapper {
 }

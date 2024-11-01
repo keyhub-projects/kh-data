@@ -25,6 +25,7 @@
 package keyhub.data.tbl;
 
 import keyhub.data.converter.KhObjectConverter;
+import keyhub.data.fbl.Fbl;
 import keyhub.data.row.Row;
 import keyhub.data.column.Column;
 import keyhub.data.schema.Schema;
@@ -41,10 +42,10 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 public abstract class TblImplement implements Tbl {
-    protected final Schema schema;
+    protected final Schema SCHEMA;
 
     protected TblImplement(Schema schema) {
-        this.schema = schema;
+        this.SCHEMA = schema;
     }
 
     public static Tbl empty() {
@@ -56,6 +57,9 @@ public abstract class TblImplement implements Tbl {
     }
 
     public static Tbl from(List<?> objectList) {
+        if(objectList == null){
+            return empty();
+        }
         if(objectList.isEmpty()) {
             return empty();
         }
@@ -71,12 +75,24 @@ public abstract class TblImplement implements Tbl {
         return fromObjects(objectList);
     }
 
-    public static Tbl fromObjects(List<?> objectList) {
+    public static Tbl from(Fbl fbl){
+        List<Row> rows =  fbl.toList();
+        return Tbl.from(rows);
+    }
+
+    public static Tbl of(Schema schema, List<List<Object>> rawRows) {
+        TblBuilder builder = TblBuilder.forRowSet(schema);
+        return builder
+                .addRawRows(rawRows)
+                .build();
+    }
+
+    private static Tbl fromObjects(List<?> objectList) {
         List<Map<String, Object>> mapList = KhObjectConverter.convertToMapList(objectList);
         return fromRowMapList(mapList);
     }
 
-    public static Tbl fromRowMapList(List<Map<String, Object>> rowMapList) {
+    private static Tbl fromRowMapList(List<Map<String, Object>> rowMapList) {
         List<Column> keyMap = rowMapList.getFirst().entrySet().stream()
                 .map(entry -> (Column)(Column.of(entry.getKey(), entry.getValue().getClass())))
                 .toList();
@@ -91,41 +107,34 @@ public abstract class TblImplement implements Tbl {
         return builder.build();
     }
 
-    public static Tbl of(Schema schema, List<List<Object>> data) {
-        TblBuilder builder = TblBuilder.forRowSet(schema);
-        return builder
-                .addRawRows(data)
-                .build();
-    }
-
     @Override
     public Column<?> getColumnSchema(int index) {
-        return schema.getColumnSchema(index);
+        return SCHEMA.getColumnSchema(index);
     }
 
     @Override
     public Schema getSchema() {
-        return this.schema;
+        return this.SCHEMA;
     }
 
     @Override
     public int getColumnSize() {
-        return schema.getColumnSize();
+        return this.SCHEMA.getColumnSize();
     }
 
     @Override
     public String getColumnName(int index) {
-        return schema.getColumnNames().get(index);
+        return SCHEMA.getColumnNames().get(index);
     }
 
     @Override
     public Class<?> getColumnType(int index) {
-        return schema.getColumnTypes().get(schema.getColumnNames().get(index));
+        return this.SCHEMA.getColumnTypes().get(this.SCHEMA.getColumnNames().get(index));
     }
 
     @Override
     public int getColumnIndex(String column) {
-        return schema.getColumnIndex(column);
+        return this.SCHEMA.getColumnIndex(column);
     }
 
     @Override
@@ -145,7 +154,7 @@ public abstract class TblImplement implements Tbl {
     }
     @Override
     public String toString() {
-        return "[" + this.schema + ", " + this.getRows().toString() + "]";
+        return "[" + this.SCHEMA + ", " + this.getRows().toString() + "]";
     }
 
     @Override

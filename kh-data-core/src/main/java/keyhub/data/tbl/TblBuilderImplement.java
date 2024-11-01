@@ -30,10 +30,10 @@ import keyhub.data.schema.Schema;
 import java.util.List;
 
 public abstract class TblBuilderImplement implements TblBuilder {
-    protected final Schema schema;
+    protected final Schema SCHEMA;
 
     protected TblBuilderImplement(Schema schema) {
-        this.schema = schema;
+        this.SCHEMA = schema;
     }
 
     public static TblBuilder forRowSet(Schema schema){

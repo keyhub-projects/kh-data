@@ -35,7 +35,7 @@ import java.util.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class TbTest {
+public class TblTest {
     @Nested
     class ConstructorTest{
         @Test

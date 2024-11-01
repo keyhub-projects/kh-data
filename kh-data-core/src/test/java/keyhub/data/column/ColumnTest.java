@@ -22,9 +22,8 @@
  * SOFTWARE.
  */
 
-package keyhub.data.tbl.schema;
+package keyhub.data.column;
 
-import keyhub.data.column.Column;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

@@ -28,9 +28,7 @@ import keyhub.data.row.Row;
 import keyhub.data.schema.Schema;
 import keyhub.data.tbl.Tbl;
 
-import java.util.Iterator;
-import java.util.Optional;
-import java.util.Spliterator;
+import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
 
@@ -71,16 +69,6 @@ public class FblImplement implements Fbl{
     }
 
     @Override
-    public Row reduce(Row identity, BinaryOperator<Row> accumulator) {
-        return null;
-    }
-
-    @Override
-    public Optional<Row> reduce(BinaryOperator<Row> accumulator) {
-        return Optional.empty();
-    }
-
-    @Override
     public Iterator<Row> iterator() {
         return this.ROW_STREAM.iterator();
     }
@@ -98,5 +86,22 @@ public class FblImplement implements Fbl{
     @Override
     public void close() {
         this.ROW_STREAM.close();
+    }
+
+    @Override
+    public <R> R collect(Supplier<R> supplier,
+                         BiConsumer<R, Row> accumulator,
+                         BiConsumer<R, R> combiner){
+        return ROW_STREAM.collect(supplier, accumulator, combiner);
+    }
+
+    @Override
+    public <R, A> R collect(Collector<Row, A, R> collector){
+        return ROW_STREAM.collect(collector);
+    }
+
+    @Override
+    public List<Row> toList(){
+        return ROW_STREAM.toList();
     }
 }

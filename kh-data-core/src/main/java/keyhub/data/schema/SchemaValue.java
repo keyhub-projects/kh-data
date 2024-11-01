@@ -70,8 +70,8 @@ public final class SchemaValue extends SchemaImplement {
     }
 
     public static class TblSchemaValueBuilder {
-        private List<String> columnNames = new ArrayList<>();
-        private Map<String, Class<?>> columnTypes = new HashMap<>();
+        private final List<String> columnNames = new ArrayList<>();
+        private final Map<String, Class<?>> columnTypes = new HashMap<>();
 
         public TblSchemaValueBuilder addColumn(String columnName, Class<?> columnType) {
             this.columnNames.add(columnName);

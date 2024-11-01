@@ -24,16 +24,18 @@
 
 package keyhub.data.fbl;
 
+import keyhub.data.column.Column;
+import keyhub.data.function.CellSelector;
+import keyhub.data.function.RowPredicate;
 import keyhub.data.row.Row;
 import keyhub.data.schema.Schema;
 import keyhub.data.tbl.Tbl;
 
 import java.util.Iterator;
-import java.util.Optional;
+import java.util.List;
 import java.util.Spliterator;
-import java.util.function.BinaryOperator;
-import java.util.function.Function;
-import java.util.function.Predicate;
+import java.util.function.*;
+import java.util.stream.Collector;
 import java.util.stream.Stream;
 
 public interface Fbl {
@@ -51,10 +53,6 @@ public interface Fbl {
 
     Stream<Row> limit(long maxSize);
 
-    Row reduce(Row identity, BinaryOperator<Row> accumulator);
-
-    Optional<Row> reduce(BinaryOperator<Row> accumulator);
-
     Iterator<Row> iterator();
 
     Spliterator<Row> spliterator();
@@ -62,4 +60,17 @@ public interface Fbl {
     Stream<Row> onClose(Runnable closeHandler);
 
     void close();
+
+    <R> R collect(Supplier<R> supplier, BiConsumer<R, Row> accumulator, BiConsumer<R, R> combiner);
+
+    <R, A> R collect(Collector<Row, A, R> collector);
+
+    Fbl select(String... columns);
+    Fbl select(Column<?>... columns);
+    Fbl select(CellSelector... selector);
+    Fbl where(RowPredicate filter);
+    Fbl leftJoin(Tbl tbl);
+    Fbl rightJoin(Tbl tbl);
+
+    List<Row> toList();
 }

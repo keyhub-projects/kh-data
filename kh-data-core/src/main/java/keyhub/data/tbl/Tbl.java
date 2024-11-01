@@ -25,6 +25,7 @@
 package keyhub.data.tbl;
 
 import keyhub.data.cell.Cell;
+import keyhub.data.fbl.Fbl;
 import keyhub.data.tbl.join.TblJoinFactory;
 import keyhub.data.row.Row;
 import keyhub.data.column.Column;
@@ -44,6 +45,9 @@ public interface Tbl extends Iterable<Row> {
     }
     static Tbl from(List<?> list) {
         return TblImplement.from(list);
+    }
+    static Tbl from(Fbl fbl){
+        return TblImplement.from(fbl);
     }
     static Tbl of(Schema schema, List<List<Object>> rawRows){
         return TblImplement.of(schema, rawRows);

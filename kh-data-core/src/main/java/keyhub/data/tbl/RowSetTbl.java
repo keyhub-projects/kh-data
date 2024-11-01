@@ -49,12 +49,12 @@ public class RowSetTbl extends TblImplement {
         if(index < 0 || index >= this.data.size()){
             throw new IllegalArgumentException("Row index out of bounds");
         }
-        return Row.of(super.schema, data.get(index));
+        return Row.of(this.SCHEMA, data.get(index));
     }
 
     @Override
     public Optional<Cell<?>> findCell(String columnName, int rowIndex){
-        int columnIndex = this.schema.getColumnIndex(columnName);
+        int columnIndex = this.SCHEMA.getColumnIndex(columnName);
         if(columnIndex == -1){
             return Optional.empty();
         }
@@ -63,20 +63,20 @@ public class RowSetTbl extends TblImplement {
 
     @Override
     public Cell<?> getCell(int columnIndex, int rowIndex){
-        if(columnIndex < 0 || columnIndex >= this.schema.getColumnSize()){
+        if(columnIndex < 0 || columnIndex >= this.SCHEMA.getColumnSize()){
             throw new IllegalArgumentException("Column index out of bounds");
         }
         if(rowIndex < 0 || rowIndex >= this.data.size()){
             throw new IllegalArgumentException("Row index out of bounds");
         }
         var value = this.data.get(rowIndex).get(columnIndex);
-        return Cell.of(this.schema.getColumnSchema(columnIndex), value);
+        return Cell.of(this.SCHEMA.getColumnSchema(columnIndex), value);
     }
 
     @Override
     public List<Row> getRows() {
         return data.stream()
-                .map(row -> Row.of(super.schema, row))
+                .map(row -> Row.of(this.SCHEMA, row))
                 .toList();
     }
 
@@ -93,8 +93,8 @@ public class RowSetTbl extends TblImplement {
         return this.data.stream()
                 .map(row -> {
                     Map<String, Object> rowMap = new HashMap<>();
-                    for(int i = 0; i < this.schema.getColumnSize(); i++){
-                        Column<?> columnSchema = this.schema.getColumnSchema(i);
+                    for(int i = 0; i < this.SCHEMA.getColumnSize(); i++){
+                        Column<?> columnSchema = this.SCHEMA.getColumnSchema(i);
                         rowMap.put(columnSchema.getColumnName(), row.get(i));
                     }
                     return rowMap;
@@ -105,8 +105,8 @@ public class RowSetTbl extends TblImplement {
     @Override
     public Map<String, List<Object>> toColumnListMap() {
         Map<String, List<Object>> columnListMap = new HashMap<>();
-        for(int i = 0; i < this.schema.getColumnSize(); i++){
-            Column<?> columnSchema = this.schema.getColumnSchema(i);
+        for(int i = 0; i < this.SCHEMA.getColumnSize(); i++){
+            Column<?> columnSchema = this.SCHEMA.getColumnSchema(i);
             List<Object> columnList = new ArrayList<>();
             for(List<Object> row : this.data){
                 columnList.add(row.get(i));

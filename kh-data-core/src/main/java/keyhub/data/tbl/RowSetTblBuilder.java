@@ -39,14 +39,14 @@ public class RowSetTblBuilder extends TblBuilderImplement {
 
     @Override
     public Tbl build() {
-        return new RowSetTbl(this.schema, this.rows);
+        return new RowSetTbl(this.SCHEMA, this.rows);
     }
 
     @Override
     public TblBuilder addRawRow(List<Object> row) {
         for(int i = 0; i < row.size(); i++) {
-            String columnName = this.schema.getColumnNames().get(i);
-            if(row.get(i) != null && !this.schema.getColumnTypes().get(columnName).isInstance(row.get(i))) {
+            String columnName = this.SCHEMA.getColumnNames().get(i);
+            if(row.get(i) != null && !this.SCHEMA.getColumnTypes().get(columnName).isInstance(row.get(i))) {
                 throw new IllegalArgumentException("Row value type does not match schema");
             }
         }
