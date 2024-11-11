@@ -1,5 +1,5 @@
 rootProject.name = 'kh-data'
-include 'kh-data-core'
+include 'kh-data-structure'
 include 'kh-data-example'
 include 'kh-data-stream'
 
