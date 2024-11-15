@@ -32,8 +32,8 @@ import java.util.*;
 
 public abstract class KhRowImplement implements KhRow {
     public static KhRow of(KhSchema schema, List<Object> values) {
-        if(schema.getColumnTypes().size() != values.size()){
-            throw new IllegalArgumentException("The number of columns and values must be the same");
+        if(schema.getColumnSize() != values.size()){
+            throw new IllegalArgumentException("In the KhRow, the number of columns and values must be the same");
         }
         for(int i = 0; i < values.size(); i++) {
             String columnName = schema.getColumnNames().get(i);
@@ -114,5 +114,29 @@ public abstract class KhRowImplement implements KhRow {
     @Override
     public Iterator<KhCell> iterator() {
         return this.getCells().iterator();
+    }
+    @Override
+    public KhRow select(String... columns){
+        List<Object> newValues = new ArrayList<>();
+        for(String column : columns){
+            Optional<KhCell<Object>> opCell = findCell(column);
+            if(opCell.isEmpty()){
+                throw new IllegalArgumentException("Column not found");
+            }
+            newValues.add(opCell.get().getValue());
+        }
+        return KhRow.of(schema().select(columns), newValues);
+    }
+    @Override
+    public KhRow select(KhColumn[] columns){
+        List<Object> newValues = new ArrayList<>();
+        for(KhColumn column : columns){
+            Optional<KhCell<Object>> opCell = findCell(column.getColumnName());
+            if(opCell.isEmpty()){
+                throw new IllegalArgumentException("Column not found");
+            }
+            newValues.add(opCell.get().getValue());
+        }
+        return KhRow.of(KhSchema.from(List.of(columns)), newValues);
     }
 }

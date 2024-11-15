@@ -22,37 +22,15 @@
  * SOFTWARE.
  */
 
-package keyhub.data.stream;
+package keyhub.data.schema;
 
 import keyhub.data.column.KhColumn;
-import keyhub.data.function.KhCellSelector;
-import keyhub.data.function.KhRowPredicate;
-import keyhub.data.join.KhJoinable;
-import keyhub.data.row.KhRow;
-import keyhub.data.schema.KhSchema;
-import keyhub.data.schema.KhSchemaBasedStructure;
-import keyhub.data.stream.join.KhStreamJoin;
-import keyhub.data.table.KhTable;
-import java.util.List;
-import java.util.stream.BaseStream;
-import java.util.stream.Stream;
 
-public interface KhStream extends BaseStream<KhRow, KhStream>, KhSchemaBasedStructure, KhJoinable {
-    static KhStream from(KhTable tbl){
-        return KhStreamImplement.from(tbl);
-    }
-    static KhStream of(KhSchema schema, Stream<KhRow> rowStream) {
-        return KhStreamImplement.of(schema, rowStream);
-    }
-
-    KhStream select(String... columns);
-    KhStream select(KhColumn<?>... columns);
-    KhStream select(KhCellSelector... selector);
-    KhStream where(KhRowPredicate filter);
-    KhStreamJoin leftJoin(KhTable tbl);
-    KhStreamJoin innerJoin(KhTable tbl);
-
-    Stream<KhRow> getRowStream();
-    List<KhRow> toList();
-    KhTable toTable();
+public interface KhSchemaBasedStructure {
+    KhColumn<?> getColumnSchema(int index);
+    KhSchema getSchema();
+    int getColumnSize();
+    String getColumnName(int index);
+    Class<?> getColumnType(int index);
+    int getColumnIndex(String column);
 }

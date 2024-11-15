@@ -25,17 +25,19 @@
 package keyhub.data.table;
 
 import keyhub.data.cell.KhCell;
+import keyhub.data.join.KhJoinable;
+import keyhub.data.schema.KhSchemaBasedStructure;
 import keyhub.data.stream.KhStream;
 import keyhub.data.row.KhRow;
-import keyhub.data.table.join.KhTableJoinFactory;
-import keyhub.data.column.KhColumn;
+import keyhub.data.stream.join.KhStreamJoin;
+import keyhub.data.table.join.KhTableJoin;
 import keyhub.data.schema.KhSchema;
-import keyhub.data.table.query.KhTableQueryFactory;
+import keyhub.data.table.query.KhTableQuery;
 
 import java.util.*;
 import java.util.stream.Stream;
 
-public interface KhTable extends Iterable<KhRow> {
+public interface KhTable extends Iterable<KhRow>, KhSchemaBasedStructure, KhJoinable {
 
     static KhTable empty() {
         return KhTableImplement.empty();
@@ -46,8 +48,8 @@ public interface KhTable extends Iterable<KhRow> {
     static KhTable from(List<?> list) {
         return KhTableImplement.from(list);
     }
-    static KhTable from(KhStream fbl){
-        return KhTableImplement.from(fbl);
+    static KhTable from(KhStream stream){
+        return KhTableImplement.from(stream);
     }
     static KhTable of(KhSchema schema, List<List<Object>> rawRows){
         return KhTableImplement.of(schema, rawRows);
@@ -61,21 +63,17 @@ public interface KhTable extends Iterable<KhRow> {
     KhRow getRow(int index);
     List<KhRow> getRows();
     List<Object> getRawRow(int index);
-    KhColumn<?> getColumnSchema(int index);
-    KhSchema getSchema();
-    int getColumnSize();
-    String getColumnName(int index);
-    Class<?> getColumnType(int index);
-    int getColumnIndex(String column);
     KhCell<?> getCell(int columnIndex, int rowIndex);
     Optional<KhCell<?>> findCell(String columnName, int rowIndex);
 
     Stream<KhRow> stream();
-    KhTableQueryFactory query();
-    KhTableJoinFactory leftJoin(KhTable right);
-    KhTableJoinFactory innerJoin(KhTable right);
+    KhTableQuery query();
+    KhTableJoin leftJoin(KhTable right);
+    KhTableJoin innerJoin(KhTable right);
+    KhStreamJoin leftJoin(KhStream right);
+    KhStreamJoin innerJoin(KhStream right);
 
     List<Map<String, Object>> toRowMapList();
     Map<String, List<Object>> toColumnListMap();
-
+    KhStream toStream();
 }

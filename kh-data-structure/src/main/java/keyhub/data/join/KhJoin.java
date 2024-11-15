@@ -22,31 +22,28 @@
  * SOFTWARE.
  */
 
-package keyhub.data.table.join;
+package keyhub.data.join;
 
-import keyhub.data.table.KhTable;
 import keyhub.data.function.KhColumnSelector;
 
-public interface KhTableJoinFactory {
-    KhTable toTbl();
+public interface KhJoin<E extends KhJoinable, T extends KhJoin<E, T>> {
+    E toOne();
 
-    KhTableJoinFactory on(String sameKey);
-    KhTableJoinFactory on(String leftKey, String rightKey);
+    KhJoin<E, T> on(String key);
+    KhJoin<E, T> on(String leftKey, String rightKey);
 
-    KhTableJoinFactory selectAll();
+    KhJoin<E, T> selectAll();
 
-    KhTableJoinFactory selectFromLeft(KhColumnSelector... selectors);
-    KhTableJoinFactory selectFromLeft(String column);
-    KhTableJoinFactory selectFromLeft(String... columns);
-    KhTableJoinFactory selectAllFromLeft();
+    KhJoin<E, T> selectFromLeft(KhColumnSelector... selectors);
+    KhJoin<E, T> selectFromLeft(String column);
+    KhJoin<E, T> selectFromLeft(String... columns);
+    KhJoin<E, T> selectAllFromLeft();
 
-    KhTableJoinFactory selectFromRight(KhColumnSelector... selectors);
-    KhTableJoinFactory selectFromRight(String column);
-    KhTableJoinFactory selectFromRight(String... columns);
-    KhTableJoinFactory selectAllFromRight();
+    KhJoin<E, T> selectFromRight(KhColumnSelector... selectors);
+    KhJoin<E, T> selectFromRight(String column);
+    KhJoin<E, T> selectFromRight(String... columns);
+    KhJoin<E, T> selectAllFromRight();
 
     int getColumnIndexFromLeft(String column);
     int getColumnIndexFromRight(String column);
-
-
 }

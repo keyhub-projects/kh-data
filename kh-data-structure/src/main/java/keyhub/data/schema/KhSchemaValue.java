@@ -52,7 +52,7 @@ public final class KhSchemaValue extends KhSchemaImplement {
         schema.getColumnTypes().forEach(this.columnTypes::put);
     }
 
-    public KhSchemaValue(TblSchemaValueBuilder builder) {
+    public KhSchemaValue(KhSchemaValueBuilder builder) {
         this.columnNames = builder.columnNames;
         this.columnTypes = new HashMap<>();
         this.columnNames.forEach(columnName ->
@@ -69,21 +69,21 @@ public final class KhSchemaValue extends KhSchemaImplement {
         return this.columnTypes;
     }
 
-    public static class TblSchemaValueBuilder {
+    public static class KhSchemaValueBuilder {
         private final List<String> columnNames = new ArrayList<>();
         private final Map<String, Class<?>> columnTypes = new HashMap<>();
 
-        public TblSchemaValueBuilder addColumn(String columnName, Class<?> columnType) {
+        public KhSchemaValueBuilder addColumn(String columnName, Class<?> columnType) {
             this.columnNames.add(columnName);
             this.columnTypes.put(columnName, columnType);
             return this;
         }
-        public TblSchemaValueBuilder addColumn(KhColumn<?> column) {
+        public KhSchemaValueBuilder addColumn(KhColumn<?> column) {
             this.columnNames.add(column.getColumnName());
             this.columnTypes.put(column.getColumnName(), column.getColumnType());
             return this;
         }
-        public TblSchemaValueBuilder addColumns(List<KhColumn<?>> columns) {
+        public KhSchemaValueBuilder addColumns(List<KhColumn<?>> columns) {
             columns.forEach(this::addColumn);
             return this;
         }

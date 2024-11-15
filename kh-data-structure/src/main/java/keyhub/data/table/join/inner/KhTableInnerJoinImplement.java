@@ -22,37 +22,35 @@
  * SOFTWARE.
  */
 
-package keyhub.data.stream;
+package keyhub.data.table.join.inner;
 
-import keyhub.data.column.KhColumn;
-import keyhub.data.function.KhCellSelector;
-import keyhub.data.function.KhRowPredicate;
-import keyhub.data.join.KhJoinable;
-import keyhub.data.row.KhRow;
-import keyhub.data.schema.KhSchema;
-import keyhub.data.schema.KhSchemaBasedStructure;
-import keyhub.data.stream.join.KhStreamJoin;
+
 import keyhub.data.table.KhTable;
+import keyhub.data.table.join.KhTableJoinImplement;
+
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.BaseStream;
-import java.util.stream.Stream;
 
-public interface KhStream extends BaseStream<KhRow, KhStream>, KhSchemaBasedStructure, KhJoinable {
-    static KhStream from(KhTable tbl){
-        return KhStreamImplement.from(tbl);
-    }
-    static KhStream of(KhSchema schema, Stream<KhRow> rowStream) {
-        return KhStreamImplement.of(schema, rowStream);
+public class KhTableInnerJoinImplement extends KhTableJoinImplement implements KhTableInnerJoin {
+
+    public KhTableInnerJoinImplement(KhTable left, KhTable right) {
+        super(left, right);
     }
 
-    KhStream select(String... columns);
-    KhStream select(KhColumn<?>... columns);
-    KhStream select(KhCellSelector... selector);
-    KhStream where(KhRowPredicate filter);
-    KhStreamJoin leftJoin(KhTable tbl);
-    KhStreamJoin innerJoin(KhTable tbl);
-
-    Stream<KhRow> getRowStream();
-    List<KhRow> toList();
-    KhTable toTable();
+    @Override
+    public List<List<Object>> computeJoinRawResult(){
+        List<List<Object>> rows = new ArrayList<>();
+        for(int i = 0; i < this.left.count(); i++){
+            for(int j = 0; j < right.count(); j++){
+                boolean isJoined = isJoinedRow(this.left.getRow(i), this.right.getRow(j));
+                if(isJoined){
+                    List<Object> row = new ArrayList<>();
+                    row.addAll(this.left.getRawRow(i));
+                    row.addAll(this.right.getRawRow(j));
+                    rows.add(row);
+                }
+            }
+        }
+        return rows;
+    }
 }

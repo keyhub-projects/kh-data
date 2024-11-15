@@ -29,10 +29,13 @@ import keyhub.data.converter.KhObjectConverter;
 import keyhub.data.stream.KhStream;
 import keyhub.data.row.KhRow;
 import keyhub.data.schema.KhSchema;
-import keyhub.data.table.join.KhTableJoinFactory;
-import keyhub.data.table.join.inner.KhTableInnerJoinFactory;
-import keyhub.data.table.join.left.KhTableLeftJoinFactory;
-import keyhub.data.table.query.KhTableQueryFactory;
+import keyhub.data.stream.join.KhStreamJoin;
+import keyhub.data.stream.join.inner.KhStreamInnerJoin;
+import keyhub.data.stream.join.left.KhStreamLeftJoin;
+import keyhub.data.table.join.KhTableJoin;
+import keyhub.data.table.join.inner.KhTableInnerJoin;
+import keyhub.data.table.join.left.KhTableLeftJoin;
+import keyhub.data.table.query.KhTableQuery;
 
 import java.util.Iterator;
 import java.util.List;
@@ -64,19 +67,22 @@ public abstract class KhTableImplement implements KhTable {
             return empty();
         }
         if(objectList.getFirst() instanceof KhRow row){
+            @SuppressWarnings("unchecked")
             List<KhRow> list = (List<KhRow>) objectList;
             return KhTable.builder(row.getSchema())
                     .addRows(list)
                     .build();
         }
         if(objectList.getFirst() instanceof Map) {
-            return fromRowMapList((List<Map<String, Object>>) objectList);
+            @SuppressWarnings("unchecked")
+            List<Map<String, Object>> mapList = (List<Map<String, Object>>) objectList;
+            return fromRowMapList(mapList);
         }
         return fromObjects(objectList);
     }
 
-    public static KhTable from(KhStream fbl){
-        List<KhRow> rows =  fbl.toList();
+    public static KhTable from(KhStream stream){
+        List<KhRow> rows =  stream.toList();
         return KhTable.from(rows);
     }
 
@@ -167,17 +173,30 @@ public abstract class KhTableImplement implements KhTable {
         return StreamSupport.stream(spliterator(), false);
     }
     @Override
-    public KhTableQueryFactory query(){
+    public KhTableQuery query(){
         Stream<KhRow> rowStream = StreamSupport.stream(spliterator(), false);
-        return KhTableQueryFactory.from(rowStream);
+        return KhTableQuery.from(rowStream);
     }
     @Override
-    public KhTableJoinFactory leftJoin(KhTable right) {
-        return KhTableLeftJoinFactory.of(this, right);
+    public KhTableJoin leftJoin(KhTable right) {
+        return KhTableLeftJoin.of(this, right);
     }
     @Override
-    public KhTableJoinFactory innerJoin(KhTable right) {
-        return KhTableInnerJoinFactory.of(this, right);
+    public KhTableJoin innerJoin(KhTable right) {
+        return KhTableInnerJoin.of(this, right);
+    }
+    @Override
+    public KhStreamJoin leftJoin(KhStream right) {
+        return KhStreamLeftJoin.of(this, right);
+    }
+    @Override
+    public KhStreamJoin innerJoin(KhStream right) {
+        return KhStreamInnerJoin.of(this, right);
     }
 
+
+    @Override
+    public KhStream toStream(){
+        return KhStream.from(this);
+    }
 }

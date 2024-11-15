@@ -25,13 +25,19 @@
 package keyhub.data.table;
 
 import keyhub.data.column.KhColumn;
+import keyhub.data.function.KhCellSelector;
 import keyhub.data.row.KhRow;
 import keyhub.data.schema.KhSchema;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
+import static keyhub.data.function.KhColumnSelector.column;
+import static keyhub.data.function.KhRowPredicate.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -152,6 +158,199 @@ public class KhTableTest {
             assertEquals("B", result.get(0).get("column2"));
             assertEquals("C", result.get(0).get("column3"));
         }
+    }
+
+    @Nested
+    class KhTableQueryTest {
+
+        @Test
+        public void testTblStream(){
+            KhSchema schema = KhSchema.from(List.of(
+                    KhColumn.of("name", String.class),
+                    KhColumn.of("age", Integer.class),
+                    KhColumn.of("height", Double.class),
+                    KhColumn.of("weight", Float.class)
+            ));
+            KhTable tbl = KhTable.of(schema, List.of(
+                    List.of("Alice", 20, 160.0, 50.0f),
+                    List.of("Bob", 30, 170.0, 60.0f),
+                    List.of("Charlie", 40, 180.0, 70.0f)
+            ));
+
+            KhTable result = tbl.query()
+                    .select("name", "age", "height")
+                    .select(
+                            KhColumn.of("name", String.class),
+                            KhColumn.of("height", String.class),
+                            KhColumn.of("age", Integer.class)
+                    )
+                    .select(
+                            KhCellSelector.column("name"),
+                            KhCellSelector.column("age")
+                    )
+                    .where(is("age", age -> (Integer) age.getValue() > 20))
+                    .toTbl();
+            System.out.println(result);
+            assertEquals(2, result.count());
+        }
+    }
+
+    @Nested
+    class TblInnerJoinTest {
+
+        KhTable mockTbl1;
+        KhTable mockTbl2;
+
+        @BeforeEach
+        public void before(){
+            KhSchema mockSchema = KhSchema.builder()
+                    .addColumn("column1", String.class)
+                    .addColumn("column3", Integer.class)
+                    .addColumn("column2", LocalDateTime.class)
+                    .build();
+            mockTbl1 = KhTable.builder(mockSchema)
+                    .addRawRow(List.of("value1", 1, LocalDateTime.of(2021, 1, 1, 0, 0)))
+                    .addRawRow(List.of("value2", 2, LocalDateTime.of(2021, 1, 2, 0, 0)))
+                    .addRawRow(Arrays.asList("value3", 3, LocalDateTime.of(2021, 1, 3, 0, 0)))
+                    .build();
+            KhSchema mockSchema2 = KhSchema.builder()
+                    .addColumn("column3", Integer.class)
+                    .addColumn("column4", String.class)
+                    .build();
+            mockTbl2 = KhTable.builder(mockSchema2)
+                    .addRawRow(List.of(1, "A"))
+                    .addRawRow(List.of(2, "B"))
+                    .build();
+        }
+
+        @Test
+        void testInnerJoinSuccess() {
+            KhTable left = mockTbl1;
+            KhTable right = mockTbl2;
+
+            KhTable result = left.innerJoin(right)
+                    .on("column3")
+                    .selectAll()
+                    .toOne();
+
+            Map<String, List<Object>> expected = new HashMap<>();
+            expected.put("column1", Arrays.asList("value1", "value2"));
+            expected.put("column2", Arrays.asList(
+                    LocalDateTime.of(2021, 1, 1, 0, 0),
+                    LocalDateTime.of(2021, 1, 2, 0, 0)
+            ));
+            expected.put("column3", Arrays.asList(1, 2));
+            expected.put("column4", Arrays.asList("A", "B"));
+            Assertions.assertEquals(expected, result.toColumnListMap());
+        }
+
+        @Test
+        void testInnerJoinByTblCellSelector(){
+            KhTable left = mockTbl1;
+            KhTable right = mockTbl2;
+
+            KhTable result = left.innerJoin(right)
+                    .on("column3")
+                    .selectFromLeft(
+                            column("column1"),
+                            column("column2")
+                    )
+                    .selectFromRight(
+                            column("column3"),
+                            column("column4")
+                    )
+                    .toOne();
+
+            Map<String, List<Object>> expected = new HashMap<>();
+            expected.put("column1", Arrays.asList("value1", "value2"));
+            expected.put("column2", Arrays.asList(
+                    LocalDateTime.of(2021, 1, 1, 0, 0),
+                    LocalDateTime.of(2021, 1, 2, 0, 0)
+            ));
+            expected.put("column3", Arrays.asList(1, 2));
+            expected.put("column4", Arrays.asList("A", "B"));
+            Assertions.assertEquals(expected, result.toColumnListMap());
+        }
+    }
+
+    @Nested
+    class TblLeftJoinTest {
+
+        KhTable mockTbl1;
+        KhTable mockTbl2;
+
+        @BeforeEach
+        public void before(){
+            KhSchema mockSchema = KhSchema.builder()
+                    .addColumn("column1", String.class)
+                    .addColumn("column3", Integer.class)
+                    .addColumn("column2", LocalDateTime.class)
+                    .build();
+            mockTbl1 = KhTable.builder(mockSchema)
+                    .addRawRow(List.of("value1", 1, LocalDateTime.of(2021, 1, 1, 0, 0)))
+                    .addRawRow(List.of("value2", 2, LocalDateTime.of(2021, 1, 2, 0, 0)))
+                    .addRawRow(Arrays.asList("value3", 3, LocalDateTime.of(2021, 1, 3, 0, 0)))
+                    .build();
+            KhSchema mockSchema2 = KhSchema.builder()
+                    .addColumn("column3", Integer.class)
+                    .addColumn("column4", String.class)
+                    .build();
+            mockTbl2 = KhTable.builder(mockSchema2)
+                    .addRawRow(List.of(1, "A"))
+                    .addRawRow(List.of(2, "B"))
+                    .build();
+        }
+
+        @Test
+        void testLeftJoinSuccess() {
+            KhTable left = mockTbl1;
+            KhTable right = mockTbl2;
+
+            KhTable result = left.leftJoin(right)
+                    .on("column3")
+                    .selectAll()
+                    .toOne();
+
+            Map<String, List<Object>> expected = new HashMap<>();
+            expected.put("column1", Arrays.asList("value1", "value2", "value3"));
+            expected.put("column2", Arrays.asList(
+                    LocalDateTime.of(2021, 1, 1, 0, 0),
+                    LocalDateTime.of(2021, 1, 2, 0, 0),
+                    LocalDateTime.of(2021, 1, 3, 0, 0))
+            );
+            expected.put("column3", Arrays.asList(1, 2, null));
+            expected.put("column4", Arrays.asList("A", "B", null));
+            Assertions.assertEquals(expected, result.toColumnListMap());
+        }
+
+
+        @Test
+        void testInnerJoinByTblCellSelector(){
+            KhTable left = mockTbl1;
+            KhTable right = mockTbl2;
+
+            KhTable result = left.leftJoin(right)
+                    .on("column3")
+                    .selectFromLeft(
+                            column("column1"),
+                            column("column2")
+                    )
+                    .selectFromRight(
+                            column("column4")
+                    )
+                    .toOne();
+
+            Map<String, List<Object>> expected = new HashMap<>();
+            expected.put("column1", Arrays.asList("value1", "value2", "value3"));
+            expected.put("column2", Arrays.asList(
+                    LocalDateTime.of(2021, 1, 1, 0, 0),
+                    LocalDateTime.of(2021, 1, 2, 0, 0),
+                    LocalDateTime.of(2021, 1, 3, 0, 0))
+            );
+            expected.put("column4", Arrays.asList("A", "B", null));
+            Assertions.assertEquals(expected, result.toColumnListMap());
+        }
+
     }
 
 }

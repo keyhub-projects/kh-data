@@ -40,7 +40,7 @@ public interface KhSchema extends Iterable<KhColumn> {
     static KhSchema from(KhSchema schema) {
         return KhSchemaImplement.from(schema);
     }
-    static KhSchemaValue.TblSchemaValueBuilder builder() {
+    static KhSchemaValue.KhSchemaValueBuilder builder() {
         return KhSchemaImplement.builder();
     }
 
@@ -60,4 +60,6 @@ public interface KhSchema extends Iterable<KhColumn> {
     int getColumnIndex(String columnName);
 
     boolean contains(String column);
+
+    KhSchema select(String... columns);
 }

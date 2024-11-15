@@ -22,37 +22,17 @@
  * SOFTWARE.
  */
 
-package keyhub.data.stream;
+package keyhub.data.stream.join.inner;
 
-import keyhub.data.column.KhColumn;
-import keyhub.data.function.KhCellSelector;
-import keyhub.data.function.KhRowPredicate;
-import keyhub.data.join.KhJoinable;
-import keyhub.data.row.KhRow;
-import keyhub.data.schema.KhSchema;
-import keyhub.data.schema.KhSchemaBasedStructure;
+import keyhub.data.stream.KhStream;
 import keyhub.data.stream.join.KhStreamJoin;
 import keyhub.data.table.KhTable;
-import java.util.List;
-import java.util.stream.BaseStream;
-import java.util.stream.Stream;
 
-public interface KhStream extends BaseStream<KhRow, KhStream>, KhSchemaBasedStructure, KhJoinable {
-    static KhStream from(KhTable tbl){
-        return KhStreamImplement.from(tbl);
+public interface KhStreamInnerJoin extends KhStreamJoin {
+    static KhStreamJoin of(KhStream left, KhTable right) {
+        return new KhLeftStreamInnerJoinImplement(left, right);
     }
-    static KhStream of(KhSchema schema, Stream<KhRow> rowStream) {
-        return KhStreamImplement.of(schema, rowStream);
+    static KhStreamJoin of(KhTable left, KhStream right){
+        return new KhRightStreamInnerJoinImplement(left, right);
     }
-
-    KhStream select(String... columns);
-    KhStream select(KhColumn<?>... columns);
-    KhStream select(KhCellSelector... selector);
-    KhStream where(KhRowPredicate filter);
-    KhStreamJoin leftJoin(KhTable tbl);
-    KhStreamJoin innerJoin(KhTable tbl);
-
-    Stream<KhRow> getRowStream();
-    List<KhRow> toList();
-    KhTable toTable();
 }

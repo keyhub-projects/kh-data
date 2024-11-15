@@ -22,13 +22,13 @@
  * SOFTWARE.
  */
 
-package keyhub.data.table.join.inner;
+package keyhub.data.table.join.left;
 
 import keyhub.data.table.KhTable;
-import keyhub.data.table.join.KhTableJoinFactory;
+import keyhub.data.table.join.KhTableJoin;
 
-public interface KhTableInnerJoinFactory extends KhTableJoinFactory {
-    static KhTableJoinFactory of(KhTable left, KhTable right) {
-        return new KhTableInnerJoinFactoryImplement(left, right);
+public interface KhTableLeftJoin extends KhTableJoin {
+    static KhTableJoin of(KhTable left, KhTable right) {
+        return new KhTableLeftJoinImplement(left, right);
     }
 }

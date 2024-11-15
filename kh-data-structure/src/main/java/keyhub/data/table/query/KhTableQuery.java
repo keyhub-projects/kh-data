@@ -22,37 +22,25 @@
  * SOFTWARE.
  */
 
-package keyhub.data.stream;
+package keyhub.data.table.query;
 
 import keyhub.data.column.KhColumn;
-import keyhub.data.function.KhCellSelector;
-import keyhub.data.function.KhRowPredicate;
-import keyhub.data.join.KhJoinable;
 import keyhub.data.row.KhRow;
-import keyhub.data.schema.KhSchema;
-import keyhub.data.schema.KhSchemaBasedStructure;
-import keyhub.data.stream.join.KhStreamJoin;
 import keyhub.data.table.KhTable;
-import java.util.List;
-import java.util.stream.BaseStream;
+import keyhub.data.function.KhRowPredicate;
+import keyhub.data.function.KhCellSelector;
+import keyhub.data.schema.KhSchema;
+
 import java.util.stream.Stream;
 
-public interface KhStream extends BaseStream<KhRow, KhStream>, KhSchemaBasedStructure, KhJoinable {
-    static KhStream from(KhTable tbl){
-        return KhStreamImplement.from(tbl);
+public interface KhTableQuery {
+    static KhTableQuery from(Stream<KhRow> rowStream) {
+        return KhTableQueryImplement.from(rowStream);
     }
-    static KhStream of(KhSchema schema, Stream<KhRow> rowStream) {
-        return KhStreamImplement.of(schema, rowStream);
-    }
-
-    KhStream select(String... columns);
-    KhStream select(KhColumn<?>... columns);
-    KhStream select(KhCellSelector... selector);
-    KhStream where(KhRowPredicate filter);
-    KhStreamJoin leftJoin(KhTable tbl);
-    KhStreamJoin innerJoin(KhTable tbl);
-
-    Stream<KhRow> getRowStream();
-    List<KhRow> toList();
-    KhTable toTable();
+    KhSchema getSchema();
+    KhTable toTbl();
+    KhTableQuery select(String... columns);
+    KhTableQuery select(KhColumn<?>... columns);
+    KhTableQuery select(KhCellSelector... selector);
+    KhTableQuery where(KhRowPredicate filter);
 }

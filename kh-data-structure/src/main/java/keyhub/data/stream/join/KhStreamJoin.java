@@ -22,13 +22,24 @@
  * SOFTWARE.
  */
 
-package keyhub.data.table.join.left;
+package keyhub.data.stream.join;
 
-import keyhub.data.table.KhTable;
-import keyhub.data.table.join.KhTableJoinFactory;
+import keyhub.data.function.KhColumnSelector;
+import keyhub.data.join.KhJoin;
+import keyhub.data.stream.KhStream;
 
-public interface KhTableLeftJoinFactory extends KhTableJoinFactory {
-    static KhTableJoinFactory of(KhTable left, KhTable right) {
-        return new KhTableLeftJoinFactoryImplement(left, right);
-    }
+public interface KhStreamJoin extends KhJoin<KhStream, KhStreamJoin> {
+
+    KhStreamJoin on(String key);
+    KhStreamJoin on(String leftKey, String rightKey);
+
+    KhStreamJoin selectFromLeft(KhColumnSelector... selectors);
+    KhStreamJoin selectFromLeft(String column);
+    KhStreamJoin selectFromLeft(String... columns);
+    KhStreamJoin selectAllFromLeft();
+
+    KhStreamJoin selectFromRight(KhColumnSelector... selectors);
+    KhStreamJoin selectFromRight(String column);
+    KhStreamJoin selectFromRight(String... columns);
+    KhStreamJoin selectAllFromRight();
 }

@@ -28,6 +28,7 @@ import keyhub.data.cell.KhCell;
 import keyhub.data.row.KhRow;
 import keyhub.data.schema.KhSchema;
 import keyhub.data.column.KhColumn;
+import keyhub.data.stream.KhStream;
 
 import java.util.*;
 

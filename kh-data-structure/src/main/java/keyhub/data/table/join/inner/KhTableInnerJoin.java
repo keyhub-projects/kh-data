@@ -24,33 +24,11 @@
 
 package keyhub.data.table.join.inner;
 
-
 import keyhub.data.table.KhTable;
-import keyhub.data.table.join.KhTableJoinFactoryImplement;
+import keyhub.data.table.join.KhTableJoin;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class KhTableInnerJoinFactoryImplement extends KhTableJoinFactoryImplement implements KhTableInnerJoinFactory {
-
-    public KhTableInnerJoinFactoryImplement(KhTable left, KhTable right) {
-        super(left, right);
-    }
-
-    @Override
-    public List<List<Object>> computeJoinRawResult(){
-        List<List<Object>> rows = new ArrayList<>();
-        for(int i = 0; i < this.left.count(); i++){
-            for(int j = 0; j < right.count(); j++){
-                boolean isJoined = isJoinedRow(this.left.getRow(i), this.right.getRow(j));
-                if(isJoined){
-                    List<Object> row = new ArrayList<>();
-                    row.addAll(this.left.getRawRow(i));
-                    row.addAll(this.right.getRawRow(j));
-                    rows.add(row);
-                }
-            }
-        }
-        return rows;
+public interface KhTableInnerJoin extends KhTableJoin {
+    static KhTableJoin of(KhTable left, KhTable right) {
+        return new KhTableInnerJoinImplement(left, right);
     }
 }

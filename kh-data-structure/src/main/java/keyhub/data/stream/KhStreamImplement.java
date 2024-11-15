@@ -24,15 +24,18 @@
 
 package keyhub.data.stream;
 
+import keyhub.data.cell.KhCell;
 import keyhub.data.column.KhColumn;
 import keyhub.data.function.KhCellSelector;
 import keyhub.data.function.KhRowPredicate;
 import keyhub.data.row.KhRow;
 import keyhub.data.schema.KhSchema;
+import keyhub.data.stream.join.KhStreamJoin;
+import keyhub.data.stream.join.inner.KhStreamInnerJoin;
+import keyhub.data.stream.join.left.KhStreamLeftJoin;
 import keyhub.data.table.KhTable;
 
 import java.util.*;
-import java.util.function.*;
 import java.util.stream.*;
 
 public class KhStreamImplement implements KhStream {
@@ -52,97 +55,120 @@ public class KhStreamImplement implements KhStream {
     }
 
     @Override
+    public KhColumn<?> getColumnSchema(int index) {
+        return this.SCHEMA.getColumnSchema(index);
+    }
+    @Override
     public KhSchema getSchema() {
         return this.SCHEMA;
     }
-
     @Override
-    public Stream<KhRow> filter(Predicate<? super KhRow> predicate) {
-        return this.ROW_STREAM.filter(predicate);
+    public int getColumnSize() {
+        return this.SCHEMA.getColumnSize();
+    }
+    @Override
+    public String getColumnName(int index) {
+        return SCHEMA.getColumnNames().get(index);
+    }
+    @Override
+    public Class<?> getColumnType(int index) {
+        return this.SCHEMA.getColumnTypes().get(this.SCHEMA.getColumnNames().get(index));
+    }
+    @Override
+    public int getColumnIndex(String column) {
+        return this.SCHEMA.getColumnIndex(column);
     }
 
     @Override
-    public <R> Stream<R> map(Function<? super KhRow, ? extends R> mapper) {
-        return this.ROW_STREAM.map(mapper);
-    }
-
-    @Override
-    public Stream<KhRow> limit(long maxSize) {
-        return this.ROW_STREAM.limit(maxSize);
+    public Stream<KhRow> getRowStream() {
+        return this.ROW_STREAM;
     }
 
     @Override
     public Iterator<KhRow> iterator() {
         return this.ROW_STREAM.iterator();
     }
-
     @Override
     public Spliterator<KhRow> spliterator() {
         return this.ROW_STREAM.spliterator();
     }
-
     @Override
-    public Stream<KhRow> onClose(Runnable closeHandler) {
-        return this.ROW_STREAM.onClose(closeHandler);
+    public boolean isParallel() {
+        return this.ROW_STREAM.isParallel();
     }
-
+    @Override
+    public KhStream sequential() {
+        return KhStream.of(this.SCHEMA, this.ROW_STREAM.sequential());
+    }
+    @Override
+    public KhStream parallel() {
+        return KhStream.of(this.SCHEMA, this.ROW_STREAM.parallel());
+    }
+    @Override
+    public KhStream unordered() {
+        return KhStream.of(this.SCHEMA, this.ROW_STREAM.unordered());
+    }
+    @Override
+    public KhStream onClose( Runnable closeHandler) {
+        return KhStream.of(this.SCHEMA, this.ROW_STREAM.onClose(closeHandler));
+    }
     @Override
     public void close() {
         this.ROW_STREAM.close();
     }
 
     @Override
-    public <R> R collect(Supplier<R> supplier,
-                         BiConsumer<R, KhRow> accumulator,
-                         BiConsumer<R, R> combiner){
-        return ROW_STREAM.collect(supplier, accumulator, combiner);
-    }
-
-    @Override
-    public <R, A> R collect(Collector<KhRow, A, R> collector){
-        return ROW_STREAM.collect(collector);
-    }
-
-
-    /// Implement KhStream
-    @Override
     public KhStream select(String... columns) {
-        // todo
-        return null;
+        KhSchema schema = this.SCHEMA.select(columns);
+        Stream<KhRow> stream = this.ROW_STREAM.map(row -> row.select(columns));
+        return KhStream.of(schema, stream);
     }
-
     @Override
     public KhStream select(KhColumn<?>... columns) {
-        // todo
-        return null;
+        KhSchema schema = KhSchema.from(List.of(columns));
+        Stream<KhRow> stream = this.ROW_STREAM.map(row -> row.select(columns));
+        return KhStream.of(schema, stream);
     }
-
     @Override
     public KhStream select(KhCellSelector... selector) {
-        // todo
-        return null;
+        Stream<KhRow> rowStream = ROW_STREAM.map(row -> {
+            List<KhCell> cells = Stream.of(selector)
+                    .map(s -> s.apply(row))
+                    .collect(Collectors.toList());
+            return KhRow.of(cells);
+        });
+        return KhStream.of(this.SCHEMA, rowStream);
     }
 
     @Override
     public KhStream where(KhRowPredicate filter) {
-        // todo
-        return null;
+        Stream<KhRow> stream = this.ROW_STREAM.filter(filter);
+        return KhStream.of(this.SCHEMA, stream);
     }
 
     @Override
-    public KhStream leftJoin(KhTable tbl) {
-        // todo
-        return null;
+    public KhStreamJoin leftJoin(KhTable tbl) {
+        return KhStreamLeftJoin.of(this, tbl);
     }
-
     @Override
-    public KhStream rightJoin(KhTable tbl) {
-        // todo
-        return null;
+    public KhStreamJoin innerJoin(KhTable tbl) {
+        return KhStreamInnerJoin.of(this, tbl);
     }
 
     @Override
     public List<KhRow> toList(){
-        return ROW_STREAM.toList();
+        try{
+            return this.ROW_STREAM.toList();
+        }finally {
+            close();
+        }
+    }
+    @Override
+    public KhTable toTable() {
+        try{
+            return KhTable.from(this);
+        }finally {
+            close();
+        }
     }
 }

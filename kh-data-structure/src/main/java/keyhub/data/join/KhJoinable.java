@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package keyhub.data.stream.query;
+package keyhub.data.join;
 
-public interface KhStreamMapper {
+public interface KhJoinable {
 }

@@ -34,14 +34,14 @@ import keyhub.data.schema.KhSchemaValue;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class KhTableJoinFactoryImplement implements KhTableJoinFactory {
+public abstract class KhTableJoinImplement implements KhTableJoin {
     protected final KhTable left;
     protected final KhTable right;
     protected final List<List<Integer>> selectColumns;
     protected final List<List<Integer>> joinColumns;
 
 
-    public KhTableJoinFactoryImplement(KhTable left, KhTable right) {
+    public KhTableJoinImplement(KhTable left, KhTable right) {
         this.left = left;
         this.right = right;
         this.selectColumns = new ArrayList<>();
@@ -53,12 +53,11 @@ public abstract class KhTableJoinFactoryImplement implements KhTableJoinFactory 
     }
 
     @Override
-    public KhTableJoinFactory on(String key){
+    public KhTableJoin on(String key){
         return on(key, key);
     }
-
     @Override
-    public KhTableJoinFactory on(String leftKey, String rightKey){
+    public KhTableJoin on(String leftKey, String rightKey){
         int leftIndex = getColumnIndexFromLeft(leftKey);
         if(leftIndex == -1){
             throw new IllegalArgumentException("Key not found");
@@ -73,7 +72,7 @@ public abstract class KhTableJoinFactoryImplement implements KhTableJoinFactory 
     }
 
     @Override
-    public KhTable toTbl() {
+    public KhTable toOne() {
         computePreProcess();
         List<List<Object>> rawRows = computeJoinRawResult();
         KhSchema schema = computeJoinSchema();
@@ -93,7 +92,7 @@ public abstract class KhTableJoinFactoryImplement implements KhTableJoinFactory 
         });
     }
     protected KhSchema computeJoinSchema(){
-        KhSchemaValue.TblSchemaValueBuilder builder = KhSchemaValue.builder();
+        KhSchemaValue.KhSchemaValueBuilder builder = KhSchemaValue.builder();
         selectColumns.get(0).forEach(index -> {
             KhColumn<?> columnSchema = left.getColumnSchema(index);
             builder.addColumn(columnSchema);
@@ -126,23 +125,21 @@ public abstract class KhTableJoinFactoryImplement implements KhTableJoinFactory 
     }
 
     @Override
-    public KhTableJoinFactory selectAll(){
+    public KhTableJoin selectAll(){
         selectAllFromLeft();
         selectAllFromRight();
         return this;
     }
-
     @Override
-    public KhTableJoinFactory selectFromLeft(KhColumnSelector... selectors){
+    public KhTableJoin selectFromLeft(KhColumnSelector... selectors){
         for(KhColumnSelector selector : selectors){
             KhColumn<?> column = selector.apply(left.getSchema());
             selectFromLeft(column.getColumnName());
         }
         return this;
     }
-
     @Override
-    public KhTableJoinFactory selectFromLeft(String column){
+    public KhTableJoin selectFromLeft(String column){
         int index = getColumnIndexFromLeft(column);
         if(index == -1){
             throw new IllegalArgumentException("Left Key not found");
@@ -151,23 +148,22 @@ public abstract class KhTableJoinFactoryImplement implements KhTableJoinFactory 
         return this;
     }
     @Override
-    public KhTableJoinFactory selectFromLeft(String... columns){
+    public KhTableJoin selectFromLeft(String... columns){
         for(String column : columns){
             selectFromLeft(column);
         }
         return this;
     }
     @Override
-    public KhTableJoinFactory selectAllFromLeft(){
+    public KhTableJoin selectAllFromLeft(){
         this.selectColumns.getFirst().clear();
         for(int i = 0; i < left.getColumnSize(); i++){
             this.selectColumns.getFirst().add(i);
         }
         return this;
     }
-
     @Override
-    public KhTableJoinFactory selectFromRight(KhColumnSelector... selectors){
+    public KhTableJoin selectFromRight(KhColumnSelector... selectors){
         for(KhColumnSelector selector : selectors){
             KhColumn<?> column = selector.apply(right.getSchema());
             selectFromRight(column.getColumnName());
@@ -175,7 +171,7 @@ public abstract class KhTableJoinFactoryImplement implements KhTableJoinFactory 
         return this;
     }
     @Override
-    public KhTableJoinFactory selectFromRight(String column){
+    public KhTableJoin selectFromRight(String column){
         int index = getColumnIndexFromRight(column);
         if(index == -1){
             throw new IllegalArgumentException("Right Key not found");
@@ -184,14 +180,14 @@ public abstract class KhTableJoinFactoryImplement implements KhTableJoinFactory 
         return this;
     }
     @Override
-    public KhTableJoinFactory selectFromRight(String... columns){
+    public KhTableJoin selectFromRight(String... columns){
         for(String column : columns){
             selectFromRight(column);
         }
         return this;
     }
     @Override
-    public KhTableJoinFactory selectAllFromRight(){
+    public KhTableJoin selectAllFromRight(){
         this.selectColumns.get(1).clear();
         for(int i = 0; i < right.getColumnSize(); i++){
             this.selectColumns.get(1).add(i);

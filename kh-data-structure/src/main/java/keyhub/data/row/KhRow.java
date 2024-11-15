@@ -25,6 +25,7 @@
 package keyhub.data.row;
 
 import keyhub.data.cell.KhCell;
+import keyhub.data.column.KhColumn;
 import keyhub.data.schema.KhSchema;
 
 import java.util.Arrays;
@@ -51,4 +52,8 @@ public interface KhRow extends Iterable<KhCell> {
     <T> KhCell<T> getCell(int columnIndex);
 
     List<KhCell> getCells();
+
+
+    KhRow select(String[] columns);
+    KhRow select(KhColumn[] columns);
 }

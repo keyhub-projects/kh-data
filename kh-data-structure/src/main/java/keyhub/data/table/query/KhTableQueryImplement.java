@@ -37,14 +37,14 @@ import java.util.List;
 import java.util.Spliterator;
 import java.util.stream.*;
 
-public class KhTableQueryFactoryImplement implements KhTableQueryFactory {
+public class KhTableQueryImplement implements KhTableQuery {
     private Stream<KhRow> rowStream;
 
-    public KhTableQueryFactoryImplement(Stream<KhRow> rowStream) {
+    public KhTableQueryImplement(Stream<KhRow> rowStream) {
         this.rowStream = rowStream;
     }
-    public static KhTableQueryFactory from(Stream<KhRow> rowStream) {
-        return new KhTableQueryFactoryImplement(rowStream);
+    public static KhTableQuery from(Stream<KhRow> rowStream) {
+        return new KhTableQueryImplement(rowStream);
     }
 
     @Override
@@ -65,7 +65,7 @@ public class KhTableQueryFactoryImplement implements KhTableQueryFactory {
     }
 
     @Override
-    public KhTableQueryFactory select(String... columnNames) {
+    public KhTableQuery select(String... columnNames) {
         rowStream = rowStream.map(row -> {
             List<KhCell> cells = Stream.of(columnNames)
                     .map(columnName -> row.findCell(columnName).orElseThrow())
@@ -76,7 +76,7 @@ public class KhTableQueryFactoryImplement implements KhTableQueryFactory {
     }
 
     @Override
-    public KhTableQueryFactory select(KhColumn... columns) {
+    public KhTableQuery select(KhColumn... columns) {
         rowStream = rowStream.map(row -> {
             KhSchema schema = KhSchema.from(List.of(columns));
             List<KhCell> cells = Stream.of(columns)
@@ -88,7 +88,7 @@ public class KhTableQueryFactoryImplement implements KhTableQueryFactory {
     }
 
     @Override
-    public KhTableQueryFactory select(KhCellSelector... selector) {
+    public KhTableQuery select(KhCellSelector... selector) {
         rowStream = rowStream.map(row -> {
             List<KhCell> cells = Stream.of(selector)
                     .map(s -> s.apply(row))
@@ -99,7 +99,7 @@ public class KhTableQueryFactoryImplement implements KhTableQueryFactory {
     }
 
     @Override
-    public KhTableQueryFactory where(KhRowPredicate filter) {
+    public KhTableQuery where(KhRowPredicate filter) {
         rowStream = rowStream.filter(filter);
         return this;
     }
@@ -116,22 +116,22 @@ public class KhTableQueryFactoryImplement implements KhTableQueryFactory {
         return rowStream.isParallel();
     }
 
-    public KhTableQueryFactory sequential() {
+    public KhTableQuery sequential() {
         rowStream.sequential();
         return this;
     }
 
-    public KhTableQueryFactory parallel() {
+    public KhTableQuery parallel() {
         rowStream.parallel();
         return this;
     }
 
-    public KhTableQueryFactory unordered() {
+    public KhTableQuery unordered() {
         rowStream = rowStream.unordered();
         return this;
     }
 
-    public KhTableQueryFactory onClose(Runnable closeHandler) {
+    public KhTableQuery onClose(Runnable closeHandler) {
         rowStream = rowStream.onClose(closeHandler);
         return this;
     }

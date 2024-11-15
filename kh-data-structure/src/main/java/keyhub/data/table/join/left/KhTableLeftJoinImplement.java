@@ -25,15 +25,15 @@
 package keyhub.data.table.join.left;
 
 import keyhub.data.table.KhTable;
-import keyhub.data.table.join.KhTableJoinFactoryImplement;
+import keyhub.data.table.join.KhTableJoinImplement;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class KhTableLeftJoinFactoryImplement extends KhTableJoinFactoryImplement implements KhTableLeftJoinFactory {
+public class KhTableLeftJoinImplement extends KhTableJoinImplement implements KhTableLeftJoin {
 
 
-    public KhTableLeftJoinFactoryImplement(KhTable left, KhTable right) {
+    public KhTableLeftJoinImplement(KhTable left, KhTable right) {
         super(left, right);
     }
 

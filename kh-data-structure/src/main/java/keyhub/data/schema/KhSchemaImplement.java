@@ -35,8 +35,8 @@ public abstract class KhSchemaImplement implements KhSchema {
     public static KhSchema from(KhSchema schema) {
         return new KhSchemaValue(schema);
     }
-    public static KhSchemaValue.TblSchemaValueBuilder builder(){
-        return new KhSchemaValue.TblSchemaValueBuilder();
+    public static KhSchemaValue.KhSchemaValueBuilder builder(){
+        return new KhSchemaValue.KhSchemaValueBuilder();
     }
     public static KhSchema empty(){
         return new KhSchemaValue();
@@ -112,5 +112,17 @@ public abstract class KhSchemaImplement implements KhSchema {
     @Override
     public Iterator<KhColumn> iterator(){
         return this.getColumnSchemas().iterator();
+    }
+    @Override
+    public KhSchema select(String... columns){
+        List<KhColumn> selectedColumns = new ArrayList<>();
+        for(String column : columns){
+            int index = getColumnIndex(column);
+            if(index == -1){
+                throw new IllegalArgumentException("Column not found");
+            }
+            selectedColumns.add(getColumnSchema(index));
+        }
+        return from(selectedColumns);
     }
 }
