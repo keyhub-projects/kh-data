@@ -9,9 +9,8 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/kh-data-core" />
             <option value="$PROJECT_DIR$/kh-data-example" />
-            <option value="$PROJECT_DIR$/kh-data-stream" />
+            <option value="$PROJECT_DIR$/kh-data-structure" />
           </set>
         </option>
       </GradleProjectSettings>
