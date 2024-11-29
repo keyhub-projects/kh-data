@@ -28,9 +28,18 @@ import keyhub.data.structure.cell.KhCell;
 
 import java.util.function.Predicate;
 
-
+/**
+ * Functional interface representing a predicate (boolean-valued function) of a KhCell.
+ */
 @FunctionalInterface
 public interface KhCellPredicate extends Predicate<KhCell<?>> {
+
+    /**
+     * Evaluates this predicate on the given cell.
+     *
+     * @param cell the input cell
+     * @return true if the input cell matches the predicate, otherwise false
+     */
     @Override
     boolean test(KhCell cell);
 }

@@ -26,11 +26,54 @@ package keyhub.data.structure.schema;
 
 import keyhub.data.structure.column.KhColumn;
 
+/**
+ * Interface representing a structure based on a schema, providing methods to access column schemas and metadata.
+ */
 public interface KhSchemaBasedStructure {
+
+    /**
+     * Gets the schema of a column by its index.
+     *
+     * @param index the index of the column
+     * @return the column schema
+     */
     KhColumn<?> getColumnSchema(int index);
+
+    /**
+     * Gets the schema of the structure.
+     *
+     * @return the schema
+     */
     KhSchema getSchema();
+
+    /**
+     * Gets the number of columns in the structure.
+     *
+     * @return the number of columns
+     */
     int getColumnSize();
+
+    /**
+     * Gets the name of a column by its index.
+     *
+     * @param index the index of the column
+     * @return the name of the column
+     */
     String getColumnName(int index);
+
+    /**
+     * Gets the type of a column by its index.
+     *
+     * @param index the index of the column
+     * @return the type of the column
+     */
     Class<?> getColumnType(int index);
+
+    /**
+     * Gets the index of a column by its name.
+     *
+     * @param column the name of the column
+     * @return the index of the column
+     */
     int getColumnIndex(String column);
 }

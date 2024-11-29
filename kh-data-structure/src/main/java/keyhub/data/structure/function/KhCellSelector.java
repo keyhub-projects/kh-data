@@ -29,11 +29,27 @@ import keyhub.data.structure.row.KhRow;
 
 import java.util.function.Function;
 
+/**
+ * Functional interface representing a selector that extracts a KhCell from a KhRow.
+ */
 @FunctionalInterface
 public interface KhCellSelector extends Function<KhRow, KhCell<?>> {
+
+    /**
+     * Applies this selector to the given row.
+     *
+     * @param row the input row
+     * @return the selected cell
+     */
     @Override
     KhCell<?> apply(KhRow row);
 
+    /**
+     * Creates a cell selector for the specified column name.
+     *
+     * @param columnName the name of the column
+     * @return a cell selector for the specified column
+     */
     static KhCellSelector column(String columnName) {
         return row -> row.findCell(columnName).orElse(null);
     }

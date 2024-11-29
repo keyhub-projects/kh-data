@@ -24,5 +24,8 @@
 
 package keyhub.data.structure.join;
 
+/**
+ * Interface representing a joinable entity in a data structure.
+ */
 public interface KhJoinable {
 }
