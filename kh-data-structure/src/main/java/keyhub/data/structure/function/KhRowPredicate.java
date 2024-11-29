@@ -28,16 +28,41 @@ import keyhub.data.structure.row.KhRow;
 
 import java.util.function.Predicate;
 
+/**
+ * Functional interface representing a predicate (boolean-valued function) of a KhRow.
+ */
 @FunctionalInterface
 public interface KhRowPredicate extends Predicate<KhRow> {
+
+    /**
+     * Evaluates this predicate on the given row.
+     *
+     * @param row the input row
+     * @return true if the input row matches the predicate, otherwise false
+     */
     @Override
     boolean test(KhRow row);
 
+    /**
+     * Creates a row predicate that evaluates a cell in the specified column using the given cell predicate.
+     *
+     * @param columnName the name of the column
+     * @param predicate the cell predicate
+     * @return a row predicate that evaluates the specified column
+     */
     static KhRowPredicate is(String columnName, KhCellPredicate predicate) {
         return tblRow -> tblRow.findCell(columnName)
                 .map(predicate::test)
                 .orElse(false);
     }
+
+    /**
+     * Creates a row predicate that evaluates a cell at the specified column index using the given cell predicate.
+     *
+     * @param columnIndex the index of the column
+     * @param predicate the cell predicate
+     * @return a row predicate that evaluates the specified column index
+     */
     static KhRowPredicate is(int columnIndex, KhCellPredicate predicate) {
         return tblRow -> predicate.test(tblRow.getCell(columnIndex));
     }

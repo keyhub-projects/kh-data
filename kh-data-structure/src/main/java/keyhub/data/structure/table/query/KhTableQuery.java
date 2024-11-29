@@ -33,14 +33,64 @@ import keyhub.data.structure.schema.KhSchema;
 
 import java.util.stream.Stream;
 
+/**
+ * Interface for querying a KhTable, providing methods to select columns, filter rows, and convert the query result to a table.
+ */
 public interface KhTableQuery {
+
+    /**
+     * Creates a KhTableQuery from a stream of KhRow.
+     *
+     * @param rowStream the stream of KhRow to query
+     * @return a KhTableQuery instance
+     */
     static KhTableQuery from(Stream<KhRow> rowStream) {
         return KhTableQueryImplement.from(rowStream);
     }
+
+    /**
+     * Returns the schema of the table being queried.
+     *
+     * @return the KhSchema of the table
+     */
     KhSchema getSchema();
+
+    /**
+     * Converts the query result to a KhTable.
+     *
+     * @return a KhTable instance containing the query result
+     */
     KhTable toTbl();
+
+    /**
+     * Selects columns by their names.
+     *
+     * @param columns the names of the columns to select
+     * @return the current KhTableQuery instance
+     */
     KhTableQuery select(String... columns);
+
+    /**
+     * Selects columns by their KhColumn instances.
+     *
+     * @param columns the KhColumn instances to select
+     * @return the current KhTableQuery instance
+     */
     KhTableQuery select(KhColumn<?>... columns);
+
+    /**
+     * Selects columns using KhCellSelector instances.
+     *
+     * @param selector the KhCellSelector instances to use for selection
+     * @return the current KhTableQuery instance
+     */
     KhTableQuery select(KhCellSelector... selector);
+
+    /**
+     * Filters rows based on a KhRowPredicate.
+     *
+     * @param filter the KhRowPredicate to use for filtering rows
+     * @return the current KhTableQuery instance
+     */
     KhTableQuery where(KhRowPredicate filter);
 }

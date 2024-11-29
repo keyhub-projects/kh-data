@@ -13,7 +13,7 @@
 
 ## Gradle
 ```gradle
-implementation 'io.github.keyhub-projects:kh-data-structure:2.0.1'
+implementation 'io.github.keyhub-projects:kh-data-structure:1.0.0'
 ```
 
 # Structure

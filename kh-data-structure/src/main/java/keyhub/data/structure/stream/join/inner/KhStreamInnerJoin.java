@@ -28,10 +28,29 @@ import keyhub.data.structure.stream.KhStream;
 import keyhub.data.structure.stream.join.KhStreamJoin;
 import keyhub.data.structure.table.KhTable;
 
+/**
+ * Interface representing an inner join operation between a KhStream and a KhTable.
+ */
 public interface KhStreamInnerJoin extends KhStreamJoin {
+
+    /**
+     * Creates an inner join between a KhStream and a KhTable.
+     *
+     * @param left the left stream in the join operation
+     * @param right the right table in the join operation
+     * @return a KhStreamJoin instance representing the inner join result
+     */
     static KhStreamJoin of(KhStream left, KhTable right) {
         return new KhLeftStreamInnerJoinImplement(left, right);
     }
+
+    /**
+     * Creates an inner join between a KhTable and a KhStream.
+     *
+     * @param left the left table in the join operation
+     * @param right the right stream in the join operation
+     * @return a KhStreamJoin instance representing the inner join result
+     */
     static KhStreamJoin of(KhTable left, KhStream right){
         return new KhRightStreamInnerJoinImplement(left, right);
     }

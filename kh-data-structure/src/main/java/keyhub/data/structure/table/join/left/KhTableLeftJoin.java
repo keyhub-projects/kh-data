@@ -27,7 +27,18 @@ package keyhub.data.structure.table.join.left;
 import keyhub.data.structure.table.KhTable;
 import keyhub.data.structure.table.join.KhTableJoin;
 
+/**
+ * Interface representing a left join operation between two KhTable instances.
+ */
 public interface KhTableLeftJoin extends KhTableJoin {
+
+    /**
+     * Creates a left join between two KhTable instances.
+     *
+     * @param left the left table in the join operation
+     * @param right the right table in the join operation
+     * @return a KhTableJoin instance representing the left join result
+     */
     static KhTableJoin of(KhTable left, KhTable right) {
         return new KhTableLeftJoinImplement(left, right);
     }

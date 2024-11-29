@@ -29,13 +29,57 @@ import keyhub.data.structure.schema.KhSchema;
 
 import java.util.List;
 
+/**
+ * Interface for building a KhTable with various methods to add rows and raw data.
+ */
 public interface KhTableBuilder {
+
+    /**
+     * Creates a KhTableBuilder for a given schema.
+     *
+     * @param schema the schema to be used by the builder
+     * @return a KhTableBuilder instance
+     */
     static KhTableBuilder forRowSet(KhSchema schema) {
         return KhTableBuilderImplement.forRowSet(schema);
     }
+
+    /**
+     * Adds a raw row to the table being built.
+     *
+     * @param row a list of objects representing the raw row data
+     * @return the current KhTableBuilder instance
+     */
     KhTableBuilder addRawRow(List<Object> row);
+
+    /**
+     * Adds multiple raw rows to the table being built.
+     *
+     * @param rows a list of lists, where each inner list represents a raw row
+     * @return the current KhTableBuilder instance
+     */
     KhTableBuilder addRawRows(List<List<Object>> rows);
+
+    /**
+     * Adds a KhRow to the table being built.
+     *
+     * @param row the KhRow to be added
+     * @return the current KhTableBuilder instance
+     */
     KhTableBuilder addRow(KhRow row);
+
+    /**
+     * Adds multiple KhRows to the table being built.
+     *
+     * @param rows a list of KhRow instances to be added
+     * @return the current KhTableBuilder instance
+     */
     KhTableBuilder addRows(List<KhRow> rows);
+
+    /**
+     * Builds and returns the KhTable instance.
+     *
+     * @return the constructed KhTable instance
+     */
     KhTable build();
 }

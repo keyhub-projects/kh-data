@@ -24,12 +24,45 @@
 
 package keyhub.data.structure.column;
 
+/**
+ * Interface representing a column in a data structure.
+ *
+ * @param <T> the type of the column
+ */
 public interface KhColumn<T> {
+
+    /**
+     * Creates a new column with the specified name and type.
+     *
+     * @param columnName the name of the column
+     * @param columnType the type of the column
+     * @param <T> the type of the column
+     * @return a new column
+     */
     static <T> KhColumn<T> of(String columnName, Class<T> columnType) {
         return KhColumnImplement.of(columnName, columnType);
     }
+
+    /**
+     * Gets the name of the column.
+     *
+     * @return the column name
+     */
     String getColumnName();
+
+    /**
+     * Gets the type of the column.
+     *
+     * @return the column type
+     */
     Class<T> getColumnType();
+
+    /**
+     * Checks if this column is equal to another object.
+     *
+     * @param o the object to compare with
+     * @return true if this column is equal to the other object, otherwise false
+     */
     @Override
     boolean equals(Object o);
 }

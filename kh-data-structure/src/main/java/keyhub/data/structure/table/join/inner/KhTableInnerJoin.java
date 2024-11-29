@@ -1,10 +1,10 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024 KH
+ * Copyright \(c\) 2024 KH
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
+ * of this software and associated documentation files \(the "Software"\), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
@@ -27,7 +27,18 @@ package keyhub.data.structure.table.join.inner;
 import keyhub.data.structure.table.KhTable;
 import keyhub.data.structure.table.join.KhTableJoin;
 
+/**
+ * Interface representing an inner join operation between two KhTable instances.
+ */
 public interface KhTableInnerJoin extends KhTableJoin {
+
+    /**
+     * Creates an inner join between two KhTable instances.
+     *
+     * @param left the left table in the join operation
+     * @param right the right table in the join operation
+     * @return a KhTableJoin instance representing the inner join result
+     */
     static KhTableJoin of(KhTable left, KhTable right) {
         return new KhTableInnerJoinImplement(left, right);
     }

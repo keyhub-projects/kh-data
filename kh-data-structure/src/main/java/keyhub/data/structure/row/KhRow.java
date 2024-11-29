@@ -32,28 +32,105 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Interface representing a row in a table, which consists of multiple cells.
+ */
 public interface KhRow extends Iterable<KhCell> {
+
+    /**
+     * Creates a row from a schema and a variable number of values.
+     *
+     * @param schema the schema of the row
+     * @param values the values of the row
+     * @return a KhRow instance
+     */
     static KhRow of(KhSchema schema, Object... values) {
         return KhRowImplement.of(schema, Arrays.stream(values).toList());
     }
+
+    /**
+     * Creates a row from a variable number of cells.
+     *
+     * @param cells the cells of the row
+     * @return a KhRow instance
+     */
     static KhRow of(KhCell... cells) {
         return KhRowImplement.of(cells);
     }
+
+    /**
+     * Creates a row from a list of cells.
+     *
+     * @param cells the cells of the row
+     * @return a KhRow instance
+     */
     static KhRow of(List<KhCell> cells) {
         return KhRowImplement.of(cells);
     }
+
+    /**
+     * Creates a row from a schema and a list of values.
+     *
+     * @param schema the schema of the row
+     * @param values the values of the row
+     * @return a KhRow instance
+     */
     static KhRow of(KhSchema schema, List<Object> values) {
         return KhRowImplement.of(schema, values);
     }
 
+    /**
+     * Gets the schema of the row.
+     *
+     * @return the schema
+     */
     KhSchema getSchema();
+
+    /**
+     * Converts the row to a list of values.
+     *
+     * @return a list of values
+     */
     List<Object> toList();
+
+    /**
+     * Finds a cell by its column name.
+     *
+     * @param columnName the name of the column
+     * @param <T> the type of the cell
+     * @return an Optional containing the cell if found, or empty if not found
+     */
     <T> Optional<KhCell<T>> findCell(String columnName);
+
+    /**
+     * Gets a cell by its column index.
+     *
+     * @param columnIndex the index of the column
+     * @param <T> the type of the cell
+     * @return the cell
+     */
     <T> KhCell<T> getCell(int columnIndex);
 
+    /**
+     * Gets all cells in the row.
+     *
+     * @return a list of cells
+     */
     List<KhCell> getCells();
 
-
+    /**
+     * Selects a subset of columns from the row.
+     *
+     * @param columns the names of the columns to select
+     * @return a new KhRow instance containing the selected columns
+     */
     KhRow select(String[] columns);
+
+    /**
+     * Selects a subset of columns from the row.
+     *
+     * @param columns the columns to select
+     * @return a new KhRow instance containing the selected columns
+     */
     KhRow select(KhColumn[] columns);
 }

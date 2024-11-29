@@ -1,10 +1,10 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024 KH
+ * Copyright \(c\) 2024 KH
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
+ * of this software and associated documentation files \(the "Software"\), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
@@ -29,15 +29,32 @@ import keyhub.data.structure.schema.KhSchema;
 
 import java.util.function.Function;
 
+/**
+ * Functional interface representing a selector that extracts a KhColumn from a KhSchema.
+ */
 @FunctionalInterface
 public interface KhColumnSelector extends Function<KhSchema, KhColumn<?>> {
+
+    /**
+     * Applies this selector to the given schema.
+     *
+     * @param schema the input schema
+     * @return the selected column
+     */
     @Override
     KhColumn<?> apply(KhSchema schema);
 
-    static KhColumnSelector column(String columnName){
+    /**
+     * Creates a column selector for the specified column name.
+     *
+     * @param columnName the name of the column
+     * @return a column selector for the specified column
+     * @throws IllegalArgumentException if the column is not found in the schema
+     */
+    static KhColumnSelector column(String columnName) {
         return schema -> {
             int index = schema.getColumnIndex(columnName);
-            if(index == -1){
+            if (index == -1) {
                 throw new IllegalArgumentException("KhColumn not found");
             }
             return schema.getColumnSchema(index);
