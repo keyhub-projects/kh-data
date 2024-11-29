@@ -3,7 +3,7 @@ plugins {
     id 'java'
 }
 
-group = 'keyhub'
+group = 'io.github.keyhub-projects'
 version = '1.0.1'
 
 repositories {
