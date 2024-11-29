@@ -2,6 +2,9 @@
 - This repository contains some classes about DataSet used in the KeyHub project.
 
 # How to start
+- https://central.sonatype.com/artifact/io.github.keyhub-projects/kh-data-structure
+- https://mvnrepository.com/artifact/io.github.keyhub-projects/kh-data-structure
+
 ## Maven
 ```xml
 <dependency>
@@ -13,6 +16,13 @@
 
 ## Gradle
 ```gradle
+dependencies {
+    implementation 'io.github.keyhub-projects:kh-data-structure:1.0.1'
+}
+```
+
+## Groovy
+```groovy
 implementation 'io.github.keyhub-projects:kh-data-structure:1.0.1'
 ```
 
