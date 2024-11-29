@@ -7,13 +7,13 @@
 <dependency>
     <groupId>io.github.keyhub-projects</groupId>
     <artifactId>kh-data-structure</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
 </dependency>
 ```
 
 ## Gradle
 ```gradle
-implementation 'io.github.keyhub-projects:kh-data-structure:1.0.0'
+implementation 'io.github.keyhub-projects:kh-data-structure:1.0.1'
 ```
 
 # Structure
@@ -58,5 +58,4 @@ public List<OrderDetailView> findOrderedDetailViewList(String userId){
 }
 ```
 
-- [KeyHub-Data-Tbl(한글 설명)_1.2.0](./docs/KeyHub-Data-Tbl(한글설명)_1.2.0.pdf)
 
